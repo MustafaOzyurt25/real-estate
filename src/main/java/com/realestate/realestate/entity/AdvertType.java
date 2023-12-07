@@ -22,4 +22,7 @@ public class AdvertType {
 
     private String title;
 
+    @OneToMany(mappedBy = "advertType",cascade = CascadeType.REMOVE)
+    private List<Advert> adverts;
+
 }

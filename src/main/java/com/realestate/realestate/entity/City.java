@@ -28,4 +28,8 @@ public class City {
     @OneToMany(mappedBy = "city",cascade = CascadeType.REMOVE)
     private List<District> districts;
 
+    @OneToMany(mappedBy = "city",cascade = CascadeType.REMOVE)
+    private List<Advert> advert;
+
+
 }

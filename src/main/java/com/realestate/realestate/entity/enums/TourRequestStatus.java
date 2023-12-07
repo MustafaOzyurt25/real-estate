@@ -1,5 +1,5 @@
 package com.realestate.realestate.entity.enums;
-public enum Status {
+public enum TourRequestStatus {
 
         PENDING(0, "Pending", "Initial value"),
         APPROVED(1, "Approved", "Can be approved by owner of property"),
@@ -10,7 +10,7 @@ public enum Status {
         private final String name;
         private final String description;
 
-        Status(int id, String name, String description) {
+        TourRequestStatus(int id, String name, String description) {
             this.id = id;
             this.name = name;
             this.description = description;

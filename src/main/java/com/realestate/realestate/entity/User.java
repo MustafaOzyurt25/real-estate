@@ -2,13 +2,22 @@ package com.realestate.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
 @Entity
 @Table(name="users")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +38,13 @@ public class User {
 
     private String reset_password_code;
 
-    private Boolean built_in;
+    private Boolean built_in=false;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalTime create_at;
+    private LocalDateTime create_at = LocalDateTime.now();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalTime update_at;
+    private LocalDateTime update_at;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Favorite> favorites;
@@ -43,5 +52,7 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Log> logs;
 
+    //@OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    //private List<User> user;
 
 }

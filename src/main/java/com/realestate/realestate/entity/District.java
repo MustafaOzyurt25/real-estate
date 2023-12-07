@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "districts")
@@ -21,4 +22,7 @@ public class District {
     private String name;
     @ManyToOne
     private City city;
+
+    @OneToMany(mappedBy = "district",cascade = CascadeType.REMOVE)
+    private List<Advert> advert;
 }
