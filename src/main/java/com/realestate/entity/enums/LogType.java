@@ -1,6 +1,6 @@
-package com.realestate.realestate.entity.enums;
+package com.realestate.entity.enums;
 
-public enum Log {
+public enum LogType {
 
     CREATE("Advert is created and wait for approve"),
     UPDATE("Advert is updated"),
@@ -13,7 +13,7 @@ public enum Log {
 
     private final String description;
 
-    Log(String description){
+    LogType(String description){
         this.description=description;
     }
 

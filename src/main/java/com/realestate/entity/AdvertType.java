@@ -1,4 +1,4 @@
-package com.realestate.realestate.entity;
+package com.realestate.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,20 +9,21 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "districts")
+@Table(name = "advert_types" )
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder(toBuilder = true)
-public class District {
+public class AdvertType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    @ManyToOne
-    private City city;
 
-    @OneToMany(mappedBy = "district",cascade = CascadeType.REMOVE)
-    private List<Advert> advert;
+    @Column(unique = true)
+    private String title;
+
+    @OneToMany(mappedBy = "advertType",cascade = CascadeType.REMOVE)
+    private List<Advert> adverts;
+
 }

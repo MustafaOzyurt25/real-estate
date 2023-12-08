@@ -1,31 +1,35 @@
-package com.realestate.realestate.entity;
+package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "logs")
+@Table(name = "favorites")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class Log {
-
+public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String log;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at;
+    private LocalDateTime create_at=LocalDateTime.now();
+
+    @ManyToOne
+    private Advert advert;
 
     @ManyToOne
     private User user;
 
-    @ManyToOne
-    private Advert advert;
+
+
+
 }

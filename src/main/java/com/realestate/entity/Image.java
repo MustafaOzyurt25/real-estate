@@ -1,4 +1,4 @@
-package com.realestate.realestate.entity;
+package com.realestate.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,25 +6,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Entity
-@Table(name = "countries")
+@Table(name = "images")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class Country {
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    private byte[] data;
+
     private String name;
-    @OneToMany(mappedBy = "country",cascade = CascadeType.REMOVE)
-    private List<City> cities;
 
-    @OneToMany(mappedBy = "country",cascade = CascadeType.REMOVE)
-    private List<Advert> advert;
+    private String type;
 
+    private Boolean featured;
+
+    @ManyToOne
+    private Advert advert;
 
 }

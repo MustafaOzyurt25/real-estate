@@ -1,4 +1,4 @@
-package com.realestate.realestate.entity;
+package com.realestate.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,23 +6,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "advert_types" )
+@Table(name = "category_property_values")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder(toBuilder = true)
-public class AdvertType {
-
+public class CategoryPropertyValue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String value;
 
-    @OneToMany(mappedBy = "advertType",cascade = CascadeType.REMOVE)
-    private List<Advert> adverts;
+    @ManyToOne
+    private Advert advert;
+
+    @ManyToOne
+    private CategoryPropertyKey categoryPropertyKey;
 
 }

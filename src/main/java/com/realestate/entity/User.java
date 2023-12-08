@@ -1,7 +1,9 @@
-package com.realestate.realestate.entity;
+package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.realestate.entity.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -52,7 +54,20 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Log> logs;
 
-    //@OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
-    //private List<User> user;
+    @ManyToMany
+    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> role;
+
+    @OneToMany(mappedBy = "owner_user",cascade = CascadeType.REMOVE)
+    private List<TourRequest> tourRequestsOwner;
+
+    @OneToMany(mappedBy = "guest_user",cascade = CascadeType.REMOVE)
+    private List<TourRequest> tourRequestGuest;
 
 }

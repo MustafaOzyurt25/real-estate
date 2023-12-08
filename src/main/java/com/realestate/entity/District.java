@@ -1,4 +1,4 @@
-package com.realestate.realestate.entity;
+package com.realestate.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,24 +9,20 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="category_property_keys")
+@Table(name = "districts")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class CategoryPropertyKey {
+public class District {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
-    private Boolean built_in=false;
-
     @ManyToOne
-    private Category category;
+    private City city;
 
-    @OneToMany(mappedBy = "categoryPropertyKey",cascade = CascadeType.REMOVE)
-    private List<CategoryPropertyValue> categoryPropertyValue;
-
+    @OneToMany(mappedBy = "district",cascade = CascadeType.REMOVE)
+    private List<Advert> advert;
 }

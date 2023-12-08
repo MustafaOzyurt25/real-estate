@@ -1,4 +1,4 @@
-package com.realestate.realestate.entity.enums;
+package com.realestate.entity.enums;
 public enum TourRequestStatus {
 
         PENDING(0, "Pending", "Initial value"),

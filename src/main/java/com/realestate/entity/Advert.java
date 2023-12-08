@@ -1,7 +1,7 @@
-package com.realestate.realestate.entity;
+package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.realestate.realestate.entity.enums.AdvertStatus;
+import com.realestate.entity.enums.AdvertStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Entity
 @Data
