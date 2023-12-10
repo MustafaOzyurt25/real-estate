@@ -55,7 +55,8 @@ public class Advert {
     @OneToMany(mappedBy = "advert", cascade = CascadeType.REMOVE)
     private List<TourRequest> tourRequests;
 
-    @OneToMany(mappedBy = "advert",cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE , fetch = FetchType.EAGER)
+    @JoinColumn(name = "advert_id")
     private List<Image> images;
 
     @OneToMany(mappedBy = "advert",cascade = CascadeType.REMOVE)
