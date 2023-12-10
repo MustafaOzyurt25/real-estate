@@ -28,7 +28,5 @@ public class Image {
 
     private Boolean featured;
 
-    @ManyToOne
-    private Advert advert;
 
 }

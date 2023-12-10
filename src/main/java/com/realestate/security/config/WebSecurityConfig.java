@@ -96,6 +96,7 @@ public class WebSecurityConfig
             "/css/**",
             "/js/**",
             "/contactMessages/save",
-            "/auth/login"
+            "/auth/login",
+            "/adverts/save"
     };
 }
