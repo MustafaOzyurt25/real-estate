@@ -27,20 +27,6 @@ public class AdvertImageService {
         return images.stream().map(Image::getId).collect(Collectors.toList());
     }
 
-    public ResponseMessage deleteImagesById(List<Long> id) {
-        id.forEach(this::isImageExist);
-        imageRepository.deleteAllById(id);
 
-        return ResponseMessage.builder()
-                .message(SuccessMessages.IMAGE_DELETE)
-                .httpStatus(HttpStatus.OK)
-                .build();
-    }
-
-    public Image isImageExist(Long imageId){
-
-        return imageRepository.findById(imageId).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_IMAGE_MESSAGE,imageId)));
-    }
 
 }

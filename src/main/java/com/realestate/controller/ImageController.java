@@ -16,6 +16,7 @@ import java.util.List;
 public class ImageController {
 
     private final AdvertImageService advertImageService;
+    private final ImageService imageService;
 
     @PostMapping("/{advertId}")
     public List<Long> addImageToAdvert(@PathVariable("advertId") Long advertId,
@@ -27,6 +28,6 @@ public class ImageController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseMessage deleteImagesById(@PathVariable List<Long> id){
-        return advertImageService.deleteImagesById(id);
+        return imageService.deleteImagesById(id);
     }
 }
