@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -26,7 +27,7 @@ public class Image {
 
     private String type;
 
+    @NotNull
     private Boolean featured;
-
 
 }
