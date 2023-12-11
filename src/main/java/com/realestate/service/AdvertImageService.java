@@ -19,4 +19,5 @@ public class AdvertImageService {
         advertService.addImageToAdvert(advertId,images);
         return images.stream().map(Image::getId).collect(Collectors.toList());
     }
+
 }

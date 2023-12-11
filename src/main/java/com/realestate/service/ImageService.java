@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,6 +18,25 @@ import java.util.stream.Collectors;
 public class ImageService {
 
     private final ImageRepository imageRepository;
+
+    public void setFeaturedArea(Long imageId) {
+        Image image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new RuntimeException("Image not found"));
+        setOtherImagesAsNotFeatured(imageId);
+        image.setFeatured(true);
+        imageRepository.save(image);
+    }
+
+    private void setOtherImagesAsNotFeatured(Long currentImageId) {
+        List<Image> allImages = imageRepository.findAll();
+
+        for (Image img : allImages) {
+            if (!img.getId().equals(currentImageId)) {
+                img.setFeatured(false);
+                imageRepository.save(img);
+            }
+        }
+    }
 
     public List<Image> saveAndGetImages(List<MultipartFile> images) {
         List<Image> realImages = new ArrayList<>();
@@ -31,6 +51,5 @@ public class ImageService {
         }
         return realImages;
     }
-
 
 }
