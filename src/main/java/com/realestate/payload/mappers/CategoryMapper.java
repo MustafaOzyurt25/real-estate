@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryMapper {
 
+    /*
     //DTO --> POJO
     public Category mapCategoryRequestToCategory(CategoryRequest categoryRequest){
         return Category.builder()
@@ -18,4 +19,5 @@ public class CategoryMapper {
                 .categoryPropertiesKeyId(categoryRequest.getCategoryPropertiesKeyId())
                 .build();
     }
+     */
 }
