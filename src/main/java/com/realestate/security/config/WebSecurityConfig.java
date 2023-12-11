@@ -98,6 +98,8 @@ public class WebSecurityConfig
             "/contactMessages/save",
             "/auth/login",
             "/adverts/save",
-            "/categories/save"
+            "/categories/save",
+            "/tour-request/save",
+            "/categories/**"
     };
 }

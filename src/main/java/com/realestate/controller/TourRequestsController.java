@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TourRequestsController {
     private final TourRequestsService tourRequestsService;
 
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    @PostMapping
+    //@PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @PostMapping("save")
     public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest){
         return tourRequestsService.save(tourRequestRequest);
 

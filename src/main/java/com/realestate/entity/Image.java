@@ -27,7 +27,6 @@ public class Image {
 
     private String type;
 
-    @NotNull
     private Boolean featured;
 
 }
