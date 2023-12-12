@@ -36,11 +36,14 @@ public class ImageController {
     }
 
 
+    /*
     @GetMapping("/{imageId}")
     public Image getImageAnAdvert(@PathVariable("advertId") Long advertId)
     {
         return advertImageService.getImageAnAdvert(advertId);
     }
+
+     */
 
     @PutMapping("/{imageId}")
     //@PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
