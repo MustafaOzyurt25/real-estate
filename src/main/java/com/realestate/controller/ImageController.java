@@ -35,13 +35,9 @@ public class ImageController {
 
     @PutMapping("/{imageId}")
     //@PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
-    public ResponseEntity<String> setFeaturedArea(@PathVariable Long imageId) {
+    public ResponseMessage<ImageResponse> setFeaturedArea(@PathVariable Long imageId) {
         return imageService.setFeaturedArea(imageId);
-
-    @PutMapping("/imageId")
-    @PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
-    public ResponseMessage<ImageResponse> setFeaturedArea(Long imageId) {
-   return imageService.setFeaturedArea(imageId);
+    }
 
 
     @DeleteMapping("/delete/{id}")

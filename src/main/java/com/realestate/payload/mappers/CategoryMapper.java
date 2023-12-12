@@ -13,9 +13,6 @@ public class CategoryMapper {
 
     //DTO --> POJO
 
-    /*
-    public Category mapCategoryRequestToCategory(CategoryRequest categoryRequest){
-
     public Category mapCategoryRequestToCategory(CategoryRequest categoryRequest, List<CategoryPropertyKey> categoryPropertyKeySet){
 
         return Category.builder()
@@ -27,8 +24,4 @@ public class CategoryMapper {
                 .categoryPropertyKeys(categoryPropertyKeySet)
                 .build();
     }
-
-
-     */
-
 }
