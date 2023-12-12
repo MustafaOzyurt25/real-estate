@@ -27,13 +27,4 @@ public class AdvertImageService {
         return images.stream().map(Image::getId).collect(Collectors.toList());
     }
 
-
-
-    public Image getImageAnAdvert(Long advertId)
-    {
-        Image img =
-    }
-
-
-
 }
