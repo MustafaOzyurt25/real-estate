@@ -6,13 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder(toBuilder = true)
-public class ImageResponse
-{
-    private byte[] data;
+public class ImageResponse {
+
+    private Long imageId;
     private String name;
     private String type;
     private Boolean featured;
+    private byte[] data;
+
 }
