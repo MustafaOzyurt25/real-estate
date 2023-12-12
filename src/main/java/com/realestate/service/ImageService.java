@@ -37,7 +37,12 @@ public class ImageService {
             imageRepository.save(img);
         }
 
-        return ResponseMessage.success(convertToImageResponse(image));
+        return ResponseMessage.<ImageResponse>builder()
+                .object(convertToImageResponse(image))
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.SET_FEATURED_AREA)
+                .build();
+
     }
 
     public ResponseMessage<ImageResponse> createImage(ImageRequest imageRequest) {
@@ -48,7 +53,11 @@ public class ImageService {
         image.setFeatured(imageRequest.getFeatured());
 
         Image savedImage = imageRepository.save(image);
-        return ResponseMessage.success(convertToImageResponse(savedImage));
+        return ResponseMessage.<ImageResponse>builder()
+                .object(convertToImageResponse(image))
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.CREATE_IMAGE)
+                .build();
     }
 
     public List<ImageResponse> getAllImages() {
@@ -102,7 +111,7 @@ public class ImageService {
     }
 
 
-    public ResponseMessage deleteImagesById(List<Long> id) {
+    public ResponseMessage deleteImagesById(List<Long> ids) {
         for(Long id : ids){
           Image image = isImageExist(id); // Resmi kontrol et
           imageRepository.delete(image); // Resmi sil
