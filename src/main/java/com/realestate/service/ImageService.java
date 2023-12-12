@@ -1,6 +1,9 @@
 package com.realestate.service;
 
 import com.realestate.entity.Image;
+import com.realestate.payload.request.ImageRequest;
+import com.realestate.payload.response.ImageResponse;
+import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,24 +21,45 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
-    public ResponseEntity<String> setFeaturedArea(Long imageId) {
+    public ResponseMessage<ImageResponse> setFeaturedArea(Long imageId) {
         Image image = imageRepository.findById(imageId)
                 .orElseThrow(() -> new RuntimeException("Image not found"));
-        setOtherImagesAsNotFeatured(imageId);
-        image.setFeatured(true);
-        imageRepository.save(image);
-        return null;
+
+        List<Image> allImages = imageRepository.findAll();
+        for (Image img : allImages) {
+            img.setFeatured(img.getId().equals(imageId));
+            imageRepository.save(img);
+        }
+
+        return ResponseMessage.success(convertToImageResponse(image));
     }
 
-    private void setOtherImagesAsNotFeatured(Long currentImageId) {
-        List<Image> allImages = imageRepository.findAll();
+    public ResponseMessage<ImageResponse> createImage(ImageRequest imageRequest) {
+        Image image = new Image();
+        image.setData(imageRequest.getData());
+        image.setName(imageRequest.getName());
+        image.setType(imageRequest.getType());
+        image.setFeatured(imageRequest.getFeatured());
 
-        for (Image img : allImages) {
-            if (!img.getId().equals(currentImageId)) {
-                img.setFeatured(false);
-                imageRepository.save(img);
-            }
-        }
+        Image savedImage = imageRepository.save(image);
+        return ResponseMessage.success(convertToImageResponse(savedImage));
+    }
+
+    public List<ImageResponse> getAllImages() {
+        List<Image> allImages = imageRepository.findAll();
+        return allImages.stream()
+                .map(this::convertToImageResponse)
+                .collect(Collectors.toList());
+    }
+
+    public ImageResponse convertToImageResponse(Image image) {
+        return ImageResponse.builder()
+                .imageId(image.getId())
+                .name(image.getName())
+                .type(image.getType())
+                .featured(image.getFeatured())
+                .data(image.getData())
+                .build();
     }
 
     public List<Image> saveAndGetImages(List<MultipartFile> images) {

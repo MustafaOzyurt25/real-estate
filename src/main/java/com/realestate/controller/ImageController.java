@@ -1,5 +1,7 @@
 package com.realestate.controller;
 
+import com.realestate.payload.response.ImageResponse;
+import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.AdvertImageService;
 import com.realestate.service.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class ImageController {
 
     @PutMapping("/imageId")
     @PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
-    public ResponseEntity<String> setFeaturedArea(@PathVariable Long imageId) {
+    public ResponseMessage<ImageResponse> setFeaturedArea(Long imageId) {
         return imageService.setFeaturedArea(imageId);
     }
 }

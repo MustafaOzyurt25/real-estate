@@ -13,5 +13,5 @@ public class CountryController {
 
     private final CountryService countryService;
 
-    @GetMapping("")
+    // @GetMapping("")
 }
