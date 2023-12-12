@@ -1,6 +1,7 @@
 package com.realestate.controller;
 
 import com.realestate.entity.Image;
+import com.realestate.payload.response.ImageResponse;
 import com.realestate.service.AdvertImageService;
 import com.realestate.service.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +31,9 @@ public class ImageController {
 
 
     @GetMapping("/{imageId}")
-    public Image getImageAnAdvert(@PathVariable("advertId") Long advertId)
+    public ImageResponse getImageAnAdvert(@PathVariable("imageId") Long image)
     {
-        return advertImageService.getImageAnAdvert(advertId);
+        return imageService.getImageAnAdvert(image);
     }
 
     @PutMapping("/{imageId}")

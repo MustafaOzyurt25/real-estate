@@ -1,6 +1,10 @@
 package com.realestate.service;
 
 import com.realestate.entity.Image;
+import com.realestate.exception.ResourceNotFoundException;
+import com.realestate.messages.ErrorMessages;
+import com.realestate.payload.mappers.ImageMapper;
+import com.realestate.payload.response.ImageResponse;
 import com.realestate.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,7 @@ import java.util.List;
 public class ImageService {
 
     private final ImageRepository imageRepository;
+    private final ImageMapper imageMapper;
 
     public ResponseEntity<String> setFeaturedArea(Long imageId) {
         Image image = imageRepository.findById(imageId)
@@ -51,4 +56,15 @@ public class ImageService {
         return realImages;
     }
 
+    public ImageResponse getImageAnAdvert(Long imageId)
+    {
+        if(!imageRepository.existsById(imageId))
+        {
+            throw new ResourceNotFoundException(String.format(ErrorMessages.RESOURCE_NOT_FOUND_EXCEPTION,"image"));
+        }
+
+        Image image = imageRepository.findById(imageId).get();
+        ImageResponse returnImageObject = imageMapper.getImageResponseFromImage(image);
+        return returnImageObject;
+    }
 }
