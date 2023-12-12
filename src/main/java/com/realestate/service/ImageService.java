@@ -82,7 +82,6 @@ public class ImageService {
         return realImages;
     }
 
-
     public ImageResponse getImageAnAdvert(Long imageId)
     {
         if(!imageRepository.existsById(imageId))
@@ -97,8 +96,11 @@ public class ImageService {
 
 
     public ResponseMessage deleteImagesById(List<Long> id) {
-        id.forEach(this::isImageExist);
-        imageRepository.deleteAllById(id);
+        for(Long id : ids){
+          Image image = isImageExist(id); // Resmi kontrol et
+          imageRepository.delete(image); // Resmi sil
+      }
+
 
         return ResponseMessage.builder()
                 .message(SuccessMessages.IMAGE_DELETE)
