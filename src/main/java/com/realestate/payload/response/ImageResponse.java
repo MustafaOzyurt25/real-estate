@@ -16,4 +16,5 @@ public class ImageResponse {
     private String type;
     private Boolean featured;
     private byte[] data;
+
 }
