@@ -20,10 +20,11 @@ public class CountryController {
 
     private final CountryService countryService;
 
+
+
     @GetMapping
     public ResponseEntity<List<Country>> getCountry(@PathVariable Long id){
         return countryService.getCountry();
     }
-
 
 }
