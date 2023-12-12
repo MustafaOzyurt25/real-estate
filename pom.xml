@@ -14,7 +14,7 @@
 	<name>real-estate</name>
 	<description>Real Estate Project</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

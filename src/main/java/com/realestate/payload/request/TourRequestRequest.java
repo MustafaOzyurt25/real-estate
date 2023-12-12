@@ -1,7 +1,6 @@
 package com.realestate.payload.request;
 
-import com.realestate.entity.Advert;
-import com.realestate.entity.enums.TourRequestStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,15 +18,15 @@ import java.time.LocalTime;
 public class TourRequestRequest {
 
     @NotNull(message = "Please enter advert id")
-    private Advert advertId;
+    private Long advertId;
 
     @NotNull(message = "Please enter tour date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate tour_date;
     @NotNull(message = "Please enter tour time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime tour_time;
-    @NotNull(message = "Please enter status")
-    private TourRequestStatus status;
 
-    private LocalDateTime create_at;
-    private LocalDateTime update_at;
+
+
 }
