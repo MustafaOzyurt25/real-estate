@@ -70,15 +70,22 @@ public class ImageService {
 
     public List<Image> saveAndGetImages(List<MultipartFile> images) {
         List<Image> realImages = new ArrayList<>();
-        for(MultipartFile mP : images){
-            try {
-                byte[] imageByte = mP.getBytes();
-                Image image = imageRepository.save(Image.builder().data(imageByte).build());
-                realImages.add(image);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        if(images==null)
+        {
+
+        }
+        else {
+            for(MultipartFile mP : images){
+                try {
+                    byte[] imageByte = mP.getBytes();
+                    Image image = imageRepository.save(Image.builder().data(imageByte).build());
+                    realImages.add(image);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
+
         return realImages;
     }
 
