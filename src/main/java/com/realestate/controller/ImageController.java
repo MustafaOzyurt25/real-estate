@@ -31,8 +31,8 @@ public class ImageController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseMessage deleteImagesById(@PathVariable List<Long> id){
-        return imageService.deleteImagesById(id);
+    public ResponseMessage deleteImagesById(@PathVariable List<Long> ids){
+        return imageService.deleteImagesById(ids);
     }
 
 
