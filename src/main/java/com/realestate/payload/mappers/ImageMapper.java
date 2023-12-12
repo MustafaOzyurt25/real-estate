@@ -1,6 +1,7 @@
 package com.realestate.payload.mappers;
 
 import com.realestate.entity.Image;
+import com.realestate.payload.response.ImageResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,16 @@ public class ImageMapper {
                 .name(multipartFile.getName())
                 .type(multipartFile.getContentType())
                 .data(data)
+                .build();
+    }
+
+    public ImageResponse getImageResponseFromImage(Image image)
+    {
+        return ImageResponse.builder()
+                .name(image.getName())
+                .type(image.getType())
+                .featured(image.getFeatured())
+                .data(image.getData())
                 .build();
     }
 
