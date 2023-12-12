@@ -1,5 +1,6 @@
 package com.realestate.controller;
 
+import com.realestate.payload.response.ResponseMessage;
 import com.realestate.entity.Image;
 import com.realestate.service.AdvertImageService;
 import com.realestate.service.ImageService;
@@ -29,6 +30,12 @@ public class ImageController {
     }
 
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseMessage deleteImagesById(@PathVariable List<Long> id){
+        return imageService.deleteImagesById(id);
+    }
+
+
     @GetMapping("/{imageId}")
     public Image getImageAnAdvert(@PathVariable("advertId") Long advertId)
     {
@@ -40,6 +47,7 @@ public class ImageController {
     public ResponseEntity<String> setFeaturedArea(@PathVariable Long imageId) {
         return imageService.setFeaturedArea(imageId);
     }
+
 
 
 }
