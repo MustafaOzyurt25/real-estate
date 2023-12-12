@@ -29,10 +29,7 @@ public class AdvertImageService {
 
 
 
-    public Image getImageAnAdvert(Long advertId)
-    {
-        Image img =
-    }
+
 
 
 
