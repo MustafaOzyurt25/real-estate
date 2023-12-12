@@ -25,7 +25,7 @@ public class CategoryPropertyKeyController {
     // Not: Save() ******************************************************************
 
     @PostMapping("/{categoryId}/properties") // http://localhost:8080/categories/33/properties  + POST
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseEntity<CategoryPropertyKey> createCategoryPropertyKey(
             @PathVariable Long categoryId,
             @RequestBody @Valid CategoryPropertyKeyRequest request) {

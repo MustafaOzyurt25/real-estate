@@ -1,7 +1,9 @@
 package com.realestate.controller;
 
+
 import com.realestate.payload.response.ImageResponse;
 import com.realestate.payload.response.ResponseMessage;
+import com.realestate.entity.Image;
 import com.realestate.service.AdvertImageService;
 import com.realestate.service.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +31,25 @@ public class ImageController {
 
     }
 
+
     @PutMapping("/imageId")
     @PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
     public ResponseMessage<ImageResponse> setFeaturedArea(Long imageId) {
-        return imageService.setFeaturedArea(imageId);
+   return imageService.setFeaturedArea(imageId);
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseMessage deleteImagesById(@PathVariable List<Long> id){
+        return imageService.deleteImagesById(id);
     }
+
+
+  //  @GetMapping("/{imageId}")
+  //  public Image getImageAnAdvert(@PathVariable("advertId") Long advertId)
+  //  {
+  //      return advertImageService.getImageAnAdvert(advertId);
+  //  }
+
+  
+
+
 }

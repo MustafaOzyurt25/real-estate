@@ -3,13 +3,17 @@ package com.realestate.service;
 import com.realestate.entity.Image;
 import com.realestate.payload.request.ImageRequest;
 import com.realestate.payload.response.ImageResponse;
+import com.realestate.exception.ResourceNotFoundException;
+import com.realestate.messages.ErrorMessages;
+import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.response.ResponseMessage;
+import com.realestate.repository.AdvertRepository;
 import com.realestate.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,5 +79,24 @@ public class ImageService {
         }
         return realImages;
     }
+
+
+    public ResponseMessage deleteImagesById(List<Long> id) {
+        id.forEach(this::isImageExist);
+        imageRepository.deleteAllById(id);
+
+        return ResponseMessage.builder()
+                .message(SuccessMessages.IMAGE_DELETE)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    public Image isImageExist(Long imageId){
+
+        return imageRepository.findById(imageId).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_IMAGE_MESSAGE,imageId)));
+    }
+
+
 
 }
