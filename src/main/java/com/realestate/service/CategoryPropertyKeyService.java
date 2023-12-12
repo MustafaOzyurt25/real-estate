@@ -12,6 +12,9 @@ import com.realestate.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryPropertyKeyService {
@@ -35,6 +38,19 @@ public class CategoryPropertyKeyService {
         return categoryPropertyKeyRepository.save(categoryPropertyKey);
 
 
+    }
+
+    public CategoryPropertyKey isCategoryPropertyKeyExistById(Long id) {
+
+        return categoryPropertyKeyRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_CATEGORYPROPERTYKEY_MESSAGE, id)));
+    }
+
+    public List<CategoryPropertyKey> getCategoryPropertyKeyByCategoryPropertyKeyIdList(List<Long> idList) {
+
+        return idList.stream()
+                .map(this::isCategoryPropertyKeyExistById)
+                .collect(Collectors.toList());
     }
 }
 

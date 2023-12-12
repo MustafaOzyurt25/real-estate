@@ -99,7 +99,7 @@ public class WebSecurityConfig
             "/auth/login",
             "/adverts/save",
             "/categories/save",
-            "/tour-request/save",
+            "/tour-requests/save",
             "/categories/**"
     };
 }
