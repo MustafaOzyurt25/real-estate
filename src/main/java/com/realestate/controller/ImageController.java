@@ -33,12 +33,10 @@ public class ImageController {
     }
 
 
-
-    @GetMapping("/{imageId}")
-    public ImageResponse getImageAnAdvert(@PathVariable("imageId") Long image)
-    {
-        return imageService.getImageAnAdvert(image);
-    }
+    @PutMapping("/{imageId}")
+    //@PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
+    public ResponseEntity<String> setFeaturedArea(@PathVariable Long imageId) {
+        return imageService.setFeaturedArea(imageId);
 
     @PutMapping("/imageId")
     @PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
@@ -49,6 +47,7 @@ public class ImageController {
     @DeleteMapping("/delete/{id}")
     public ResponseMessage deleteImagesById(@PathVariable List<Long> ids){
         return imageService.deleteImagesById(ids);
+
     }
 
 
