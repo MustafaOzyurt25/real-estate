@@ -32,7 +32,7 @@ public class TourRequest {
     private LocalDateTime create_at;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalTime update_at;
+    private LocalDateTime update_at;
 
     @ManyToOne
     private Advert advert;

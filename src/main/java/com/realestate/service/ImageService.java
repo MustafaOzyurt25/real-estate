@@ -1,22 +1,41 @@
 package com.realestate.service;
 
 import com.realestate.entity.Image;
-import com.realestate.repository.AdvertRepository;
 import com.realestate.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ImageService {
 
     private final ImageRepository imageRepository;
+
+    public ResponseEntity<String> setFeaturedArea(Long imageId) {
+        Image image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new RuntimeException("Image not found"));
+        setOtherImagesAsNotFeatured(imageId);
+        image.setFeatured(true);
+        imageRepository.save(image);
+        return null;
+    }
+
+    private void setOtherImagesAsNotFeatured(Long currentImageId) {
+        List<Image> allImages = imageRepository.findAll();
+
+        for (Image img : allImages) {
+            if (!img.getId().equals(currentImageId)) {
+                img.setFeatured(false);
+                imageRepository.save(img);
+            }
+        }
+    }
 
     public List<Image> saveAndGetImages(List<MultipartFile> images) {
         List<Image> realImages = new ArrayList<>();
@@ -31,6 +50,5 @@ public class ImageService {
         }
         return realImages;
     }
-
 
 }
