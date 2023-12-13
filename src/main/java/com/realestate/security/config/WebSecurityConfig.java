@@ -102,6 +102,9 @@ public class WebSecurityConfig
             "/tour-requests/save",
             "/categories/**",
             "/countries/**",
-            "/advert-types/**"
+            "/advert-types/**",
+            "/cities/**",
+            "/districts/**"
+
     };
 }
