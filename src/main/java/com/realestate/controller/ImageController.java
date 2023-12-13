@@ -47,13 +47,9 @@ public class ImageController {
     }
 
 
-  //  @GetMapping("/{imageId}")
-  //  public Image getImageAnAdvert(@PathVariable("advertId") Long advertId)
-  //  {
-  //      return advertImageService.getImageAnAdvert(advertId);
-  //  }
-
-  
-
-
+    @GetMapping("/{imageId}")
+    public ImageResponse getImageAnAdvert(@PathVariable("imageId") Long imageId)
+    {
+        return imageService.getImageAnAdvert(imageId);
+    }
 }
