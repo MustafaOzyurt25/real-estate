@@ -1,5 +1,8 @@
 package com.realestate.payload.response;
 
+import com.realestate.entity.City;
+import com.realestate.entity.Country;
+import com.realestate.entity.District;
 import com.realestate.entity.Image;
 import com.realestate.entity.enums.AdvertStatus;
 import lombok.AllArgsConstructor;
@@ -28,5 +31,8 @@ public class AdvertResponse {
     private List<Image> images;
     private LocalDateTime create_at;
     private LocalDateTime update_at;
+    private Country country;
+    private City city;
+    private District district;
 
 }

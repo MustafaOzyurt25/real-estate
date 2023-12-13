@@ -20,7 +20,7 @@ public class AdvertTypeController {
     private final AdvertTypeService advertTypeService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<AdvertTypeResponse> advertTypeCreated (@Valid @RequestBody AdvertTypeRequest advertTypeRequest) {
         return advertTypeService.advertTypeCreate (advertTypeRequest);
 

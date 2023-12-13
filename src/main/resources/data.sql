@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS countries (
 )  ;
 --
 --
+
 INSERT INTO countries (id, name) VALUES
 (1, 'AFGHANISTAN'),
 (2, 'ALBANIA'),
@@ -49,8 +50,9 @@ INSERT INTO countries (id, name) VALUES
 (39,'TURKEY');
 
 
+
 CREATE TABLE IF NOT EXISTS cities (
-  id int PRIMARY KEY NOT NULL,
+  id int NOT NULL,
   name varchar(80) NOT NULL,
   country_id int NOT NULL,
   PRIMARY KEY(id)
@@ -65,13 +67,15 @@ INSERT INTO cities (id, name, country_id) VALUES
 (4, 'AGRI',39),
 (5, 'AMASYA',39),
 (6, 'ANKARA',39),
+(7 , 'Antalya' , 39),
 (34, 'ISTANBUL',39);
 
 
 
 
+
 CREATE TABLE IF NOT EXISTS districts (
-  id int PRIMARY KEY NOT NULL,
+  id int NOT NULL,
   name varchar(80) NOT NULL,
   city_id int NOT NULL,
   PRIMARY KEY(id)
