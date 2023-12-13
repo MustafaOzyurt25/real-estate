@@ -19,7 +19,7 @@ public class DistrictController {
     private final DistrictService districtService;
 
     @GetMapping
-    public ResponseEntity<List<District>> getCountry(Long id){
+    public ResponseEntity<List<District>> getCountry(){
         return districtService.getDistrict();
     }
 
