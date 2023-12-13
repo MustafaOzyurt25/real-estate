@@ -21,7 +21,7 @@ public class ContactService {
 
     public ResponseMessage<ContactResponse> save(ContactRequest contactRequest) {
         boolean isSameMessageWithSameEmailForToday =
-                contactRepository.existsByEmailEqualsAndDateEquals(contactRequest.getEmail(), LocalDateTime.now());
+                contactRepository.existsByEmailEqualsAndCreateAtEquals(contactRequest.getEmail(), LocalDateTime.now());
 
         if (isSameMessageWithSameEmailForToday) {
             throw new ConflictException(ErrorMessages.ALREADY_SEND_A_MESSAGE_TODAY);

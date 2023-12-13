@@ -95,7 +95,7 @@ public class WebSecurityConfig
             "/images/**",
             "/css/**",
             "/js/**",
-            "/contactMessages/save",
+            "/contactMessage/save",
             "/auth/login",
             "/adverts/save",
             "/categories/create",
