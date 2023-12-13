@@ -19,12 +19,10 @@ public class Contact {
     private Long id;
     private String first_name;
     private String last_name;
-
     @Column(unique = true)
     private String email;
-
     private String message;
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime create_at = LocalDateTime.now();
 
 }
