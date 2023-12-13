@@ -22,20 +22,17 @@ public class AdvertRequest {
     @NotNull
     @Size(min=5,max=150,message = "The number of characters in the title must be between 5 and 150")
     private String title;
-
     @Size(max=300,message = "The number of characters in the description max 300")
     private String description;
-
-    @NotNull
-    @Size(min=5,max=150,message = "The number of characters in the title must be between 5 and 200")
-    private String slug;
-
     @NotNull
     private Double price;
-
     @NotNull
     private String location;
     private List<MultipartFile> images;
-    private LocalDateTime create_at;
+    private LocalDateTime create_at = LocalDateTime.now();
     private LocalDateTime update_at;
+    private Long countryId;
+    private Long cityId;
+    private Long districtId;
+    private Long advertTypeId;
 }

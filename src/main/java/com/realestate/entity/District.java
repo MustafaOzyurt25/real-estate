@@ -1,5 +1,6 @@
 package com.realestate.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +21,11 @@ public class District {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
     @ManyToOne
     private City city;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "district",cascade = CascadeType.REMOVE)
     private List<Advert> advert;
 }

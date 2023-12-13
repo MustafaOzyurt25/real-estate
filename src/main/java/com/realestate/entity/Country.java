@@ -1,5 +1,6 @@
 package com.realestate.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +21,10 @@ public class Country {
     private Long id;
 
     private String name;
+    @JsonIgnore
     @OneToMany(mappedBy = "country",cascade = CascadeType.REMOVE)
     private List<City> cities;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "country",cascade = CascadeType.REMOVE)
     private List<Advert> advert;
 

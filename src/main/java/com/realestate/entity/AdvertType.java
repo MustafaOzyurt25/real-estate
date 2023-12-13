@@ -1,5 +1,6 @@
 package com.realestate.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class AdvertType {
     @Column(unique = true)
     private String title;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "advertType",cascade = CascadeType.REMOVE)
     private List<Advert> adverts;
 

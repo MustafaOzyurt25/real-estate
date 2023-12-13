@@ -1,7 +1,6 @@
 package com.realestate.service;
 
-import com.realestate.entity.Advert;
-import com.realestate.entity.Image;
+import com.realestate.entity.*;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.payload.mappers.AdvertMapper;
@@ -23,11 +22,22 @@ public class AdvertService {
     private final AdvertRepository advertRepository;
     private final AdvertMapper advertMapper;
     private final ImageService imageService;
-
+    private final CountryService countryService;
+    private final CityService cityService;
+    private final DistrictService districtService;
+    private final AdvertTypeService advertTypeService;
 
     public Advert save(AdvertRequest advertRequest) {
+
+        Country country = countryService.getCountyById(advertRequest.getCountryId());
+        City city = cityService.getCityById(advertRequest.getCityId());
+        District district = districtService.getDistrictById(advertRequest.getDistrictId());
+        AdvertType advertType = advertTypeService.getAdvertTypeById(advertRequest.getAdvertTypeId());
+
+        String slug = advertRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
+
         List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
-        Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest,images);
+        Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest,images,country,city,district,advertType,slug);
         advertRepository.save(advert);
         return advert;
     }
@@ -42,4 +52,6 @@ public class AdvertService {
                 .build();
         advertRepository.save(updatedAdvert);
     }
+
+
 }
