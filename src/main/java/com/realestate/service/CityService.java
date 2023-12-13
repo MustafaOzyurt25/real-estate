@@ -19,7 +19,7 @@ public class CityService {
                 new ResourceNotFoundException(String.format(ErrorMessages.CITY_NOT_FOUND_MESSAGE,id)));
 
     }
-    public City getCityById(Long countryId) {
-        return isCityExists(countryId);
+    public City getCityById(Long cityId) {
+        return isCityExists(cityId);
     }
 }
