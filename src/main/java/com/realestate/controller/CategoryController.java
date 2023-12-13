@@ -5,8 +5,11 @@ import com.realestate.payload.request.CategoryRequest;
 import com.realestate.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/categories")
@@ -15,9 +18,9 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/save")
-    public Category save(CategoryRequest categoryRequest){
+    @PostMapping("/create")
+    public Category createCategory(@RequestBody @Valid CategoryRequest categoryRequest){
 
-        return categoryService.save(categoryRequest);
+        return categoryService.createCategory(categoryRequest);
     }
 }

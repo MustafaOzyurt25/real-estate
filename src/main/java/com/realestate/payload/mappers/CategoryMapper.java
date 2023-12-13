@@ -22,6 +22,7 @@ public class CategoryMapper {
                 .seq(categoryRequest.getSeq())
                 .is_active(categoryRequest.getIs_active())
                 .categoryPropertyKeys(categoryPropertyKeySet)
+                .create_at(categoryRequest.getCreate_at())
                 .build();
     }
 }

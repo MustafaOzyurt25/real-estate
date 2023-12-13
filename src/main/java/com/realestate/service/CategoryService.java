@@ -19,7 +19,7 @@ public class CategoryService {
     private final CategoryPropertyKeyService categoryPropertyKeyService;
 
 
-    public Category save(CategoryRequest categoryRequest){
+    public Category createCategory(CategoryRequest categoryRequest){
         List<CategoryPropertyKey> categoryPropertyKeys = categoryPropertyKeyService.getCategoryPropertyKeyByCategoryPropertyKeyIdList(categoryRequest.getCategoryPropertiesKeyId());
 
         Category category = categoryMapper.mapCategoryRequestToCategory(categoryRequest,categoryPropertyKeys);
