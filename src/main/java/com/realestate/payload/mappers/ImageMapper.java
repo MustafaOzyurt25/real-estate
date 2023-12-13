@@ -30,6 +30,7 @@ public class ImageMapper {
     public ImageResponse getImageResponseFromImage(Image image)
     {
         return ImageResponse.builder()
+                .imageId(image.getId())
                 .name(image.getName())
                 .type(image.getType())
                 .featured(image.getFeatured())

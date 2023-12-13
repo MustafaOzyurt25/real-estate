@@ -34,7 +34,7 @@ public class Category {
 
     private Boolean is_active;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at=LocalDateTime.now();
+    private LocalDateTime create_at;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime update_at;
 
