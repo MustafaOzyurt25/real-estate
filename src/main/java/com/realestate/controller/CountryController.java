@@ -23,7 +23,7 @@ public class CountryController {
 
 
     @GetMapping
-    public ResponseEntity<List<Country>> getCountry(@PathVariable Long id){
+    public ResponseEntity<List<Country>> getCountry(){
         return countryService.getCountry();
     }
 
