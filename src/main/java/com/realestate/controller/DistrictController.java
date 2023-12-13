@@ -1,30 +1,26 @@
 package com.realestate.controller;
 
 import com.realestate.entity.Country;
-
-import com.realestate.service.CountryService;
+import com.realestate.entity.District;
+import com.realestate.service.DistrictService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/countries")
+@RequestMapping("/districts")
 @RequiredArgsConstructor
-public class CountryController {
+public class DistrictController {
 
-    private final CountryService countryService;
-
-
+    private final DistrictService districtService;
 
     @GetMapping
-    public ResponseEntity<List<Country>> getCountry( Long id){
-        return countryService.getCountry();
+    public ResponseEntity<List<District>> getCountry(Long id){
+        return districtService.getDistrict();
     }
 
 }
