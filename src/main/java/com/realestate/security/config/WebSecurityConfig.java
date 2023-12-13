@@ -100,6 +100,8 @@ public class WebSecurityConfig
             "/adverts/save",
             "/categories/save",
             "/tour-requests/save",
-            "/categories/**"
+            "/categories/**",
+            "/countries/**",
+            "/advert-types/**"
     };
 }

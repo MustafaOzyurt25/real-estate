@@ -33,15 +33,19 @@ public class Advert {
 
     private Double price;
 
+
     @Enumerated(EnumType.ORDINAL)
     private AdvertStatus status;
 
-    private Boolean built_in = false;
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private Boolean built_in;
+
     private Boolean is_active;
+
     private Integer view_count;
     private String location;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at = LocalDateTime.now();
+    private LocalDateTime create_at;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime update_at;

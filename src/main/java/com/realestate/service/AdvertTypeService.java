@@ -2,6 +2,10 @@ package com.realestate.service;
 
 
 import com.realestate.entity.AdvertType;
+import com.realestate.entity.City;
+import com.realestate.exception.ResourceNotFoundException;
+import com.realestate.messages.ErrorMessages;
+import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.AdvertTypeMapper;
 import com.realestate.payload.request.AdvertTypeRequest;
 import com.realestate.payload.response.AdvertTypeResponse;
@@ -26,8 +30,19 @@ public class AdvertTypeService {
      return ResponseMessage.<AdvertTypeResponse>builder()
              .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(savedAdvertType))
              .httpStatus(HttpStatus.CREATED)
+             .message(SuccessMessages.CREATE_ADVERT_TYPE)
              .build();
 
+    }
+
+    private AdvertType isAdvertTypeExists(Long id){
+
+        return advertTypeRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE,id)));
+
+    }
+    public AdvertType getAdvertTypeById(Long countryId) {
+        return isAdvertTypeExists(countryId);
     }
 
 }
