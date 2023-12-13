@@ -17,12 +17,17 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String first_name;
-    private String last_name;
+    @Column(name="first_name")
+    private String firstName;
+    @Column(name="last_name")
+    private String lastName;
+
     @Column(unique = true)
     private String email;
     private String message;
+
+    @Column(name = "create_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at = LocalDateTime.now();
+    private LocalDateTime createAt = LocalDateTime.now();
 
 }

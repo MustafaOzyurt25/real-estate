@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 
 public interface ContactRepository extends JpaRepository<Contact, Long> {
-    boolean existsByEmailEqualsAndDateEquals(String email, LocalDateTime now);
+
+    boolean existsByEmailEqualsAndCreateAtEquals(String email, LocalDateTime now);
 }
