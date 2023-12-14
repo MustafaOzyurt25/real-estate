@@ -1,6 +1,7 @@
 package com.realestate.service;
 
 import com.realestate.entity.*;
+import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
@@ -42,6 +43,12 @@ public class AdvertService {
 
         List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
         Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest,images,country,city,district,advertType,slug);
+
+        advert.setStatus(AdvertStatus.PENDING);
+        advert.setBuilt_in(false);
+        advert.setIs_active(true);
+        advert.setView_count(0);
+
         advertRepository.save(advert);
         return advert;
     }
