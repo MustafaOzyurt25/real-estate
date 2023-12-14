@@ -38,7 +38,7 @@ public class ImageService {
         }
 
         return ResponseMessage.<ImageResponse>builder()
-                .object(convertToImageResponse(image))
+                .object(imageMapper.convertToImageResponse(image))
                 .httpStatus(HttpStatus.OK)
                 .message(SuccessMessages.SET_FEATURED_AREA)
                 .build();
@@ -46,15 +46,10 @@ public class ImageService {
     }
 
     public ResponseMessage<ImageResponse> createImage(ImageRequest imageRequest) {
-        Image image = new Image();
-        image.setData(imageRequest.getData());
-        image.setName(imageRequest.getName());
-        image.setType(imageRequest.getType());
-        image.setFeatured(imageRequest.getFeatured());
-
+        Image image = imageMapper.convertToImageEntity(imageRequest);
         Image savedImage = imageRepository.save(image);
         return ResponseMessage.<ImageResponse>builder()
-                .object(convertToImageResponse(image))
+                .object(imageMapper.convertToImageResponse(savedImage))
                 .httpStatus(HttpStatus.OK)
                 .message(SuccessMessages.CREATE_IMAGE)
                 .build();
@@ -63,18 +58,8 @@ public class ImageService {
     public List<ImageResponse> getAllImages() {
         List<Image> allImages = imageRepository.findAll();
         return allImages.stream()
-                .map(this::convertToImageResponse)
+                .map(imageMapper::convertToImageResponse)
                 .collect(Collectors.toList());
-    }
-
-    public ImageResponse convertToImageResponse(Image image) {
-        return ImageResponse.builder()
-                .imageId(image.getId())
-                .name(image.getName())
-                .type(image.getType())
-                .featured(image.getFeatured())
-                .data(image.getData())
-                .build();
     }
 
     public List<Image> saveAndGetImages(List<MultipartFile> images) {

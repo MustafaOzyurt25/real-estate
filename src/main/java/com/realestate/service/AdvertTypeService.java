@@ -1,6 +1,7 @@
 package com.realestate.service;
 
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.AdvertType;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
@@ -8,6 +9,7 @@ import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.AdvertTypeMapper;
 import com.realestate.payload.request.AdvertTypeRequest;
 import com.realestate.payload.response.AdvertTypeResponse;
+import com.realestate.payload.response.ImageResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.AdvertTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,4 +46,13 @@ public class AdvertTypeService {
         return isAdvertTypeExists(advertTypeId);
     }
 
+    public ResponseMessage<AdvertTypeResponse> updateAdvertType(Long advertTypeId) {
+        AdvertType existingAdvertType = advertTypeRepository.findById(advertTypeId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE, advertTypeId)));
+        existingAdvertType.setTitle("New Title");
+        return ResponseMessage.<AdvertTypeResponse>builder()
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.UPDATE_ADVERT_TYPE)
+                .build();
+    }
 }
