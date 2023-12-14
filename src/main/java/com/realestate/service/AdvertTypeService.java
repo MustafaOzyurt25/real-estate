@@ -3,7 +3,6 @@ package com.realestate.service;
 
 import com.realestate.entity.Advert;
 import com.realestate.entity.AdvertType;
-import com.realestate.entity.City;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
@@ -42,8 +41,8 @@ public class AdvertTypeService {
                 new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE,id)));
 
     }
-    public AdvertType getAdvertTypeById(Long countryId) {
-        return isAdvertTypeExists(countryId);
+    public AdvertType getAdvertTypeById(Long advertTypeId) {
+        return isAdvertTypeExists(advertTypeId);
     }
 
     public ResponseMessage<AdvertTypeResponse> getAdvertTypeWithId(Long id) {
