@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/advert-types")
+    @RequestMapping("/advert-types")
 @RequiredArgsConstructor
 public class AdvertTypeController {
     private final AdvertTypeService advertTypeService;
@@ -23,10 +23,16 @@ public class AdvertTypeController {
         return advertTypeService.advertTypeCreate (advertTypeRequest);
     }
 
+
     @DeleteMapping("/delete/{id}")
     public ResponseMessage<AdvertTypeResponse> advertTypeDelete(@PathVariable Long id){
 
         return advertTypeService.advertTypeDeleteById(id);
+
+
+    @GetMapping("/{id}")
+    public ResponseMessage<AdvertTypeResponse> getAdvertTypeById(@PathVariable("id") Long id){
+        return advertTypeService.getAdvertTypeWithId(id);
 
     }
 

@@ -1,8 +1,8 @@
 package com.realestate.service;
 
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.AdvertType;
-
 import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
@@ -46,9 +46,10 @@ public class AdvertTypeService {
                 new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE,id)));
 
     }
-    public AdvertType getAdvertTypeById(Long countryId) {
-        return isAdvertTypeExists(countryId);
+    public AdvertType getAdvertTypeById(Long advertTypeId) {
+        return isAdvertTypeExists(advertTypeId);
     }
+
 
     public ResponseMessage<AdvertTypeResponse> advertTypeDeleteById(Long advertTypeId) {
         //id kontrol
@@ -60,17 +61,20 @@ public class AdvertTypeService {
             throw new ConflictException(ErrorMessages.ADVERT_TYPE_CANNOT_BE_DELETED);
         }
 
-
-
-
-
-
         return ResponseMessage.<AdvertTypeResponse>builder()
                 .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(advertType))
                 .message(SuccessMessages.ADVERT_TYPE_DELETE)
                 .httpStatus(HttpStatus.OK)
                 .build();
 
+
+
+    public ResponseMessage<AdvertTypeResponse> getAdvertTypeWithId(Long id) {
+        return ResponseMessage.<AdvertTypeResponse>builder()
+                .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(advertTypeRepository.findById(id)
+                        .orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE,id)))))
+                .httpStatus(HttpStatus.OK)
+                .build();
 
     }
 }

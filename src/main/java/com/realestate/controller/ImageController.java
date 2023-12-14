@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/images")
@@ -25,8 +26,8 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping("/{advertId}")
-    public List<Long> addImageToAdvert(@PathVariable("advertId") Long advertId,
-                                       @ModelAttribute List<MultipartFile> imageFiles) {
+    public ResponseEntity<Map<String, Object>> addImageToAdvert(@PathVariable("advertId") Long advertId,
+                                                                @ModelAttribute List<MultipartFile> imageFiles) {
 
         return advertImageService.addImageToAdvert(advertId, imageFiles);
 
