@@ -26,6 +26,7 @@ public class UserService
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UniquePropertyValidator uniquePropertyValidator;
+    private final RoleService roleService;
 
     public void saveDefaultAdmin(User defaultAdmin)
     {
@@ -40,9 +41,7 @@ public class UserService
         User user = userMapper.mapUserRequestToUser(userRequest);
 
         Set<Role> roleSet = new HashSet<>();
-        roleSet.add(Role.builder()
-                .role_name(RoleType.CUSTOMER)
-                .build());
+        roleSet.add(roleService.getRole(RoleType.CUSTOMER));
         user.setRole(roleSet);
 
 
