@@ -21,5 +21,5 @@ public class SuccessMessages {
 
     public static final String ADVERT_TYPE_DELETE="Advert Type is Deleted Successfully";
 
-
+    public static final String USER_CREATE = "User Created Successfully";
 }
