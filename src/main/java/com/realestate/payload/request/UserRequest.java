@@ -37,6 +37,4 @@ public class UserRequest
     @NotNull
     private String password;
 
-    @JsonIgnore
-    private RoleType roleType = RoleType.CUSTOMER;
 }

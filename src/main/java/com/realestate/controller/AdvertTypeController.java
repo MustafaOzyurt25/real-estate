@@ -25,10 +25,10 @@ public class AdvertTypeController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseMessage<AdvertTypeResponse> advertTypeDelete(@PathVariable Long id){
+    public ResponseMessage<AdvertTypeResponse> advertTypeDelete(@PathVariable Long id) {
 
         return advertTypeService.advertTypeDeleteById(id);
-
+    }
 
     @GetMapping("/{id}")
     public ResponseMessage<AdvertTypeResponse> getAdvertTypeById(@PathVariable("id") Long id){
