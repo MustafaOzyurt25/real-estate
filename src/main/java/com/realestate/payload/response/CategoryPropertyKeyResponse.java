@@ -20,9 +20,9 @@ public class CategoryPropertyKeyResponse {
 
     private String name;
     
-    private Category category; // burda pojo gonderdim !
+    private Category category; // burda pojo gonderdim !  // value ve built_in i gondermedim.
     
-                                // value ve built_in i gondermedim.
+                               
     
     
     
