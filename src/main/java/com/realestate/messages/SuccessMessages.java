@@ -16,5 +16,7 @@ public class SuccessMessages {
     public static final String CREATE_IMAGE = "Image has created successfully";
     public static final String CREATE_ADVERT_TYPE = "Advert Type has created successfully";
 
+    public static final String ADVERT_TYPE_DELETE="Advert Type is Deleted Successfully";
+
 
 }

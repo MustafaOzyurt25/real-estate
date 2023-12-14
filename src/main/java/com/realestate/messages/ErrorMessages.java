@@ -13,6 +13,8 @@ public class ErrorMessages
     public static final String CITY_NOT_FOUND_MESSAGE = "%s city not found ";
     public static final String DISTRICT_NOT_FOUND_MESSAGE = "%s district not found ";
     public static final String ADVERT_TYPE_NOT_FOUND_MESSAGE = "%s advertType not found ";
+    public static final String ADVERT_TYPE_CANNOT_BE_DELETED = "Advert type cannot be deleted because it is a dependent advert ";
+
 
 
 }
