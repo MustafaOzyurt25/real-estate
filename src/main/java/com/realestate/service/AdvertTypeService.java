@@ -50,6 +50,7 @@ public class AdvertTypeService {
         AdvertType existingAdvertType = advertTypeRepository.findById(advertTypeId).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE, advertTypeId)));
         existingAdvertType.setTitle("New Title");
+        advertTypeRepository.save(existingAdvertType);
         return ResponseMessage.<AdvertTypeResponse>builder()
                 .httpStatus(HttpStatus.OK)
                 .message(SuccessMessages.UPDATE_ADVERT_TYPE)
