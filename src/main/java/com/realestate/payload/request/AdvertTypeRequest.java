@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class AdvertTypeRequest {
 
     @NotNull(message = "Please enter a Title")
-    @Size(min = 10, max = 30, message = "Title should be at least 10 chars")
+    @Size(max = 30, message = "Title max 30 chars")
     private String title;
 
 }

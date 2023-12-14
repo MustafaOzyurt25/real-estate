@@ -1,6 +1,8 @@
 package com.realestate.service;
 
+import com.realestate.entity.Role;
 import com.realestate.entity.User;
+import com.realestate.entity.enums.RoleType;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
@@ -14,13 +16,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class UserService
 {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
     private final UniquePropertyValidator uniquePropertyValidator;
 
     public void saveDefaultAdmin(User defaultAdmin)
@@ -34,6 +38,13 @@ public class UserService
 
         uniquePropertyValidator.checkDuplicate(userRequest.getPhone(),userRequest.getEmail());
         User user = userMapper.mapUserRequestToUser(userRequest);
+
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(Role.builder()
+                .role_name(RoleType.CUSTOMER)
+                .build());
+        user.setRole(roleSet);
+
 
         return ResponseMessage.<UserResponse>builder()
                 .object(userMapper.mapUserToUserResponse(userRepository.save(user)))

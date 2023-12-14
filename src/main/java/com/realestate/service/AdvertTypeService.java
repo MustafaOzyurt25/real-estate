@@ -64,11 +64,11 @@ public class AdvertTypeService {
     }
     public ResponseMessage<AdvertTypeResponse> advertTypeDeleteById(Long advertTypeId) {
         //id kontrol
-        AdvertType advertType= isAdvertTypeExists(advertTypeId);
+        AdvertType advertType = isAdvertTypeExists(advertTypeId);
 
-        if (advertType.getAdverts().isEmpty()){
+        if (advertType.getAdverts().isEmpty()) {
             advertTypeRepository.deleteById(advertTypeId);
-        }else{
+        } else {
             throw new ConflictException(ErrorMessages.ADVERT_TYPE_CANNOT_BE_DELETED);
         }
 
@@ -80,6 +80,8 @@ public class AdvertTypeService {
 
 
     }
+
+
     public ResponseMessage<AdvertTypeResponse> getAdvertTypeWithId(Long id) {
         return ResponseMessage.<AdvertTypeResponse>builder()
                 .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(advertTypeRepository.findById(id)
