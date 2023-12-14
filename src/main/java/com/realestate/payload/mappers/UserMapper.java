@@ -7,6 +7,8 @@ import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @Data
 public class UserMapper {
@@ -21,6 +23,7 @@ public class UserMapper {
                 .phone(userRequest.getPhone())
                 .email(userRequest.getEmail())
                 .password_hash(passwordEncoder.encode(userRequest.getPassword()))
+                .create_at(LocalDateTime.now())
                 .build();
     }
 
