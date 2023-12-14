@@ -19,5 +19,7 @@ public class SuccessMessages {
     public static final String ADVERT_FOUNDED = "Slug with Advert has founded";
 
 
+    public static final String ADVERT_TYPE_DELETE="Advert Type is Deleted Successfully";
+
 
 }

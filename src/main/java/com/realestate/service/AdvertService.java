@@ -65,6 +65,7 @@ public class AdvertService {
     }
 
 
+
     public ResponseMessage<Advert> getAdvertWithSlug(String slug) {
 
          Advert advert = getAdvertBySlug(slug);
@@ -88,3 +89,4 @@ public class AdvertService {
         return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
     }
 }
+
