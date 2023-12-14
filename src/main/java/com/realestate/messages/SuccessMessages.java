@@ -15,6 +15,6 @@ public class SuccessMessages {
     public static final String SET_FEATURED_AREA = "Featured area has set successfully";
     public static final String CREATE_IMAGE = "Image has created successfully";
     public static final String CREATE_ADVERT_TYPE = "Advert Type has created successfully";
-
+    public static final String IMAGES_SUCCESSFULLY_ADDED_TO_ADVERT = "Images successfully added";
 
 }

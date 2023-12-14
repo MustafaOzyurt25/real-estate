@@ -13,6 +13,7 @@ public class ErrorMessages
     public static final String CITY_NOT_FOUND_MESSAGE = "%s city not found ";
     public static final String DISTRICT_NOT_FOUND_MESSAGE = "%s district not found ";
     public static final String ADVERT_TYPE_NOT_FOUND_MESSAGE = "%s advertType not found ";
+    public static final String PLEASE_SEND_IMAGE = "Please send at least one image";
 
 
 }
