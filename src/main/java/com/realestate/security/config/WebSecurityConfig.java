@@ -97,7 +97,7 @@ public class WebSecurityConfig
             "/js/**",
             "/contactMessage/save",
             "/auth/login",
-            "/adverts/save",
+            "/adverts/**",
             "/categories/create",
             "/tour-requests/save",
             "/categories/**",
