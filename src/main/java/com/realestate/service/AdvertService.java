@@ -3,16 +3,20 @@ package com.realestate.service;
 import com.realestate.entity.*;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
+import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.mappers.ImageMapper;
 import com.realestate.payload.request.AdvertRequest;
+import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.AdvertRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,4 +58,26 @@ public class AdvertService {
     }
 
 
+    public ResponseMessage<Advert> getAdvertWithSlug(String slug) {
+
+         Advert advert = getAdvertBySlug(slug);
+
+         return ResponseMessage.<Advert>builder()
+                 .object(advert)
+                 .message(SuccessMessages.ADVERT_FOUNDED)
+                 .httpStatus(HttpStatus.OK)
+                 .build();
+
+    }
+
+    public Advert getAdvertBySlug(String slug){
+        return advertRepository.findBySlug(slug).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
+    }
+
+
+    public List<AdvertCityResponse> getAdvertAmountByCity() {
+
+        return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
+    }
 }
