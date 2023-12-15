@@ -5,11 +5,6 @@ public class ErrorMessages {
     private ErrorMessages() {
     }
 
-
-
-
-
-
     public static final String ADVERT_NOT_FOUND_EXCEPTION = "Advert with id %s Not Found";
     public static final String RESOURCE_NOT_FOUND_EXCEPTION = "%s could not find";
     public static final String RESOURCE_CONFLICT_EXCEPTION = "%s role already saved in Data Base";
@@ -20,18 +15,14 @@ public class ErrorMessages {
     public static final String CITY_NOT_FOUND_MESSAGE = "%s city not found ";
     public static final String DISTRICT_NOT_FOUND_MESSAGE = "%s district not found ";
     public static final String ADVERT_TYPE_NOT_FOUND_MESSAGE = "%s advertType not found ";
-
     public static final String CATAGORY_NOT_FOUND_MESSAGE = "catagory with id %s Not Found";
     public static final String CATEGORY_PROPERTY_KEY_NOT_FOUND_MESSAGE = "Category Property Key with id %s Not Found";
-    public static final String THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED = "The property key whose \n" +
-            "builtIn property is true \n" +
-            "can not be updated.";
-
+    public static final String THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED = "The property key whose builtIn property is true can not be updated.";
     public static final String ADVERT_TYPE_CANNOT_BE_DELETED = "Advert type cannot be deleted because it is a dependent advert ";
     public static final String PLEASE_SEND_IMAGE = "Please send at least one image";
     public static final String ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG = "Error: Advert not found with slug %s";
+    public static final String CATEGORY_NOT_FOUND = "%s category not found" ;
     public static final String TOUR_REQUEST_NOT_FOUND = "Tour request with id %s was not found";
-
 
 
     // ---------------------- ERROR REGISTER -----------------------------------------------------------------------
