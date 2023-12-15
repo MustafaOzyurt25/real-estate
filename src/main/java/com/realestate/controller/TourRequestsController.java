@@ -7,10 +7,7 @@ import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.service.TourRequestsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tour-requests")
@@ -22,6 +19,10 @@ public class TourRequestsController {
     @PostMapping("save")
     public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest){
         return tourRequestsService.save(tourRequestRequest);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseMessage<TourRequestResponse> delete(@PathVariable("id") Long id){
+        return tourRequestsService.delete(id);
     }
 }

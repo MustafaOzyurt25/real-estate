@@ -2,9 +2,6 @@ package com.realestate.messages;
 
 public class SuccessMessages {
 
-
-
-
     private SuccessMessages(){
 
     }
@@ -23,4 +20,5 @@ public class SuccessMessages {
     public static final String ADVERT_TYPE_DELETE="Advert Type is Deleted Successfully";
 
     public static final String USER_CREATE = "User Created Successfully";
+    public static final String TOUR_REQUEST_DELETED = "Tour Request Successfully Deleted";
 }
