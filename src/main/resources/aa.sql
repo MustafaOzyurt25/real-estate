@@ -89,5 +89,3 @@ INSERT INTO districts (id, name, city_id) VALUES
 (4, 'PENDIK',34),
 (5, 'MALTAPE',34),
 (6, 'USKUDAR',34);
-
-

@@ -50,16 +50,7 @@ public class RoleService
         return role;
     }
 
-    public Set<String> getUserRoles(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        return userOptional.map(user -> user.getRole()
-                        .stream()
-                        .map(Role::getRole_name)
-                        .map(Enum::name)
-                        .collect(Collectors.toSet()))
-                .orElse(Collections.emptySet());
 
-    }
 
 
 }

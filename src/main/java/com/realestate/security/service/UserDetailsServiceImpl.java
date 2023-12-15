@@ -28,12 +28,12 @@ public class UserDetailsServiceImpl implements UserDetailsService
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-      User user =userRepository.findByEmailEquals(email);
+      User user = userRepository.findByEmailEquals(email);
 
       if(user != null){
           return new UserDetailsImpl(
                   user.getId(),
-                  user.getFirst_name(),
+                  user.getFirstName(),
                   user.getEmail(),
                   user.getPassword_hash(),
                   user.getRole().stream().map(Role::getRole_name).toString()

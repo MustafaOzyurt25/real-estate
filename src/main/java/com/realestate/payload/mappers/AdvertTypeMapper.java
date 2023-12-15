@@ -26,12 +26,4 @@ public class AdvertTypeMapper {
                 .build();
     }
 
-
-    //T01 Get All AdvertType mapperMethod ------------------------------------------------------------
-    public static AdvertTypeResponse toResponse(AdvertType advertType) {
-        return AdvertTypeResponse.builder()
-                .id(advertType.getId())
-                .title(advertType.getTitle())
-                .build();
-    }
 }

@@ -54,14 +54,9 @@ public class AuthenticationService {
 
 
         AuthResponse.AuthResponseBuilder authResponse = AuthResponse.builder();
-        authResponse.email(userDetails.getUsername());
+
         authResponse.token(token.substring(7));
-        authResponse.firstName(userDetails.getName());
 
-
-        String email1 = userDetails.getUsername();
-        Set<String> role1 = roleService.getUserRoles(email1);
-        authResponse.roles(role1);
         return ResponseEntity.ok(authResponse.build());
 
 
