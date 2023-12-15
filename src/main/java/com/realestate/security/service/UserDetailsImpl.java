@@ -19,28 +19,21 @@ import java.util.Objects;
 public class UserDetailsImpl implements UserDetails
 {
 
-    // Burada oluşturulan field'lar mimari tasarım gereği oluşturulmultur.
-    // Projeden projeye göre değişkenlik gösterebilir. Lakin kullanılması zorunlu olan field'lar
-    // her projede kullanılmalıdır.
-    private Long id; //şart
+    private Long id;
 
-    private String username; //şart
+    private String email;
 
-    private String name; //zorunlu değil
-
-    private Boolean isAdvisor; //şart gibi
-
+    private String name;
     @JsonIgnore
-    private String password; //şart
+    private String password;
 
-    private Collection<? extends GrantedAuthority> authorities; //şart
+    private Collection<? extends GrantedAuthority> authorities;
 
 
-    public UserDetailsImpl(Long id, String username, String name, Boolean isAdvisor, String password, String role) {
+    public UserDetailsImpl(Long id, String email, String firstName, String password, String role) {
         this.id = id;
-        this.username = username;
-        this.name = name;
-        this.isAdvisor = isAdvisor;
+        this.email = email;
+        this.name = firstName;
         this.password = password;
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
@@ -60,7 +53,7 @@ public class UserDetailsImpl implements UserDetails
 
     @Override
     public String getUsername() {
-        return username;
+        return getEmail();
     }
 
     @Override
@@ -90,13 +83,13 @@ public class UserDetailsImpl implements UserDetails
             return true;
         }
 
-        // sınıf türü ile karşılaştırma
+
         if(o == null || getClass()!=o.getClass())
         {
             return false;
         }
 
-        // id ile karşılaştırma
+
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id,user.getId());
     }

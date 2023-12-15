@@ -45,9 +45,9 @@ public class AuthTokenFilter extends OncePerRequestFilter
         {
             try {
                 // !!! username bilgisini JWT tokenden çekiyoruz.
-                String username = jwtUtils.getUsernameFromJwtToken(jwt);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                request.setAttribute("username" , username);
+                String email = jwtUtils.getUsernameFromJwtToken(jwt);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                request.setAttribute("email" , email);
 
                 // Security Context'e authenticate edilen kullanıcı gönderiliyor.
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

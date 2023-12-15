@@ -18,8 +18,8 @@ public class UserMapper {
 
     public User mapUserRequestToUser(UserRequest userRequest){
         return User.builder()
-                .first_name(userRequest.getFirstName())
-                .last_name(userRequest.getLastName())
+                .firstName(userRequest.getFirstName())
+                .lastName(userRequest.getLastName())
                 .phone(userRequest.getPhone())
                 .email(userRequest.getEmail())
                 .password_hash(passwordEncoder.encode(userRequest.getPassword()))
@@ -29,11 +29,10 @@ public class UserMapper {
 
     public UserResponse mapUserToUserResponse(User user){
         return UserResponse.builder()
-                .firstName(user.getFirst_name())
-                .lastName(user.getLast_name())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .build();
     }
-
 }
