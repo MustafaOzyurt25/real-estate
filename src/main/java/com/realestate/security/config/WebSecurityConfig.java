@@ -105,7 +105,8 @@ public class WebSecurityConfig
             "/advert-types/**",
             "/cities/**",
             "/districts/**",
-            "/register"
+            "/register",
+            "/login"
 
     };
 }

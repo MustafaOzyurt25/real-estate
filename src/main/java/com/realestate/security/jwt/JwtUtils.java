@@ -28,10 +28,10 @@ public class JwtUtils
         return generateTokenFromUsername(userDetails.getUsername());
     }
 
-    public String generateTokenFromUsername(String username)
+    public String generateTokenFromUsername(String email)
     {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512 , jwtSecret)

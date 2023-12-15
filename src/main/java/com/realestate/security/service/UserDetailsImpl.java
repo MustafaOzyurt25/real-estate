@@ -1,6 +1,8 @@
 package com.realestate.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.realestate.entity.Role;
+import com.realestate.entity.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -22,31 +22,27 @@ public class UserDetailsImpl implements UserDetails
     // Burada oluşturulan field'lar mimari tasarım gereği oluşturulmultur.
     // Projeden projeye göre değişkenlik gösterebilir. Lakin kullanılması zorunlu olan field'lar
     // her projede kullanılmalıdır.
-    private Long id; //şart
 
-    private String username; //şart
-
-    private String name; //zorunlu değil
-
-    private Boolean isAdvisor; //şart gibi
-
+    private Long id;
+    private String name;
+    private String email;
     @JsonIgnore
-    private String password; //şart
+    private String password;
 
     private Collection<? extends GrantedAuthority> authorities; //şart
 
 
-    public UserDetailsImpl(Long id, String username, String name, Boolean isAdvisor, String password, String role) {
+    public UserDetailsImpl(Long id, String email, String firstName, String password, String role) {
         this.id = id;
-        this.username = username;
-        this.name = name;
-        this.isAdvisor = isAdvisor;
+        this.email = email;
+        this.name = firstName;
         this.password = password;
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(role));
         this.authorities = grantedAuthorities;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -60,7 +56,7 @@ public class UserDetailsImpl implements UserDetails
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -83,22 +79,17 @@ public class UserDetailsImpl implements UserDetails
         return true;
     }
 
-    public boolean equals(Object o)
-    {
-        if(this == o)
-        {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
 
-        // sınıf türü ile karşılaştırma
-        if(o == null || getClass()!=o.getClass())
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        // id ile karşılaştırma
         UserDetailsImpl user = (UserDetailsImpl) o;
-        return Objects.equals(id,user.getId());
+        return Objects.equals(id, user.id);
     }
-
 }
