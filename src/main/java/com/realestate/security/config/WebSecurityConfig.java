@@ -109,5 +109,6 @@ public class WebSecurityConfig
             "/register",
             "/tour-requests/**"
 
+
     };
 }

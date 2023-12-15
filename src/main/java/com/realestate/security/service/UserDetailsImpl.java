@@ -1,6 +1,8 @@
 package com.realestate.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.realestate.entity.Role;
+import com.realestate.entity.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -19,11 +19,16 @@ import java.util.Objects;
 public class UserDetailsImpl implements UserDetails
 {
 
-    private Long id;
 
+    // Burada oluşturulan field'lar mimari tasarım gereği oluşturulmultur.
+    // Projeden projeye göre değişkenlik gösterebilir. Lakin kullanılması zorunlu olan field'lar
+    // her projede kullanılmalıdır.
+
+    private Long id;
+    private String name;
     private String email;
 
-    private String name;
+
     @JsonIgnore
     private String password;
 
@@ -41,6 +46,7 @@ public class UserDetailsImpl implements UserDetails
         this.authorities = grantedAuthorities;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -53,7 +59,9 @@ public class UserDetailsImpl implements UserDetails
 
     @Override
     public String getUsername() {
+
         return getEmail();
+
     }
 
     @Override
@@ -76,13 +84,11 @@ public class UserDetailsImpl implements UserDetails
         return true;
     }
 
-    public boolean equals(Object o)
-    {
-        if(this == o)
-        {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-
 
         if(o == null || getClass()!=o.getClass())
         {
@@ -91,7 +97,6 @@ public class UserDetailsImpl implements UserDetails
 
 
         UserDetailsImpl user = (UserDetailsImpl) o;
-        return Objects.equals(id,user.getId());
+        return Objects.equals(id, user.id);
     }
-
 }

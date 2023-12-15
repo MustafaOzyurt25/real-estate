@@ -1,6 +1,5 @@
 package com.realestate.service;
 
-
 import com.realestate.payload.request.LoginRequest;
 import com.realestate.payload.response.AuthResponse;
 import com.realestate.security.jwt.JwtUtils;
@@ -21,6 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+
+  
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
@@ -44,6 +45,7 @@ public class AuthenticationService {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         Set<String> roles = userDetails.getAuthorities()
+
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
@@ -72,3 +74,4 @@ public class AuthenticationService {
 
 
 }
+
