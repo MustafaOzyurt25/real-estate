@@ -1,5 +1,6 @@
 package com.realestate.controller;
 
+import com.realestate.entity.AdvertType;
 import com.realestate.payload.request.AdvertTypeRequest;
 import com.realestate.payload.response.AdvertTypeResponse;
 import com.realestate.payload.response.ResponseMessage;
@@ -21,13 +22,17 @@ public class AdvertTypeController {
     //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<AdvertTypeResponse> advertTypeCreated (@Valid @RequestBody AdvertTypeRequest advertTypeRequest) {
         return advertTypeService.advertTypeCreate (advertTypeRequest);
+
     }
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseMessage<AdvertTypeResponse> advertTypeDelete(@PathVariable Long id){
+    public ResponseMessage<AdvertTypeResponse> advertTypeDelete(@PathVariable Long id) {
 
         return advertTypeService.advertTypeDeleteById(id);
+
+    }
+
 
 
     @GetMapping("/{id}")
@@ -36,4 +41,9 @@ public class AdvertTypeController {
 
     }
 
+    @PutMapping("/:id")
+    //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    public ResponseMessage<AdvertTypeResponse> updateAdvertType(@PathVariable Long advertTypeId){
+        return advertTypeService.updateAdvertType(advertTypeId);
+    }
 }

@@ -18,8 +18,9 @@ public class SuccessMessages {
     public static final String IMAGES_SUCCESSFULLY_ADDED_TO_ADVERT = "Images successfully added";
     public static final String ADVERT_FOUNDED = "Slug with Advert has founded";
 
+    public static final String UPDATE_ADVERT_TYPE = "Advert Type has updated successfully";
 
     public static final String ADVERT_TYPE_DELETE="Advert Type is Deleted Successfully";
 
-
+    public static final String USER_CREATE = "User Created Successfully";
 }

@@ -43,7 +43,7 @@ public class CategoryPropertyKeyService {
     public CategoryPropertyKey isCategoryPropertyKeyExistById(Long id) {
 
         return categoryPropertyKeyRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_CATEGORYPROPERTYKEY_MESSAGE, id)));
+                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_CATEGORY_PROPERTY_KEY_MESSAGE, id)));
     }
 
     public List<CategoryPropertyKey> getCategoryPropertyKeyByCategoryPropertyKeyIdList(List<Long> idList) {
