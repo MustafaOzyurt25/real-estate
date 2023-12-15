@@ -13,10 +13,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class CategoryPropertyValue {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CategoryPropertyValue {  @Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
 
     private String value;
 
@@ -25,5 +24,6 @@ public class CategoryPropertyValue {
 
     @ManyToOne
     private CategoryPropertyKey categoryPropertyKey;
+  
 
 }

@@ -3,8 +3,6 @@ package com.realestate.service;
 import com.realestate.entity.Role;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.RoleType;
-import com.realestate.exception.ResourceNotFoundException;
-import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.UserMapper;
 import com.realestate.payload.request.UserRequest;
@@ -28,6 +26,8 @@ public class UserService
     private final UniquePropertyValidator uniquePropertyValidator;
     private final RoleService roleService;
 
+
+
     public void saveDefaultAdmin(User defaultAdmin)
     {
         defaultAdmin.setBuilt_in(true);
@@ -40,9 +40,9 @@ public class UserService
         uniquePropertyValidator.checkDuplicate(userRequest.getPhone(),userRequest.getEmail());
         User user = userMapper.mapUserRequestToUser(userRequest);
 
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleService.getRole(RoleType.CUSTOMER));
-        user.setRole(roleSet);
+        Set<Role> role = new HashSet<>();
+        role.add(roleService.getRole(RoleType.CUSTOMER));
+        user.setRole(role);
 
 
         return ResponseMessage.<UserResponse>builder()
@@ -50,6 +50,5 @@ public class UserService
                 .message(SuccessMessages.USER_CREATE)
                 .httpStatus(HttpStatus.CREATED)
                 .build();
-
     }
 }

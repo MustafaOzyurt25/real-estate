@@ -2,12 +2,12 @@ package com.realestate.controller;
 
 import com.realestate.entity.Category;
 import com.realestate.payload.request.CategoryRequest;
+import com.realestate.payload.response.CategoryResponse;
+import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,5 +22,11 @@ public class CategoryController {
     public Category createCategory(@RequestBody @Valid CategoryRequest categoryRequest){
 
         return categoryService.createCategory(categoryRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    public ResponseMessage<CategoryResponse> deleteCategory(@PathVariable("id") Long categoryId){
+        return categoryService.deleteCategory(categoryId);
     }
 }

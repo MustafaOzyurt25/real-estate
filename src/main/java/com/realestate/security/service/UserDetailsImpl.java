@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class UserDetailsImpl implements UserDetails
 {
 
+
     // Burada oluşturulan field'lar mimari tasarım gereği oluşturulmultur.
     // Projeden projeye göre değişkenlik gösterebilir. Lakin kullanılması zorunlu olan field'lar
     // her projede kullanılmalıdır.
@@ -26,10 +27,12 @@ public class UserDetailsImpl implements UserDetails
     private Long id;
     private String name;
     private String email;
+
+
     @JsonIgnore
     private String password;
 
-    private Collection<? extends GrantedAuthority> authorities; //şart
+    private Collection<? extends GrantedAuthority> authorities;
 
 
     public UserDetailsImpl(Long id, String email, String firstName, String password, String role) {
@@ -56,7 +59,9 @@ public class UserDetailsImpl implements UserDetails
 
     @Override
     public String getUsername() {
-        return email;
+
+        return getEmail();
+
     }
 
     @Override
@@ -85,9 +90,11 @@ public class UserDetailsImpl implements UserDetails
             return true;
         }
 
-        if (o == null || getClass() != o.getClass()) {
+        if(o == null || getClass()!=o.getClass())
+        {
             return false;
         }
+
 
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id, user.id);

@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
     @RequestMapping("/advert-types")
@@ -41,9 +42,16 @@ public class AdvertTypeController {
 
     }
 
-    @PutMapping("/:id")
+    @PutMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-    public ResponseMessage<AdvertTypeResponse> updateAdvertType(@PathVariable Long advertTypeId){
-        return advertTypeService.updateAdvertType(advertTypeId);
+    public ResponseMessage<AdvertTypeResponse> updateAdvertType(@PathVariable("id") Long advertTypeId,
+                                                                @RequestBody AdvertTypeRequest request) {
+        return advertTypeService.updateAdvertType(advertTypeId, request);
+    }
+
+    //T01 Get All AdvertType method---------------------------------------------------------------
+    @GetMapping()
+    public ResponseMessage<List<AdvertTypeResponse>> getAll() {
+        return advertTypeService.getAll();
     }
 }

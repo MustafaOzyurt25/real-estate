@@ -1,7 +1,6 @@
 package com.realestate.security.service;
 
 
-
 import com.realestate.entity.Role;
 import com.realestate.entity.User;
 import com.realestate.repository.UserRepository;
@@ -12,12 +11,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
 import java.util.Set;
+
+
 
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService
 {
+
 
     private  final UserRepository userRepository;
 
@@ -37,7 +40,6 @@ public class UserDetailsServiceImpl implements UserDetailsService
           );
       }
       throw  new UsernameNotFoundException("User" + email + "not found");
-
 
 
     }
