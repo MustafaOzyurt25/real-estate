@@ -97,6 +97,7 @@ public class WebSecurityConfig
             "/js/**",
             "/contactMessage/save",
             "/auth/login",
+            "/auth/register",
             "/adverts/**",
             "/categories/create",
             "/tour-requests/save",
@@ -105,7 +106,8 @@ public class WebSecurityConfig
             "/advert-types/**",
             "/cities/**",
             "/districts/**",
-            "/register"
+            "/register",
+            "/tour-requests/**"
 
     };
 }

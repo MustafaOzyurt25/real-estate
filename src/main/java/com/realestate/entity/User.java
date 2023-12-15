@@ -3,12 +3,10 @@ package com.realestate.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.realestate.entity.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,9 +24,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String first_name;
+    private String firstName;
 
-    private String last_name;
+    private String lastName;
 
     @Column(unique = true)
     private String email;
@@ -55,7 +53,7 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Log> logs;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinTable(

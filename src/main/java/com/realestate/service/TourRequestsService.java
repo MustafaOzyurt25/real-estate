@@ -3,6 +3,8 @@ package com.realestate.service;
 
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.enums.TourRequestStatus;
+import com.realestate.exception.ResourceNotFoundException;
+import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.TourRequestMapper;
 import com.realestate.payload.request.TourRequestRequest;
@@ -37,5 +39,15 @@ public class TourRequestsService {
               .build();
 
 
+    }
+
+    public ResponseMessage<TourRequestResponse> delete(Long id) {
+        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND,id)));
+        tourRequestsRepository.deleteById(id);
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequest))
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.TOUR_REQUEST_DELETED)
+                .build();
     }
 }

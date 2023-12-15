@@ -1,5 +1,6 @@
 package com.realestate.controller;
 
+import com.realestate.payload.request.LoginRequest;
 import com.realestate.payload.request.UserRequest;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.UserResponse;
@@ -17,11 +18,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
 
-    private  final UserService userService;
 
-    @PostMapping()
-    public ResponseMessage<UserResponse> registerUser (@RequestBody @Valid UserRequest userRequest) {
-        return userService.registerUser(userRequest);
-    }
 
 }
