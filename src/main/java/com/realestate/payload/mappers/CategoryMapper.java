@@ -17,9 +17,9 @@ public class CategoryMapper {
 
         return Category.builder()
                 .title(categoryRequest.getTitle())
-                .slug(categoryRequest.getSlug())
                 .icon(categoryRequest.getIcon())
                 .seq(categoryRequest.getSeq())
+                .slug(categoryRequest.getSlug())
                 .is_active(categoryRequest.getIs_active())
                 .categoryPropertyKeys(categoryPropertyKeySet)
                 .create_at(categoryRequest.getCreate_at())

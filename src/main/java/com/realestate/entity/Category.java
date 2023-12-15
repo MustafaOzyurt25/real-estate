@@ -1,6 +1,7 @@
 package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,6 +42,7 @@ public class Category {
     @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
     private List<CategoryPropertyKey> categoryPropertyKeys;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
     private List<Advert> adverts;
 }
