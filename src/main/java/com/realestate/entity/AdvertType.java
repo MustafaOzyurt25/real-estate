@@ -24,8 +24,8 @@ public class AdvertType {
     @Column(unique = true)
     private String title;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "advertType",cascade = CascadeType.REMOVE)
-    private List<Advert> adverts;
+   @JsonIgnore
+   @OneToMany(mappedBy = "advertType")
+   private List<Advert> adverts;
 
 }

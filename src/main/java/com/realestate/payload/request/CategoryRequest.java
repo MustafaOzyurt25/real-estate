@@ -32,7 +32,7 @@ public class CategoryRequest {
 
     @NotNull
     private Boolean is_active;
-
+    
     @NotNull
     private List<Long> categoryPropertiesKeyId;
 
