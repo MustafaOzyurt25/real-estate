@@ -18,7 +18,7 @@ public class ErrorMessages
     public static final String ADVERT_TYPE_CANNOT_BE_DELETED = "Advert type cannot be deleted because it is a dependent advert ";
     public static final String PLEASE_SEND_IMAGE = "Please send at least one image";
     public static final String ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG = "Error: Advert not found with slug %s";
-
+    public static final String CATEGORY_NOT_FOUND = "%s category not found" ;
 
 
     // ---------------------- ERROR REGISTER -----------------------------------------------------------------------

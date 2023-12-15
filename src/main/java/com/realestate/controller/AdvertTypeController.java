@@ -41,9 +41,10 @@ public class AdvertTypeController {
 
     }
 
-    @PutMapping("/:id")
+    @PutMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-    public ResponseMessage<AdvertTypeResponse> updateAdvertType(@PathVariable Long advertTypeId){
-        return advertTypeService.updateAdvertType(advertTypeId);
+    public ResponseMessage<AdvertTypeResponse> updateAdvertType(@PathVariable("id") Long advertTypeId,
+                                                                @RequestBody AdvertTypeRequest request) {
+        return advertTypeService.updateAdvertType(advertTypeId, request);
     }
 }
