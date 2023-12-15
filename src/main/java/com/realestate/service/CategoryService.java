@@ -28,6 +28,7 @@ public class CategoryService {
     private final AdvertService advertService;
 
     public ResponseMessage<CategoryResponse> deleteCategory(Long categoryId) {
+
         Category category = categoryRepository.findById(categoryId).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND,categoryId)));
         if (category.getBuilt_in()) {
@@ -42,6 +43,7 @@ public class CategoryService {
                 message(SuccessMessages.DELETE_CATEGORY).
                 build();
     }
+
     public Category createCategory(CategoryRequest categoryRequest){
 
         List<CategoryPropertyKey> categoryPropertyKeys = categoryPropertyKeyService.getCategoryPropertyKeyByCategoryPropertyKeyIdList(categoryRequest.getCategoryPropertiesKeyId());

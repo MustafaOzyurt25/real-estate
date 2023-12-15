@@ -39,12 +39,10 @@ public class Category {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime update_at;
     
-    @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
-    
-    
+    @OneToMany(mappedBy = "category")
     private List<CategoryPropertyKey> categoryPropertyKeys;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "category")
     private List<Advert> adverts;
 }

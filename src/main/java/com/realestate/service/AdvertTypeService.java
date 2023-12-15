@@ -54,11 +54,16 @@ public class AdvertTypeService {
 
 
     public ResponseMessage<AdvertTypeResponse> updateAdvertType(Long advertTypeId, AdvertTypeRequest request) {
+
         AdvertType existingAdvertType = advertTypeRepository.findById(advertTypeId).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE, advertTypeId)));
+
+
         existingAdvertType.setTitle(request.getTitle());
-        advertTypeRepository.save(existingAdvertType);
+        AdvertType savedAdvertType =  advertTypeRepository.save(existingAdvertType);
+
         return ResponseMessage.<AdvertTypeResponse>builder()
+                .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(savedAdvertType))
                 .httpStatus(HttpStatus.OK)
                 .message(SuccessMessages.UPDATE_ADVERT_TYPE)
                 .build();
