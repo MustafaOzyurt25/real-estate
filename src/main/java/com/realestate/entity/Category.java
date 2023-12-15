@@ -44,6 +44,7 @@ public class Category {
     
     private List<CategoryPropertyKey> categoryPropertyKeys;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
     private List<Advert> adverts;
 }

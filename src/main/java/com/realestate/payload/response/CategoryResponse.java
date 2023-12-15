@@ -25,7 +25,6 @@ public class CategoryResponse {
     private LocalDateTime create_at;
     private LocalDateTime update_at;
     private List<CategoryPropertyKey> categoryPropertyKeys;
-    private List<Advert> adverts;
 
 
 }
