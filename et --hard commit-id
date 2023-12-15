@@ -1,0 +1,265 @@
+[33mcommit 9661211b3b749c66bfeb92312faa30b42397593c[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: c49e5ef 7ea591e
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Thu Dec 14 20:19:44 2023 +0300
+
+    Merge pull request #35 from FzlDmr/huseyin
+    
+    Huseyin
+
+[33mcommit c49e5ef6c72b9c520db34feeb436eabfadbda171[m
+Merge: e36b1b5 959667b
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Thu Dec 14 20:16:52 2023 +0300
+
+    Merge pull request #34 from FzlDmr/ebru
+    
+    AdvertTypeDelete
+
+[33mcommit 959667bcf0d5aa61ccb0252245c078437395556c[m[33m ([m[1;31morigin/ebru[m[33m)[m
+Merge: 7e32fc3 e36b1b5
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Thu Dec 14 20:16:42 2023 +0300
+
+    Merge branch 'master' into ebru
+
+[33mcommit e36b1b59d49e3c370a95543f8e9fdf5c72820d17[m
+Merge: 2b7a239 920cbb8
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Thu Dec 14 20:12:24 2023 +0300
+
+    Merge pull request #33 from FzlDmr/cemal
+    
+    advert-type-get-by-id
+
+[33mcommit 920cbb8ab42c6403aa6e03f589c13358b04dd6cd[m[33m ([m[1;31morigin/cemal[m[33m)[m
+Merge: e8d34b8 2b7a239
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Thu Dec 14 20:12:05 2023 +0300
+
+    Merge branch 'master' into cemal
+
+[33mcommit 7ea591e38431f8c91ed667cf4060b8d81da37f8b[m[33m ([m[1;31morigin/huseyin[m[33m)[m
+Author: Huseyin Kirtan <one_guns1990@hotmail.com>
+Date:   Thu Dec 14 20:06:01 2023 +0300
+
+    registerUserEdit2
+
+[33mcommit 7e32fc38ac77de53e4faab5ccefcc39b22fac57c[m
+Author: emelebruergin <e.ebruergin@hotmail.com>
+Date:   Thu Dec 14 20:05:43 2023 +0300
+
+    AdvertTypeDelete
+
+[33mcommit 2b7a239b33528e389847120451cc903ae83359a7[m
+Merge: 8a7f400 46cf7cc
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Thu Dec 14 19:36:09 2023 +0300
+
+    Merge pull request #32 from FzlDmr/fazil
+    
+    AdvertService Updated
+
+[33mcommit 46cf7ccac72a4e267236d1ed1f406a45d714eed7[m[33m ([m[1;31morigin/fazil[m[33m)[m
+Author: Fazıl Demir <fazildemir20@gmail.com>
+Date:   Thu Dec 14 19:35:05 2023 +0300
+
+    AdvertService Updated
+
+[33mcommit 18211e85939564fdb72af7e96728423034f63dd1[m
+Author: Huseyin Kirtan <one_guns1990@hotmail.com>
+Date:   Thu Dec 14 19:22:41 2023 +0300
+
+    registerUser
+
+[33mcommit 8a7f40039ee5fa88ebb002fa790fc6dd79dd2519[m
+Merge: 9c58905 8ad7d46
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Thu Dec 14 16:55:50 2023 +0300
+
+    Merge pull request #31 from FzlDmr/fazil
+    
+    AdvertCotroller Advert AdvertService updated
+
+[33mcommit 8ad7d46a1922f45ee8edae67f6b871eb28ef13b4[m
+Author: Fazıl Demir <fazildemir20@gmail.com>
+Date:   Thu Dec 14 16:54:55 2023 +0300
+
+    AdvertCotroller Advert AdvertService updated
+
+[33mcommit e8d34b82525894de05dd8ff2ff7a4b6ca801c1f2[m
+Author: Cemal Kırtan <leader58619@hotmail.com>
+Date:   Thu Dec 14 16:09:37 2023 +0300
+
+    advert-type-get-by-id
+
+[33mcommit 9c5890569cec7c4431e56fc168c939a00862eb0a[m
+Merge: 846c88f ffed587
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 22:52:12 2023 +0300
+
+    Merge pull request #30 from FzlDmr/fazil
+    
+    ContantService Updated
+
+[33mcommit ffed587186540a23e2b7e206ddccaad0701b7312[m
+Author: Fazıl Demir <fazildemir20@gmail.com>
+Date:   Wed Dec 13 22:50:57 2023 +0300
+
+    ContantService Updated
+
+[33mcommit 846c88fb460525da1b7cfff7427710928e4d7ab3[m
+Merge: e942b00 15ac3df
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 22:10:34 2023 +0300
+
+    Merge pull request #29 from FzlDmr/guney_blks
+    
+    ContactMessage
+
+[33mcommit 15ac3df233086388388c7656614f06a5be041cfd[m[33m ([m[1;31morigin/guney_blks[m[33m)[m
+Merge: 3a55b4c e942b00
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 22:10:24 2023 +0300
+
+    Merge branch 'master' into guney_blks
+
+[33mcommit 3a55b4cddbc03618eed5edaca1cea5941fadf333[m
+Author: Belkıs Güney <guneyblks.java@gmail.com>
+Date:   Wed Dec 13 22:09:00 2023 +0300
+
+    ContactMessage
+
+[33mcommit e942b00e1897acf564703d9ca3ba63ab7c6b32fc[m
+Merge: 0c8e7ac 7b7c455
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 22:08:08 2023 +0300
+
+    Merge pull request #28 from FzlDmr/fazil
+    
+    web security config updated
+
+[33mcommit 7b7c455e9d9efbfc3f9b0527599d2ede01b5563f[m
+Author: Fazıl Demir <fazildemir20@gmail.com>
+Date:   Wed Dec 13 22:07:13 2023 +0300
+
+    web security config updated
+
+[33mcommit 0c8e7ac7d1945b162d542110dad2e472dfa1bac1[m
+Merge: 2e7a270 756dad7
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 21:54:41 2023 +0300
+
+    Merge pull request #27 from FzlDmr/alifuat
+    
+    update City-District
+
+[33mcommit 756dad78b8173d35f6d07917c0c6ea69c6663b41[m[33m ([m[1;31morigin/alifuat[m[33m)[m
+Author: Alifuatakcn <fakcan4908@gmail.com>
+Date:   Wed Dec 13 20:59:53 2023 +0300
+
+    update City-District
+
+[33mcommit 2e7a270ea88746801be0b13bdaa6efe273b5d68f[m
+Merge: cdd4e8a 546f74d
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 20:53:53 2023 +0300
+
+    Merge pull request #26 from FzlDmr/alifuat
+    
+    City-District
+
+[33mcommit 546f74dddf9e6f1007824005a816403ee9827218[m
+Merge: a656c9e cdd4e8a
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 20:53:38 2023 +0300
+
+    Merge branch 'master' into alifuat
+
+[33mcommit a656c9e4ec66bd788a2ecff577bf89ef3664bc78[m
+Author: Alifuatakcn <fakcan4908@gmail.com>
+Date:   Wed Dec 13 20:51:03 2023 +0300
+
+    City-District
+
+[33mcommit cdd4e8abf01f3af529ce2931bb285962a69c50cd[m
+Merge: 3525669 e54a06d
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 20:39:46 2023 +0300
+
+    Merge pull request #25 from FzlDmr/musab
+    
+    latest version of category
+
+[33mcommit e54a06dd376ae81eed4dc1065cf092918d8eeb41[m[33m ([m[1;31morigin/musab[m[33m)[m
+Author: Muhammed Musab Demir <mmusabdemirr@gmail.com>
+Date:   Wed Dec 13 20:39:10 2023 +0300
+
+    latest version of category
+
+[33mcommit 35256699c02c29adeecaf471d8b212f8627aca50[m
+Merge: aa6acd6 7847f24
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 20:39:09 2023 +0300
+
+    Merge pull request #24 from FzlDmr/fazil
+    
+    City Service updated
+
+[33mcommit 7847f24a5c3316a95ea95e4a59ddfc81c68d8f8c[m
+Author: Fazıl Demir <fazildemir20@gmail.com>
+Date:   Wed Dec 13 20:38:20 2023 +0300
+
+    City Service updated
+
+[33mcommit aa6acd6e04612b44bd5ab0f0d9e6f6ca4f8edd9d[m
+Merge: fe43a70 1a7e85b
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 20:36:35 2023 +0300
+
+    Merge pull request #23 from FzlDmr/bahadir
+    
+    getImageAnAdvert endpointi düzeltildi
+
+[33mcommit fe43a703d326adf22f6589ce40b6c06778327c64[m
+Merge: 854f74e 6d583b9
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Wed Dec 13 20:07:54 2023 +0300
+
+    Merge pull request #22 from FzlDmr/fazil
+    
+    AdvertService AdvertMapper AdvertRequest updated
+
+[33mcommit 6d583b939f0e29fab1639b99142ef14619cca351[m
+Author: Fazıl Demir <fazildemir20@gmail.com>
+Date:   Wed Dec 13 19:33:51 2023 +0300
+
+    AdvertService AdvertMapper AdvertRequest updated
+
+[33mcommit 1a7e85b7c2411fc42bdb144cdaf0fd37a715894d[m[33m ([m[1;31morigin/bahadir[m[33m)[m
+Author: Bahadır Ahmet Ulaş <bahadirahmetu@gmail.com>
+Date:   Wed Dec 13 14:35:13 2023 +0300
+
+    getImageAnAdvert endpointi düzeltildi
+
+[33mcommit 854f74ea47d4074fdcbe2f95773fa28803d2f2bb[m
+Merge: 0295c46 3205d26
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Tue Dec 12 23:31:41 2023 +0300
+
+    Merge pull request #21 from FzlDmr/bahadir
+    
+    en son çalışan hali
+
+[33mcommit 3205d26cea8d6d70818e49cde9a7dc0d3fd5d7fd[m
+Author: Bahadır Ahmet Ulaş <bahadirahmetu@gmail.com>
+Date:   Tue Dec 12 23:30:45 2023 +0300
+
+    en son çalışan hali
+
+[33mcommit 0295c4689db9601df6f444009009d830e17910d2[m
+Merge: 421c481 ed13666
+Author: Fazıl <101219829+FzlDmr@users.noreply.github.com>
+Date:   Tue Dec 12 23:04:58 2023 +0300
+
+    Merge pull reques
