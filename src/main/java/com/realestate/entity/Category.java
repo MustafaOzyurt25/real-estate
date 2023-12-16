@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,17 +26,17 @@ public class Category {
 
     private String icon;
 
-    private Boolean built_in=false;
+    private Boolean builtIn = false;
 
     private Integer seq;
 
     private String slug;
 
-    private Boolean is_active;
+    private Boolean isActive;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at;
+    private LocalDateTime createAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime update_at;
+    private LocalDateTime updateAt;
     
     @OneToMany(mappedBy = "category")
     private List<CategoryPropertyKey> categoryPropertyKeys;

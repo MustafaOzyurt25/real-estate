@@ -1,6 +1,5 @@
 package com.realestate.service;
 
-import com.realestate.entity.Advert;
 import com.realestate.entity.Category;
 import com.realestate.entity.CategoryPropertyKey;
 import com.realestate.exception.ResourceNotFoundException;
@@ -8,7 +7,6 @@ import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.CategoryMapper;
 import com.realestate.payload.request.CategoryRequest;
-import com.realestate.payload.response.AdvertTypeResponse;
 import com.realestate.payload.response.CategoryResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.CategoryRepository;
@@ -31,7 +29,7 @@ public class CategoryService {
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND,categoryId)));
-        if (category.getBuilt_in()) {
+        if (category.getBuiltIn()) {
             throw new RuntimeException("Built-in categories cannot be deleted.");
         }
         if (categoryRepository.existsByIdAndAdvertsIsNotEmpty(categoryId)) {
@@ -52,8 +50,8 @@ public class CategoryService {
 
         Category category = categoryMapper.mapCategoryRequestToCategory(categoryRequest,categoryPropertyKeys);
 
-        category.setBuilt_in(false);
-        category.setIs_active(true);
+        category.setBuiltIn(false);
+        category.setIsActive(true);
 
         categoryRepository.save(category);
         return category;

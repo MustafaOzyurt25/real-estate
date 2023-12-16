@@ -1,9 +1,7 @@
 package com.realestate.security.service;
 
 
-import com.realestate.entity.Role;
 import com.realestate.entity.User;
-import com.realestate.entity.enums.RoleType;
 import com.realestate.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +10,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -35,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService
                   user.getId(),
                   user.getEmail(),
                   user.getFirstName(),
-                  user.getPassword_hash(),
+                  user.getPasswordHash(),
                   user.getRole()
           );
       }

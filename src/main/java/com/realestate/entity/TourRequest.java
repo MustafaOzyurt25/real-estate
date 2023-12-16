@@ -21,27 +21,27 @@ public class TourRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
-    private LocalDate tour_date;
+    private LocalDate tourDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm:ss")
-    private LocalTime tour_time;
+    private LocalTime tourTime;
 
     @Enumerated(EnumType.ORDINAL)
     private TourRequestStatus status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at;
+    private LocalDateTime createAt;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime update_at;
+    private LocalDateTime updateAt;
 
     @ManyToOne
     private Advert advert;
 
     @ManyToOne
-    private User owner_user;
+    private User ownerUser;
 
     @ManyToOne
-    private User guest_user;
+    private User guestUser;
 
 
 }

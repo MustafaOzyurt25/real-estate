@@ -2,7 +2,6 @@ package com.realestate.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.realestate.entity.Role;
-import com.realestate.entity.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -42,9 +40,10 @@ public class UserDetailsImpl implements UserDetails
         this.password = password;
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (Role  role : roles)
-        grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole_name().name()));
-        this.authorities = grantedAuthorities;
+        for (Role  role : roles) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRoleName().name()));
+            this.authorities = grantedAuthorities;
+        }
     }
 
 

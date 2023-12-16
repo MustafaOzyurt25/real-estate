@@ -1,6 +1,5 @@
 package com.realestate.payload.response;
 
-import com.realestate.entity.Advert;
 import com.realestate.entity.CategoryPropertyKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +20,9 @@ public class CategoryResponse {
     private String icon;
     private Integer seq;
     private String slug;
-    private Boolean is_active;
-    private LocalDateTime create_at;
-    private LocalDateTime update_at;
+    private Boolean isActive;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
     private List<CategoryPropertyKey> categoryPropertyKeys;
 
 

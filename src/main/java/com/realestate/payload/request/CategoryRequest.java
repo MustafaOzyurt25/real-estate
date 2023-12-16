@@ -31,10 +31,10 @@ public class CategoryRequest {
     private String slug;
 
     @NotNull
-    private Boolean is_active;
+    private Boolean isActive;
     
     @NotNull
     private List<Long> categoryPropertiesKeyId;
 
-    private LocalDateTime create_at = LocalDateTime.now();
+    private LocalDateTime createAt = LocalDateTime.now();
 }

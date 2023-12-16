@@ -76,7 +76,7 @@ public class CategoryPropertyKeyService {
         CategoryPropertyKey existingCategoryPropertyKey = isCategoryPropertyKeyExist(propertyKeyId);// eger yoksa exception firlar, varsa devam...
 
         //2.  eger mevcut propety'nin builtIn property si  true ise update edilemez ( requirements )
-        if (existingCategoryPropertyKey.getBuilt_in()) {
+        if (existingCategoryPropertyKey.getBuiltIn()) {
             throw new ConflictException(ErrorMessages.THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED);
         }
         // 3. todo: deleteCategoryPropertyKeyById(id); // eger  varsa sil cunku onu guncelleyecem mantikli mi!!!
@@ -85,7 +85,7 @@ public class CategoryPropertyKeyService {
         CategoryPropertyKey categoryPropertyKey = categoryPropertyKeyMapper
                 .mapCategoryPropertyKeyRequestoUpdatedCategoryPropertyKey(propertyKeyId, request);
 
-        Category category = isCategoryExist(request.getCategory_id());
+        Category category = isCategoryExist(request.getCategoryId());
         categoryPropertyKey.setCategory(category); // mapperda bu field, eksik kalmisti!!
 
         CategoryPropertyKey propertyKeyUpdated = categoryPropertyKeyRepository.save(categoryPropertyKey);

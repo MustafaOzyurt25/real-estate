@@ -20,9 +20,9 @@ public class CategoryMapper {
                 .icon(categoryRequest.getIcon())
                 .seq(categoryRequest.getSeq())
                 .slug(categoryRequest.getSlug())
-                .is_active(categoryRequest.getIs_active())
+                .isActive(categoryRequest.getIsActive())
                 .categoryPropertyKeys(categoryPropertyKeySet)
-                .create_at(categoryRequest.getCreate_at())
+                .createAt(categoryRequest.getCreateAt())
                 .build();
     }
 }

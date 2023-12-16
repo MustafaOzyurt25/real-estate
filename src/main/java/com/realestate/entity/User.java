@@ -35,17 +35,17 @@ public class User {
     private String phone;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password_hash;
+    private String passwordHash;
 
-    private String reset_password_code;
+    private String resetPasswordCode;
 
-    private Boolean built_in=false;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at = LocalDateTime.now();
+    private Boolean builtIn = false;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime update_at;
+    private LocalDateTime createAt = LocalDateTime.now();
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateAt;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Favorite> favorites;
@@ -63,10 +63,10 @@ public class User {
     )
     private Set<Role> role;
 
-    @OneToMany(mappedBy = "owner_user",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "ownerUser",cascade = CascadeType.REMOVE)
     private List<TourRequest> tourRequestsOwner;
 
-    @OneToMany(mappedBy = "guest_user",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "guestUser",cascade = CascadeType.REMOVE)
     private List<TourRequest> tourRequestGuest;
 
 }

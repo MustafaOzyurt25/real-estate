@@ -14,8 +14,8 @@ public class ContactMapper {
     //DTO > POJO
     public Contact createContact(ContactRequest contactRequest) {
         return Contact.builder()
-                .firstName(contactRequest.getFirst_name())
-                .lastName(contactRequest.getLast_name())
+                .firstName(contactRequest.getFirstName())
+                .lastName(contactRequest.getLastName())
                 .message(contactRequest.getMessage())
                 .email(contactRequest.getEmail())
                 .createAt(LocalDateTime.now())
@@ -25,11 +25,11 @@ public class ContactMapper {
     //POJO > DTO
     public ContactResponse createResponse(Contact contact) {
         return ContactResponse.builder()
-                .first_name(contact.getFirstName())
-                .last_name(contact.getLastName())
+                .firstName(contact.getFirstName())
+                .lastName(contact.getLastName())
                 .message(contact.getMessage())
                 .email(contact.getEmail())
-                .create_at(LocalDateTime.now())
+                .createAt(LocalDateTime.now())
                 .build();
     }
 }

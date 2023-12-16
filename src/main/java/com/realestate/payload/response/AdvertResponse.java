@@ -25,12 +25,12 @@ public class AdvertResponse {
     private String slug;
     private Double price;
     private AdvertStatus advertStatus;
-    private Boolean is_active;
-    private Integer view_count;
+    private Boolean isActive;
+    private Integer viewCount;
     private String location;
     private List<Image> images;
-    private LocalDateTime create_at;
-    private LocalDateTime update_at;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
     private Country country;
     private City city;
     private District district;

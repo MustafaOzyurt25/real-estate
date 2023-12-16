@@ -20,12 +20,12 @@ public class ContactRequest implements Serializable {
     @NotNull(message = "Please enter first name.")
     @Size(min=4, max = 16, message = "Your first name should be at least 4 characters.")
     @Pattern(regexp= "\\A(?!\\s*\\Z).+",message = "Your message must consist of the character .")
-    private String first_name;
+    private String firstName;
 
     @NotNull(message = "Please enter last name.")
     @Size(min=4, max = 16, message = "Your last name should be at least 4 characters.")
     @Pattern(regexp= "\\A(?!\\s*\\Z).+",message = "Your message must consist of the character .")
-    private String last_name;
+    private String lastName;
 
     @Email(message = "Please enter valid email.")
     @Size(min=5, max=20, message = "Your email should be at least 5 characters.")

@@ -6,10 +6,8 @@ import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.AdvertMapper;
-import com.realestate.payload.mappers.ImageMapper;
 import com.realestate.payload.request.AdvertRequest;
 import com.realestate.payload.response.AdvertCityResponse;
-import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.AdvertRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +43,9 @@ public class AdvertService {
         Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest,images,country,city,district,advertType,slug);
 
         advert.setStatus(AdvertStatus.PENDING);
-        advert.setBuilt_in(false);
-        advert.setIs_active(true);
-        advert.setView_count(0);
+        advert.setBuiltIn(false);
+        advert.setIsActive(true);
+        advert.setViewCount(0);
 
         advertRepository.save(advert);
         return advert;

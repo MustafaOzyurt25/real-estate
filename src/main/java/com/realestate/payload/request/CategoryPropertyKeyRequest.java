@@ -21,7 +21,7 @@ public class CategoryPropertyKeyRequest {
     private String name;  // villa category'sinde bir dairenin, cat. prop. keyleri isitma, kacinci kat oldugu  vs olur
 
     @NotNull(message = "Please enter category")
-    private Long category_id;  // id=5 category (mesela apt dairesi).
+    private Long categoryId;  // id=5 category (mesela apt dairesi).
     
     
 }

@@ -22,10 +22,10 @@ public class TourRequestRequest {
 
     @NotNull(message = "Please enter tour date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate tour_date;
+    private LocalDate tourDate;
     @NotNull(message = "Please enter tour time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
-    private LocalTime tour_time;
+    private LocalTime tourTime;
 
 
 

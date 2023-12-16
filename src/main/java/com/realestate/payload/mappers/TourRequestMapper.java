@@ -16,9 +16,9 @@ public class TourRequestMapper {
 
     public TourRequest mapTourRequestRequestToTourRequest(TourRequestRequest tourRequestRequest){
         return TourRequest.builder()
-                .tour_date(tourRequestRequest.getTour_date())
-                .tour_time(tourRequestRequest.getTour_time())
-                .create_at(LocalDateTime.now())
+                .tourDate(tourRequestRequest.getTourDate())
+                .tourTime(tourRequestRequest.getTourTime())
+                .createAt(LocalDateTime.now())
                 .build();
     }
 
@@ -27,11 +27,11 @@ public class TourRequestMapper {
     public TourRequestResponse mapTourRequestToTourRequestResponse(TourRequest tourRequest){
         return TourRequestResponse.builder()
                 .tourRequestId(tourRequest.getId())
-                .tour_date(tourRequest.getTour_date())
-                .tour_time(tourRequest.getTour_time())
+                .tourDate(tourRequest.getTourDate())
+                .tourTime(tourRequest.getTourTime())
                 .status(tourRequest.getStatus())
-                .create_at(tourRequest.getCreate_at())
-                .update_at(tourRequest.getUpdate_at())
+                .createAt(tourRequest.getCreateAt())
+                .updateAt(tourRequest.getUpdateAt())
                 .build();
     }
 }

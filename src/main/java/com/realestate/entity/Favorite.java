@@ -21,7 +21,7 @@ public class Favorite {
     private Long id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at=LocalDateTime.now();
+    private LocalDateTime createAt =LocalDateTime.now();
 
     @ManyToOne
     private Advert advert;
