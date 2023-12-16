@@ -1,6 +1,7 @@
 package com.realestate;
 
 
+import com.realestate.entity.User;
 import com.realestate.entity.enums.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -12,6 +13,7 @@ import com.realestate.service.*;
 public class RealEstateApplication implements CommandLineRunner {
 
 	private final RoleService roleService;
+	private final UserService userService;
 	public static void main(String[] args) {
 		SpringApplication.run(RealEstateApplication.class, args);
 	}
@@ -25,6 +27,9 @@ public class RealEstateApplication implements CommandLineRunner {
 			roleService.saveRole(RoleType.CUSTOMER);
 			roleService.saveRole(RoleType.MANAGER);
 		}
+
+		userService.saveDefaultAdmin(User.builder().build());
+
 
 		// getUserRole() methodunun çalışığ çalışmadığı kontrol edildi. Çalışıyor.
 		System.out.println("Customer Role = " + roleService.getRole(RoleType.CUSTOMER));

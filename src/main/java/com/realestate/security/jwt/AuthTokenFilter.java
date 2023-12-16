@@ -45,7 +45,7 @@ public class AuthTokenFilter extends OncePerRequestFilter
         {
             try {
                 // !!! username bilgisini JWT tokenden çekiyoruz.
-                String email = jwtUtils.getUsernameFromJwtToken(jwt);
+                String email = jwtUtils.getEmailFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 request.setAttribute("email" , email);
 

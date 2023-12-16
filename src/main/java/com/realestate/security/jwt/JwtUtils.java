@@ -25,10 +25,10 @@ public class JwtUtils
     public String generateJwtToken(Authentication authentication)
     {
         UserDetailsImpl userDetails =(UserDetailsImpl) authentication.getPrincipal();
-        return generateTokenFromUsername(userDetails.getUsername());
+        return generateTokenFromEmail(userDetails.getUsername());
     }
 
-    public String generateTokenFromUsername(String email)
+    public String generateTokenFromEmail(String email)
     {
         return Jwts.builder()
                 .setSubject(email)
@@ -60,7 +60,7 @@ public class JwtUtils
     }
 
     // Not : getUsernameFromJWT ***************************************
-    public String getUsernameFromJwtToken(String token)
+    public String getEmailFromJwtToken(String token)
     {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)

@@ -12,8 +12,10 @@ import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,11 +27,23 @@ public class UserService
     private final UserMapper userMapper;
     private final UniquePropertyValidator uniquePropertyValidator;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
 
 
     public void saveDefaultAdmin(User defaultAdmin)
     {
+        Set<Role> role = new HashSet<>();
+        role.add(roleService.getRole(RoleType.ADMIN));
+
+        defaultAdmin.setFirstName("admin");
+        defaultAdmin.setLastName("admin");
+        defaultAdmin.setCreate_at(LocalDateTime.now());
+        defaultAdmin.setPassword_hash("Asd12345*");
+        defaultAdmin.setPassword_hash(passwordEncoder.encode("123456Aa*"));
+        defaultAdmin.setEmail("admin10@gmail.com");
+        defaultAdmin.setPhone("555-555-5555");
+        defaultAdmin.setRole(role);
         defaultAdmin.setBuilt_in(true);
         userRepository.save(defaultAdmin);
 

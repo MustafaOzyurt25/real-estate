@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,12 +51,18 @@ public class AuthenticationService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
 
-        //Optional<String> role = roles.stream().findFirst(); bir tane rol verdigimiz zaman kullaniyoruz
+
+        Optional<String> role = roles.stream().findFirst();
+
+        System.out.println("role : " + role);
 
 
         AuthResponse.AuthResponseBuilder authResponse = AuthResponse.builder();
 
         authResponse.token(token.substring(7));
+        if(role.isPresent()){
+            authResponse.role(role.get());
+        }
 
         return ResponseEntity.ok(authResponse.build());
 
