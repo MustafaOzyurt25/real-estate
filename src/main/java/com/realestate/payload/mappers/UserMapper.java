@@ -22,8 +22,8 @@ public class UserMapper {
                 .lastName(userRequest.getLastName())
                 .phone(userRequest.getPhone())
                 .email(userRequest.getEmail())
-                .password_hash(passwordEncoder.encode(userRequest.getPassword()))
-                .create_at(LocalDateTime.now())
+                .passwordHash(passwordEncoder.encode(userRequest.getPassword()))
+                .createAt(LocalDateTime.now())
                 .build();
     }
 

@@ -38,13 +38,13 @@ public class UserService
 
         defaultAdmin.setFirstName("admin");
         defaultAdmin.setLastName("admin");
-        defaultAdmin.setCreate_at(LocalDateTime.now());
-        defaultAdmin.setPassword_hash("Asd12345*");
-        defaultAdmin.setPassword_hash(passwordEncoder.encode("123456Aa*"));
+        defaultAdmin.setCreateAt(LocalDateTime.now());
+        defaultAdmin.setPasswordHash("Asd12345*");
+        defaultAdmin.setPasswordHash(passwordEncoder.encode("123456Aa*"));
         defaultAdmin.setEmail("admin10@gmail.com");
         defaultAdmin.setPhone("555-555-5555");
         defaultAdmin.setRole(role);
-        defaultAdmin.setBuilt_in(true);
+        defaultAdmin.setBuiltIn(true);
         userRepository.save(defaultAdmin);
 
     }

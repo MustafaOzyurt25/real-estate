@@ -16,7 +16,7 @@ public class AdvertMapper {
                 .slug(slug)
                 .price(advertRequest.getPrice())
                 .location(advertRequest.getLocation())
-                .create_at(advertRequest.getCreate_at())
+                .createAt(advertRequest.getCreateAt())
                 .country(country)
                 .city(city)
                 .district(district)

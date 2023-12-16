@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,17 +38,17 @@ public class Advert {
     private AdvertStatus status;
 
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
-    private Boolean built_in;
+    private Boolean builtIn;
 
-    private Boolean is_active;
+    private Boolean isActive;
 
-    private Integer view_count;
+    private Integer viewCount;
     private String location;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime create_at;
+    private LocalDateTime createAt;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime update_at;
+    private LocalDateTime updateAt;
 
     @OneToMany(mappedBy = "advert",cascade = CascadeType.REMOVE)
     private List<CategoryPropertyValue> categoryPropertyValue;

@@ -1,8 +1,6 @@
 package com.realestate.payload.request;
 
 
-import com.realestate.entity.Image;
-import com.realestate.entity.enums.AdvertStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,8 +27,8 @@ public class AdvertRequest {
     @NotNull
     private String location;
     private List<MultipartFile> images;
-    private LocalDateTime create_at = LocalDateTime.now();
-    private LocalDateTime update_at;
+    private LocalDateTime createAt = LocalDateTime.now();
+    private LocalDateTime updateAt;
     private Long countryId;
     private Long cityId;
     private Long districtId;

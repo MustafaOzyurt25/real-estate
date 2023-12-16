@@ -21,7 +21,7 @@ public class CategoryPropertyKey {
 
     private String name;
 
-    private Boolean built_in=false;
+    private Boolean builtIn = false;
 
     @ManyToOne
     private Category category;

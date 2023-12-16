@@ -19,7 +19,6 @@ public class RealEstateApplication implements CommandLineRunner {
 	}
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("Merhaba burası RealEstateApplication class'ında \"run\" methodu");
 
 		if(roleService.getAllUserRoles().isEmpty())
 		{
@@ -29,9 +28,5 @@ public class RealEstateApplication implements CommandLineRunner {
 		}
 
 		userService.saveDefaultAdmin(User.builder().build());
-
-
-		// getUserRole() methodunun çalışığ çalışmadığı kontrol edildi. Çalışıyor.
-		System.out.println("Customer Role = " + roleService.getRole(RoleType.CUSTOMER));
 	}
 }
