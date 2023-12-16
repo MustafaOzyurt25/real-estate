@@ -39,14 +39,12 @@ public class UserService
         defaultAdmin.setFirstName("admin");
         defaultAdmin.setLastName("admin");
         defaultAdmin.setCreateAt(LocalDateTime.now());
-        defaultAdmin.setPasswordHash("Asd12345*");
         defaultAdmin.setPasswordHash(passwordEncoder.encode("123456Aa*"));
         defaultAdmin.setEmail("admin10@gmail.com");
         defaultAdmin.setPhone("555-555-5555");
         defaultAdmin.setRole(role);
         defaultAdmin.setBuiltIn(true);
         userRepository.save(defaultAdmin);
-
     }
 
     public ResponseMessage<UserResponse> registerUser(UserRequest userRequest) {
@@ -56,6 +54,7 @@ public class UserService
 
         Set<Role> role = new HashSet<>();
         role.add(roleService.getRole(RoleType.CUSTOMER));
+        user.setBuiltIn(false);
         user.setRole(role);
 
 
