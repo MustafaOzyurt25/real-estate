@@ -35,14 +35,15 @@ public class UserDetailsImpl implements UserDetails
     private Collection<? extends GrantedAuthority> authorities;
 
 
-    public UserDetailsImpl(Long id, String email, String firstName, String password, String role) {
+    public UserDetailsImpl(Long id, String email, String firstName, String password, Set<Role> roles) {
         this.id = id;
         this.email = email;
         this.name = firstName;
         this.password = password;
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(role));
+        for (Role  role : roles)
+        grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole_name().name()));
         this.authorities = grantedAuthorities;
     }
 
@@ -60,7 +61,7 @@ public class UserDetailsImpl implements UserDetails
     @Override
     public String getUsername() {
 
-        return getEmail();
+        return email;
 
     }
 
