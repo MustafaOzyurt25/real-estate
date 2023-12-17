@@ -1,12 +1,14 @@
 package com.realestate.payload.mappers;
 
 import com.realestate.entity.User;
+import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
 import com.realestate.payload.response.UserResponse;
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 @Component
@@ -22,7 +24,17 @@ public class UserMapper {
                 .lastName(userRequest.getLastName())
                 .phone(userRequest.getPhone())
                 .email(userRequest.getEmail())
-                .passwordHash(passwordEncoder.encode(userRequest.getPassword()))
+                .createAt(LocalDateTime.now())
+                .build();
+    }
+
+    public User mapRegisterRequestToUser(RegisterRequest registerRequest){
+        return User.builder()
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
+                .phone(registerRequest.getPhone())
+                .email(registerRequest.getEmail())
+                .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
                 .createAt(LocalDateTime.now())
                 .build();
     }
@@ -34,5 +46,19 @@ public class UserMapper {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .build();
+    }
+
+    public User mapUserRequestUpdatedUser(User user,UserRequest userRequest){
+        return User.builder()
+                .id(user.getId())
+                .createAt(user.getCreateAt())
+                .builtIn(user.getBuiltIn())
+                .updateAt(LocalDateTime.now())
+                .firstName(userRequest.getFirstName())
+                .lastName(userRequest.getLastName())
+                .phone(userRequest.getPhone())
+                .email(userRequest.getEmail())
+                .build();
+
     }
 }

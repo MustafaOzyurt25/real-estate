@@ -1,11 +1,14 @@
 package com.realestate.controller;
 
+import com.realestate.payload.request.ForgotPasswordRequest;
 import com.realestate.payload.request.LoginRequest;
+import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
 import com.realestate.payload.response.AuthResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.UserResponse;
 import com.realestate.service.AuthenticationService;
+import com.realestate.service.ForgotPasswordService;
 import com.realestate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +26,9 @@ import javax.validation.Valid;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-
-
     private final UserService userService;
+
+    private final ForgotPasswordService forgotPasswordService;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody @Valid LoginRequest loginRequest){
@@ -35,9 +38,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseMessage<UserResponse> registerUser (@RequestBody @Valid UserRequest userRequest) {
-        return userService.registerUser(userRequest);
+    public ResponseMessage<UserResponse> registerUser (@RequestBody @Valid RegisterRequest registerRequest) {
+        return userService.registerUser(registerRequest);
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity forgotPasswordUser(@RequestBody @Valid ForgotPasswordRequest forgotPasswordRequest){
+            forgotPasswordService.forgotPasswordUser(forgotPasswordRequest);
+        return ResponseEntity.ok("Password reset request has been initiated. Check your email for further instructions.");
+    }
+
 
 
 }
