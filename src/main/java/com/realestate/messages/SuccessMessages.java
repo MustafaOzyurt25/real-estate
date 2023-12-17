@@ -1,7 +1,5 @@
 package com.realestate.messages;
 
-import com.realestate.entity.CategoryPropertyKey;
-
 public class SuccessMessages {
 
     private SuccessMessages(){
@@ -23,5 +21,8 @@ public class SuccessMessages {
     public static final String USER_CREATE = "User Created Successfully";
     public static final String DELETE_CATEGORY = "Category Deleted Successfully" ;
     public static final String TOUR_REQUEST_DELETED = "Tour Request Successfully Deleted";
+    public static final String USER_UPDATE = "User Successfully Updated";
+    public static final String USER_FOUNDED = "User Successfully Founded";
+    public static final String USER_PASSWORD_UPDATE = "User Password Successfully Updated";
 
 }
