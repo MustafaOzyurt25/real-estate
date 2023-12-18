@@ -1,9 +1,6 @@
 package com.realestate.payload.response;
 
-import com.realestate.entity.City;
-import com.realestate.entity.Country;
-import com.realestate.entity.District;
-import com.realestate.entity.Image;
+import com.realestate.entity.*;
 import com.realestate.entity.enums.AdvertStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,5 +31,7 @@ public class AdvertResponse {
     private Country country;
     private City city;
     private District district;
+    private Category category;
+    private AdvertType advertType;
 
 }

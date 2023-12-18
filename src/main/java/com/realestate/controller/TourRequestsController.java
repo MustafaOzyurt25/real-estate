@@ -27,4 +27,9 @@ public class TourRequestsController {
     public ResponseMessage<TourRequestResponse> delete(@PathVariable("id") Long id){
         return tourRequestsService.delete(id);
     }
+    @GetMapping("/{id}/admin")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    public ResponseMessage<TourRequestResponse> getTourRequestById(@PathVariable("id") Long tourRequestId){
+        return tourRequestsService.getTourRequestById(tourRequestId);
+    }
 }
