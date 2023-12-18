@@ -2,6 +2,7 @@ package com.realestate.controller;
 
 import com.realestate.entity.Advert;
 import com.realestate.payload.request.AdvertRequest;
+import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
@@ -39,5 +40,13 @@ public class AdvertController {
         return advertService.getAdvertAmountByCity();
     }
 
+
+
+
+
+
+    @GetMapping("/categories")
+    public List<AdvertCategoriesResponse> getAdvertAmountByCategories(){return advertService.getAdvertAmountByCategories();}
+     //asdf
 
 }

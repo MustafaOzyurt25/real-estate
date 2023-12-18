@@ -7,6 +7,7 @@ import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.request.AdvertRequest;
+import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.AdvertRepository;
@@ -85,6 +86,10 @@ public class AdvertService {
     public List<AdvertCityResponse> getAdvertAmountByCity() {
 
         return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
+    }
+
+    public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
+        return advertRepository.getAdvertAmountByCategories().stream().collect(Collectors.toList());
     }
 }
 

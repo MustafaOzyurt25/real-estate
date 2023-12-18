@@ -1,6 +1,7 @@
 package com.realestate.repository;
 
 import com.realestate.entity.Advert;
+import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,5 +20,6 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
     List<AdvertCityResponse> getAdvertAmountByCity();
 
 
-
+    @Query("SELECT new com.realestate.payload.response.AdvertCategoriesResponse(a.categories.name, COUNT(a)) FROM Advert a GROUP BY a.categories.name")
+    List<AdvertCategoriesResponse> getAdvertAmountByCategories();
 }
