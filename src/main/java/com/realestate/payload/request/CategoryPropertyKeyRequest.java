@@ -1,7 +1,6 @@
 package com.realestate.payload.request;
 
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +16,8 @@ import javax.validation.constraints.Size;
 public class CategoryPropertyKeyRequest {
 
     @NotNull(message = "Please enter category property key's name")
-    @Size(min=2,max=80,message = "catagory property's key name should be at least 2 chars")
-    private String name;  // villa category'sinde bir dairenin, cat. prop. keyleri isitma, kacinci kat oldugu  vs olur
+    @Size(min = 2, max = 80, message = "catagory property key's name should be between 2 and 80 chars")
+    private String name;
 
-    @NotNull(message = "Please enter category")
-    private Long categoryId;  // id=5 category (mesela apt dairesi).
-    
-    
+
 }

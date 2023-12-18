@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="category_property_keys")
+@Table(name = "category_property_keys")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,12 +21,15 @@ public class CategoryPropertyKey {
 
     private String name;
 
+
     private Boolean builtIn = false;
+
 
     @ManyToOne
     private Category category;
 
-    @OneToMany(mappedBy = "categoryPropertyKey",cascade = CascadeType.REMOVE)
+
+    @OneToMany(mappedBy = "categoryPropertyKey", cascade = CascadeType.REMOVE)
     private List<CategoryPropertyValue> categoryPropertyValue;
 
 }

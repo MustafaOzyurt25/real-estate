@@ -23,5 +23,7 @@ public class SuccessMessages {
     public static final String USER_CREATE = "User Created Successfully";
     public static final String DELETE_CATEGORY = "Category Deleted Successfully" ;
     public static final String TOUR_REQUEST_DELETED = "Tour Request Successfully Deleted";
+    public static final String CATEGORY_PROPERTY_KEY_DELETED ="Category Property Key is Deleted Successfully";
+    public static final String CATEGORY_PROPERTY_KEY_CREATE = "Category Property Key is created Successfully";
 
 }

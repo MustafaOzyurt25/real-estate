@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CategoryPropertyKeyRepository extends JpaRepository<CategoryPropertyKey, Long> {
     boolean existsByCategoryId(Long categoryId);
-
     List<CategoryPropertyKey> findByCategoryId(Long categoryId);
+    
 }
