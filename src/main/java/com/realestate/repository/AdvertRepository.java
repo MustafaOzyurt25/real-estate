@@ -12,9 +12,6 @@ public interface AdvertRepository extends JpaRepository<Advert,Long> {
 
     Optional<Advert> findBySlug(String slug);
 
-    //@Query("SELECT a.city.name, COUNT(a) FROM Advert a GROUP BY a.city.name")
-    //List<Object[]> getAdvertAmountByCity();
-
     @Query("SELECT new com.realestate.payload.response.AdvertCityResponse(a.city.name, COUNT(a)) FROM Advert a GROUP BY a.city.name")
     List<AdvertCityResponse> getAdvertAmountByCity();
 

@@ -45,6 +45,10 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .phone(user.getPhone())
                 .email(user.getEmail())
+                .favorites(user.getFavorites())
+                .roles(user.getRole())
+                .tourRequestGuests(user.getTourRequestGuest())
+                .tourRequestOwners(user.getTourRequestsOwner())
                 .build();
     }
 
