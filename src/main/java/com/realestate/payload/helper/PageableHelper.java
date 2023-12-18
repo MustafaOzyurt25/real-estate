@@ -18,4 +18,8 @@ public class PageableHelper {
 
         return pageable;
     }
+
+    public Pageable getPageableWithProperties(int page, int size){//burada front end dev a secenek vermiyoruz id ile desc i kendimiz setliyoruz
+        return PageRequest.of(page, size,Sort.by("id").descending());
+    }
 }

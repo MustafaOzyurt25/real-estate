@@ -15,7 +15,6 @@ public class ErrorMessages {
     public static final String CITY_NOT_FOUND_MESSAGE = "%s city not found ";
     public static final String DISTRICT_NOT_FOUND_MESSAGE = "%s district not found ";
     public static final String ADVERT_TYPE_NOT_FOUND_MESSAGE = "%s advertType not found ";
-    public static final String CATEGORY_NOT_FOUND_MESSAGE = "category with id %s Not Found";
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category with id %s Not Found";
     public static final String CATEGORY_PROPERTY_KEY_NOT_FOUND_MESSAGE = "Category Property Key with id %s Not Found";
     public static final String THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED = "The property key whose builtIn property is true can not be updated.";

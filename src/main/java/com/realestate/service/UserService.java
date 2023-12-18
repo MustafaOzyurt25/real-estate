@@ -7,6 +7,7 @@ import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
+import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.UserMapper;
 import com.realestate.payload.request.PasswordUpdatedRequest;
 import com.realestate.payload.request.RegisterRequest;
@@ -15,7 +16,7 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.UserResponse;
 import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.UserRepository;
-import com.realestate.service.helper.PageableHelper;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
