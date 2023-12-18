@@ -38,6 +38,8 @@ public class Category {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateAt;
     
+    
+    @JsonIgnore 
     @OneToMany(mappedBy = "category")
     private List<CategoryPropertyKey> categoryPropertyKeys;
 

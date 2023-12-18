@@ -4,8 +4,10 @@ import com.realestate.entity.Role;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.RoleType;
 import com.realestate.exception.ConflictException;
+import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
+import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.UserMapper;
 import com.realestate.payload.request.PasswordUpdatedRequest;
 import com.realestate.payload.request.RegisterRequest;
@@ -14,7 +16,10 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.UserResponse;
 import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -33,7 +39,7 @@ public class UserService
     private final UniquePropertyValidator uniquePropertyValidator;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
-
+    private final PageableHelper pageableHelper;
 
 
     public void saveDefaultAdmin(User defaultAdmin)
@@ -73,6 +79,10 @@ public class UserService
                 .build();
     }
 
+
+    public List<User> getALlUsers() {
+        return userRepository.findAll();
+    }
     public ResponseMessage<UserResponse> authenticatedUser(HttpServletRequest httpServletRequest) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
@@ -87,9 +97,9 @@ public class UserService
 
     }
 
-    public ResponseMessage<UserResponse> authenticatedUserUpdated(HttpServletRequest httpServletRequest, UserRequest userRequest) {
+    public ResponseMessage<UserResponse> authenticatedUserUpdated(HttpServletRequest request, UserRequest userRequest) {
 
-        String userEmail = (String) httpServletRequest.getAttribute("email");
+        String userEmail = (String) request.getAttribute("email");
 
         User user = userRepository.findByEmailEquals(userEmail);
 
@@ -118,13 +128,12 @@ public class UserService
 
     }
 
-    public ResponseMessage<UserResponse> authenticatedUserPasswordUpdated(HttpServletRequest httpServletRequest, PasswordUpdatedRequest passwordUpdatedRequest) {
+    public ResponseMessage<UserResponse> authenticatedUserPasswordUpdated(HttpServletRequest request, PasswordUpdatedRequest passwordUpdatedRequest) {
 
-        String userEmail = (String) httpServletRequest.getAttribute("email");
+        String userEmail = (String) request.getAttribute("email");
 
         User user = userRepository.findByEmailEquals(userEmail);
 
-        //user.getPasswordHash().equals(passwordEncoder.encode(passwordUpdatedRequest.getCurrentPassword()))
 
         if(user.getBuiltIn().equals(false) &&
                 passwordEncoder.matches(passwordUpdatedRequest.getCurrentPassword(), user.getPasswordHash())&&
@@ -150,6 +159,56 @@ public class UserService
         {
             throw new ConflictException("User can not be updated");
         }
+
+    }
+
+
+    public ResponseMessage authenticatedUserDeleted(HttpServletRequest request) {
+
+        String userEmail = (String) request.getAttribute("email");
+
+        User user = userRepository.findByEmailEquals(userEmail);
+
+        //user in advert veya tour request i varsa silmeye izin verilmeyecek
+
+        if(user.getBuiltIn().equals(false)){
+
+            userRepository.deleteById(user.getId());
+        }
+
+        else throw new ConflictException("You do not have permission to delete this user");
+
+        return ResponseMessage.builder()
+                .message(SuccessMessages.USER_DELETE)
+                .httpStatus(HttpStatus.OK)
+                .build();
+
+    }
+
+    public Page<UserResponse> getAllUsersByPage(int page, int size, String sort, String type) {
+
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+
+        return userRepository.findAll(pageable).map(userMapper::mapUserToUserResponse);
+    }
+
+    public ResponseMessage<UserResponse> getUserByAdmin(Long userId) {
+
+        User user = isUserExists(userId);
+
+        //user in adverti da frontend de gozuktugu icin response da olmasi gerekiyor
+
+        return ResponseMessage.<UserResponse>builder()
+                .object(userMapper.mapUserToUserResponse(user))
+                .message(SuccessMessages.USER_FOUNDED)
+                .httpStatus(HttpStatus.OK)
+                .build();
+
+    }
+
+    private User isUserExists(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, userId)));
 
     }
 }

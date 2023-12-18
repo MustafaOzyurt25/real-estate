@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/adverts")
@@ -47,6 +48,33 @@ public class AdvertController {
 
     @GetMapping("/categories")
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories(){return advertService.getAdvertAmountByCategories();}
-     //asdf
+   
+
+
+     @GetMapping(("/popular/{amount}"))
+     public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable Integer amount){
+             return advertService.getPopularAdvertsByAmount(amount);
+      }
+
+    @GetMapping()
+    public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(@RequestParam(value = "q", required = false) String q,
+                                                                        @RequestParam(value = "category_id", required = false) Long categoryId,
+                                                                        @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
+                                                                        @RequestParam(value = "price_start", required = false) Double priceStart,
+                                                                        @RequestParam(value = "price_end", required = false) Double priceEnd,
+                                                                        @RequestParam(value = "status", required = false) Integer status,
+                                                                        @RequestParam(value = "page",defaultValue = "0") int page,
+                                                                        @RequestParam(value = "size",defaultValue = "20") int size,
+                                                                        @RequestParam(value = "sort",defaultValue = "category") String sort,
+                                                                        @RequestParam(value = "type",defaultValue = "asc") String type){
+        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/{id}/auth")
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id){
+        return advertService.getAuthenticatedCustomerAdvertById(id);
+    }
 
 }

@@ -43,5 +43,4 @@ public class TourRequest {
     @ManyToOne
     private User guestUser;
 
-
 }

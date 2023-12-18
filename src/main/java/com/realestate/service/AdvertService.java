@@ -2,20 +2,32 @@ package com.realestate.service;
 
 import com.realestate.entity.*;
 import com.realestate.entity.enums.AdvertStatus;
+import com.realestate.entity.enums.RoleType;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
+import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.request.AdvertRequest;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
+import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.AdvertRepository;
+import com.realestate.repository.TourRequestsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +42,10 @@ public class AdvertService {
     private final CityService cityService;
     private final DistrictService districtService;
     private final AdvertTypeService advertTypeService;
+    private final PageableHelper pageableHelper;
+
+    private final TourRequestsRepository tourRequestsRepository;
+
 
     public Advert save(AdvertRequest advertRequest) {
 
@@ -77,10 +93,10 @@ public class AdvertService {
 
     }
 
-    public Advert getAdvertBySlug(String slug){
-        return advertRepository.findBySlug(slug).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
-    }
+  // public Advert getAdvertBySlug(String slug){
+  //     return advertRepository.findBySlug(slug).orElseThrow(()->
+  //             new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
+  // }
 
 
     public List<AdvertCityResponse> getAdvertAmountByCity() {
@@ -88,8 +104,142 @@ public class AdvertService {
         return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
     }
 
+
+    public Advert getAdvertBySlug(String slug){
+
+        Advert advert= advertRepository.findBySlug(slug).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
+
+        Long advertId= advert.getId();// view_count güncellemek için eklendi
+        advert= advertView(advertId);
+
+        return advert;
+    }
+
+
+
+
+
+
+
+    //====================================popular================================================
+
+
+    //view_count sayısını güncellemek için
+    public Advert advertView(Long advertId){
+        //id kontrol
+        Advert advert=getAdvertById(advertId);
+
+        advert.setViewCount(advert.getViewCount()+1);
+        advertRepository.save(advert);
+        return advert;
+    }
+
+    //tour_request sayısını almak için
+    public int tourRequestAmount(Long advertId){
+        return tourRequestsRepository.countByAdvertId(advertId);
+    }
+
+
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
         return advertRepository.getAdvertAmountByCategories().stream().collect(Collectors.toList());
     }
+
+
+
+     public  List<AdvertResponse> getPopularAdvertsByAmount(Integer amount) {
+
+        if (amount==null){
+            amount= 10;
+        }
+        //tüm advertları almak için
+         List<Advert> allAdvert = advertRepository.findAll().stream().toList();
+
+
+
+         List<PopularAdvert> popularAdvert = new ArrayList<>();
+         for (int i=0; i<allAdvert.size(); i++){
+             int tvoa= allAdvert.get(i).getViewCount();
+             int troa= tourRequestAmount(allAdvert.get(i).getId());
+             int pp= ((troa*3)+tvoa);
+             popularAdvert.add(new PopularAdvert(allAdvert.get(i).getId(),pp));
+         }
+
+
+         //amount miktarı kadar popularAdvert ı büyükten küçüğe sıraladım topList e attım
+          List<PopularAdvert> topListPopularAdvert = popularAdvert.stream()
+                 .sorted(Comparator.comparingInt(PopularAdvert::getPpValue).reversed())
+                 .limit(amount)
+                 .toList();
+
+         // topListPopularAdvert ten sadece idlerin oldugu liste oluşturdum
+         List<Long> advertIds=new ArrayList<>();
+         for (PopularAdvert popularAdverts:topListPopularAdvert){
+             advertIds.add(popularAdverts.getAdvertId());
+         }
+
+
+        return advertRepository.findAllById(advertIds).stream().map(advertMapper::mapAdvertToAdvertResponse).toList();
+
+         }
+
+            //===================================================popular===================================================
+
+
+
+
+    // =======================================A08================================================
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(Long advertId) {
+
+        //id kontrol
+        Advert advert=getAdvertById(advertId);
+
+        return ResponseMessage.<AdvertResponse>builder()
+                .object(advertMapper.mapAdvertToAdvertResponse(advert))
+                .message(SuccessMessages.ADVERT_FOUNDED)
+                .httpStatus(HttpStatus.OK)
+                .build();
+
+    }
+
+
+
+    //===========================ID kontrol============================================
+        public Advert getAdvertById(Long advertId){
+            return isAdvertExists(advertId);
+        }
+
+        private Advert isAdvertExists(Long advertId) {
+            return advertRepository.findById(advertId).orElseThrow(()->
+                    new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION,advertId)));
+        }
+
+
+
+
+
+    public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, Integer status, int page, int size, String sort, String type) {
+        Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort.toLowerCase(),type.toLowerCase());
+        AdvertStatus aStatus = null;
+        if(status!=null) {
+            aStatus = AdvertStatus.getAdvertStatusByNumber(status);
+        }
+        if(q!=null){
+            q=q.trim().toLowerCase().replaceAll("-"," ");
+        }
+        Page<AdvertResponse> adverts = advertRepository.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,aStatus,pageable)
+                .map(advertMapper::mapAdvertToAdvertResponse);
+        Map<String, Object> responseBody = new HashMap<>();
+        if (adverts.isEmpty()){
+            responseBody.put("message", ErrorMessages.CRITERIA_ADVERT_NOT_FOUND);
+            return new ResponseEntity<>(responseBody,HttpStatus.OK);
+        }
+        responseBody.put("Message",SuccessMessages.CRITERIA_ADVERT_FOUND);
+        responseBody.put("Adverts",adverts);
+        return new ResponseEntity<>(responseBody,HttpStatus.OK);
+    }
+
+
+
 }
 

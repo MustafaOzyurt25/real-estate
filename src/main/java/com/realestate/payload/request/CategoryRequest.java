@@ -33,7 +33,7 @@ public class CategoryRequest {
     @NotNull
     private Boolean isActive;
     
-    @NotNull
+//  @NotNull 
     private List<Long> categoryPropertiesKeyId;
 
     private LocalDateTime createAt = LocalDateTime.now();
