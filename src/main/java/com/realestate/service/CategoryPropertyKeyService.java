@@ -34,7 +34,7 @@ public class CategoryPropertyKeyService {
 
         CategoryPropertyKey categoryPropertyKey = categoryPropertyKeyMapper.mapCategoryPropertyKeyRequestToCategoryPropertyKey(request);
         categoryPropertyKey.setCategory(category);
-        categoryPropertyKey.setBuiltIn(false);
+        categoryPropertyKey.setBuiltIn(true);
 
         CategoryPropertyKey savedCategoryPropertyKey = categoryPropertyKeyRepository.save(categoryPropertyKey);
         return ResponseMessage.<CategoryPropertyKey>builder()

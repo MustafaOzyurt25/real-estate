@@ -141,6 +141,7 @@ public class AdvertService {
     }
 
 
+
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
         return advertRepository.getAdvertAmountByCategories().stream().collect(Collectors.toList());
     }
