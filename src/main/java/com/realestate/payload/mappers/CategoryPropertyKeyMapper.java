@@ -16,19 +16,13 @@ public class CategoryPropertyKeyMapper {
 
         return CategoryPropertyKey.builder()
                 .name(categoryPropertyKeyRequest.getName())
-                //.built_in(categoryPropertyKeyRequest.get...)  bu db de doldurulacak
-                //.category(...)  // bunu servicede tamamladim!
-                //.categoryPropertyValue(categoryPropertyKeyRequest.get)  bu relational table geregi var.
-
                 .build();
     }
 
-    // Update icin DTO - > POJO( CUNKU UPDATE VERISI DB DE HAZIR VE ID SI DE VAR )
+    // Update icin DTO - > POJO 
     public CategoryPropertyKey mapCategoryPropertyKeyRequestoUpdatedCategoryPropertyKey(Long id, CategoryPropertyKeyRequest request) {
-        //  @Builder(toBuilder = true) kullanip buna id ekledik.
-
         return mapCategoryPropertyKeyRequestToCategoryPropertyKey(request)
-                .toBuilder() // metodun olusturdugu objeye elimizde zaten varolan id yi eklemek istedik
+                .toBuilder()
                 .id(id)
                 .build();
 

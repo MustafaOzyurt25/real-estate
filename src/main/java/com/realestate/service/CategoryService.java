@@ -31,8 +31,8 @@ public class CategoryService {
 
     public ResponseMessage<CategoryResponse> deleteCategory(Long categoryId) {
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND,categoryId)));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND, categoryId)));
         if (category.getBuiltIn()) {
             throw new RuntimeException("Built-in categories cannot be deleted.");
         }
@@ -46,18 +46,20 @@ public class CategoryService {
                 build();
     }
 
-    public Category createCategory(CategoryRequest categoryRequest){
+    public Category createCategory(CategoryRequest categoryRequest) {
 
         List<CategoryPropertyKey> categoryPropertyKeys = categoryPropertyKeyService.getCategoryPropertyKeyByCategoryPropertyKeyIdList(categoryRequest.getCategoryPropertiesKeyId());
 
         String slug = categoryRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
 
-        Category category = categoryMapper.mapCategoryRequestToCategory(categoryRequest,categoryPropertyKeys);
+        Category category = categoryMapper.mapCategoryRequestToCategory(categoryRequest, categoryPropertyKeys);
 
         category.setBuiltIn(false);
         category.setIsActive(true);
 
+
         categoryRepository.save(category);
+
         return category;
     }
 

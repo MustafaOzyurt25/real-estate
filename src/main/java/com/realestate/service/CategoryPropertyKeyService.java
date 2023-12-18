@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,92 +28,88 @@ public class CategoryPropertyKeyService {
     private final CategoryPropertyKeyRepository categoryPropertyKeyRepository;
     private final CategoryPropertyKeyMapper categoryPropertyKeyMapper;
     private final CategoryRepository categoryRepository;
-
-    // Not: Save() ******************************************************************
-    public CategoryPropertyKey createProperty(Long categoryId, CategoryPropertyKeyRequest request) {
-
-        // burda ; verilen categoryId ile bir category varmi kontrolu yaptim.eger yoksa excptn firlatir.
+    
+    public ResponseMessage<CategoryPropertyKey> createProperty(Long categoryId, CategoryPropertyKeyRequest request) {
         Category category = isCategoryExist(categoryId);
 
-
         CategoryPropertyKey categoryPropertyKey = categoryPropertyKeyMapper.mapCategoryPropertyKeyRequestToCategoryPropertyKey(request);
-        categoryPropertyKey.setCategory(category);// mapperda bu field, eksik kalmisti!!
+        categoryPropertyKey.setCategory(category);
+        categoryPropertyKey.setBuiltIn(false);
 
-        return categoryPropertyKeyRepository.save(categoryPropertyKey);
+        CategoryPropertyKey savedCategoryPropertyKey = categoryPropertyKeyRepository.save(categoryPropertyKey);
+        return ResponseMessage.<CategoryPropertyKey>builder()
+                .object(savedCategoryPropertyKey)
+                .httpStatus(HttpStatus.CREATED)
+                .message(SuccessMessages.CATEGORY_PROPERTY_KEY_CREATE)
+                .build();
 
 
     }
-
-
-    // Not: getCategoryPropertyKeysByCategoryId() ******************************************************************
-
+    
     public ResponseMessage<List<CategoryPropertyKey>> getCategoryPropertyKeysByCategoryId(Long categoryId) {
-        // 1- bu categoryId ile kayitli bir Category var mi ?
-        Category category = isCategoryExist(categoryId);  // buna gerek varmi. once category var mi kontrolu yapmaya.
-        // todo : bu if-else ifadesi daha sade yazilabilir mi? burda isExistsCategoryPropertyKeyByCategoryId metodu yazilip daha sadelestirilebilir gibi.
-        if (categoryPropertyKeyRepository.existsByCategoryId(categoryId)) {  // burda categoryId ile propertyKey kontrolu
-            List<CategoryPropertyKey> categoryPropertyKeys = categoryPropertyKeyRepository.findByCategoryId(categoryId);
-            return ResponseMessage.<List<CategoryPropertyKey>>builder()
-                    .object(categoryPropertyKeys)
-                    .message(SuccessMessages.CATEGORY_PROPERTY_KEY_FOUND)
-                    .httpStatus(HttpStatus.OK)
-                    .build();
+        isCategoryExist(categoryId);
 
-        } else {
-            return ResponseMessage.<List<CategoryPropertyKey>>builder()  // obje yok ama sadece mesaj vermek istedim. 
-                    .message(ErrorMessages.CATEGORY_PROPERTY_KEY_NOT_FOUND_MESSAGE)
-                    .httpStatus(HttpStatus.NOT_FOUND)
-                    .build();
-        }
+        List<CategoryPropertyKey> categoryPropertyKeys = getCategoryPropertyKeys(categoryId);
 
+        HttpStatus httpStatus = categoryPropertyKeys.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK;
+        String message = categoryPropertyKeys.isEmpty() ?
+                ErrorMessages.CATEGORY_PROPERTY_KEY_NOT_FOUND_MESSAGE :
+                SuccessMessages.CATEGORY_PROPERTY_KEY_FOUND;
 
+        return ResponseMessage.<List<CategoryPropertyKey>>builder()
+                .object(categoryPropertyKeys)
+                .message(message)
+                .httpStatus(httpStatus)
+                .build();
     }
 
-    // Not: updateByCategoryPropertyKeyId() *********************************************************************
-
+    private List<CategoryPropertyKey> getCategoryPropertyKeys(Long categoryId) {
+        return categoryPropertyKeyRepository.existsByCategoryId(categoryId) ?
+                categoryPropertyKeyRepository.findByCategoryId(categoryId) :
+                Collections.emptyList();
+    }
+    
     public ResponseMessage<CategoryPropertyKey> updateCategoryPropertyKeyById(Long propertyKeyId, CategoryPropertyKeyRequest request) {
-
-        //1. verilen id ile kayitli bir CategoryPropertyKey objesi varmi?   
-        CategoryPropertyKey existingCategoryPropertyKey = isCategoryPropertyKeyExist(propertyKeyId);// eger yoksa exception firlar, varsa devam...
-
-        //2.  eger mevcut propety'nin builtIn property si  true ise update edilemez ( requirements )
+        CategoryPropertyKey existingCategoryPropertyKey = isCategoryPropertyKeyExistById(propertyKeyId);
         if (existingCategoryPropertyKey.getBuiltIn()) {
             throw new ConflictException(ErrorMessages.THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED);
         }
-        // 3. todo: deleteCategoryPropertyKeyById(id); // eger  varsa sil cunku onu guncelleyecem mantikli mi!!!
-
-        // 4.kullaniciya updated property key object olmali ( requirements )
         CategoryPropertyKey categoryPropertyKey = categoryPropertyKeyMapper
                 .mapCategoryPropertyKeyRequestoUpdatedCategoryPropertyKey(propertyKeyId, request);
 
-        Category category = isCategoryExist(request.getCategoryId());
-        categoryPropertyKey.setCategory(category); // mapperda bu field, eksik kalmisti!!
+        Category category = isCategoryExist(existingCategoryPropertyKey.getCategory().getId());
+        categoryPropertyKey.setCategory(category);
+        categoryPropertyKey.setBuiltIn(false);
 
         CategoryPropertyKey propertyKeyUpdated = categoryPropertyKeyRepository.save(categoryPropertyKey);
-
-
         return ResponseMessage.<CategoryPropertyKey>builder()
-                .object(propertyKeyUpdated) // updated property key object istenmis cunku.
+                .object(propertyKeyUpdated)
                 .message(SuccessMessages.CATEGORY_PROPERTY_KEY_UPDATE)
                 .httpStatus(HttpStatus.OK).build();
 
     }
-
-    //verilen categoryPropertyKeyId ile kayitli bir CategoryPropertyKey objesi varmi?
-    public CategoryPropertyKey isCategoryPropertyKeyExist(Long id) {
-        return categoryPropertyKeyRepository.
-                findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_PROPERTY_KEY_NOT_FOUND_MESSAGE, id)));
-
-    }
- 
-
+    
     public Category isCategoryExist(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND_MESSAGE, categoryId)));
     }
-
-
     
+    public ResponseMessage<CategoryPropertyKey> deleteCategoryPropertyKeyByKeyId(Long id) {
+        CategoryPropertyKey categoryPropertyKey = isCategoryPropertyKeyExistById(id);
+
+        if (categoryPropertyKey.getBuiltIn()) {
+            throw new RuntimeException(ErrorMessages.THE_PROPERTY_KEY_CAN_NOT_BE_DELETED);
+        }
+        categoryPropertyKeyRepository.delete(categoryPropertyKey);
+        return ResponseMessage.<CategoryPropertyKey>builder().
+                object(categoryPropertyKey).
+                httpStatus(HttpStatus.OK).
+                message(SuccessMessages.CATEGORY_PROPERTY_KEY_DELETED).
+                build();
+
+
+    }
+
 
     public CategoryPropertyKey isCategoryPropertyKeyExistById(Long id) {
 
@@ -121,12 +118,15 @@ public class CategoryPropertyKeyService {
     }
 
     public List<CategoryPropertyKey> getCategoryPropertyKeyByCategoryPropertyKeyIdList(List<Long> idList) {
-
+        if (idList == null || idList.isEmpty()) {
+            return Collections.emptyList(); 
+        }
+        
         return idList.stream()
                 .map(this::isCategoryPropertyKeyExistById)
                 .collect(Collectors.toList());
     }
 
 
-} // service
+} 
 
