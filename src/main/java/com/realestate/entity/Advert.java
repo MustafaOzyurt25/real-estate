@@ -80,6 +80,6 @@ public class Advert {
 
     @ManyToOne
     private Category category;
-
+//yorum
 
 }
