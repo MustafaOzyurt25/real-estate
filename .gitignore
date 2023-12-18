@@ -21,7 +21,7 @@ target/
 *.properties
 dev.properties
 application.properties
-
+d.sql
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
