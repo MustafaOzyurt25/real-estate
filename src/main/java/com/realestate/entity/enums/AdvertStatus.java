@@ -28,4 +28,12 @@ public enum AdvertStatus {
     public String getDescription() {
         return description;
     }
+    public static AdvertStatus getAdvertStatusByNumber(int number) {
+        for (AdvertStatus status : AdvertStatus.values()) {
+            if (status.getId() == number) {
+                return status;
+            }
+        }
+        return null;
+    }
 }

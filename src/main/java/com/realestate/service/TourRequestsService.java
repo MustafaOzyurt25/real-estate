@@ -30,6 +30,7 @@ public class TourRequestsService {
        tourRequest.setStatus(TourRequestStatus.PENDING);
 
 
+
       TourRequest savedTourRequest= tourRequestsRepository.save(tourRequest);
 
       return ResponseMessage.<TourRequestResponse>builder()
@@ -50,4 +51,16 @@ public class TourRequestsService {
                 .message(SuccessMessages.TOUR_REQUEST_DELETED)
                 .build();
     }
+    public ResponseMessage<TourRequestResponse> getTourRequestById(Long tourRequestId) {
+        TourRequest getTourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND,tourRequestId)));
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(getTourRequest))
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.RETURNED_TOUR_REQUEST_DETAILS)
+                .build();
+    }
+    /*
+
+     */
 }
