@@ -14,8 +14,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class UserRequest
-{
+public class RegisterRequest {
+
     @NotNull
     private String firstName;
     @NotNull
@@ -29,6 +29,10 @@ public class UserRequest
     @NotNull
     private String email;
 
-
-
+    @Pattern(
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
+            message = "Invalid password format"
+    )
+    @NotNull
+    private String password;
 }
