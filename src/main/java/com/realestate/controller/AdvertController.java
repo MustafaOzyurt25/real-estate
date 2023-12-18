@@ -53,6 +53,6 @@ public class AdvertController {
                                                                         @RequestParam(value = "type",defaultValue = "asc") String type){
         return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
     }
-
+//a
 
 }
