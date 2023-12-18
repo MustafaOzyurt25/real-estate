@@ -40,6 +40,12 @@ public class AdvertController {
         return advertService.getAdvertAmountByCity();
     }
 
+
+     @GetMapping(("/popular/{amount}"))
+     public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable Integer amount){
+             return advertService.getPopularAdvertsByAmount(amount);
+      }
+
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(@RequestParam(value = "q", required = false) String q,
                                                                         @RequestParam(value = "category_id", required = false) Long categoryId,
@@ -53,6 +59,11 @@ public class AdvertController {
                                                                         @RequestParam(value = "type",defaultValue = "asc") String type){
         return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
     }
-//a
 
+
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/{id}/auth")
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id){
+        return advertService.getAuthenticatedCustomerAdvertById(id);
+    }
 }

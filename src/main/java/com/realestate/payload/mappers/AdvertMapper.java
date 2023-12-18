@@ -27,6 +27,11 @@ public class AdvertMapper {
                 .build();
     }
 
+
+    //POJO--> DTO
+
+
+
     public AdvertResponse mapAdvertToAdvertResponse(Advert advert){
         return AdvertResponse.builder()
                 .advertId(advert.getId())
@@ -34,16 +39,16 @@ public class AdvertMapper {
                 .description(advert.getDescription())
                 .slug(advert.getSlug())
                 .price(advert.getPrice())
-                .advertStatus(advert.getStatus())
-                .isActive(advert.getIsActive())
-                .viewCount(advert.getViewCount())
                 .location(advert.getLocation())
-                .images(advert.getImages())
                 .createAt(advert.getCreateAt())
-                .updateAt(advert.getUpdateAt())
                 .country(advert.getCountry())
                 .city(advert.getCity())
                 .district(advert.getDistrict())
+                .images(advert.getImages())
+                .advertStatus(advert.getStatus())
+                .isActive(advert.getIsActive())
+                .viewCount(advert.getViewCount())
+                .updateAt(advert.getUpdateAt())
                 .category(advert.getCategory())
                 .advertType(advert.getAdvertType())
                 .build();
