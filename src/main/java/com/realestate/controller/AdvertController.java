@@ -39,5 +39,15 @@ public class AdvertController {
         return advertService.getAdvertAmountByCity();
     }
 
+     @GetMapping(("/popular/{amount}"))
+     public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable Integer amount){
+             return advertService.getPopularAdvertsByAmount(amount);
+      }
 
+
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/{id}/auth")
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id){
+        return advertService.getAuthenticatedCustomerAdvertById(id);
+    }
 }
