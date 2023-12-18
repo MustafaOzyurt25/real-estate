@@ -5,16 +5,23 @@ import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
+import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.request.AdvertRequest;
 import com.realestate.payload.response.AdvertCityResponse;
+import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.AdvertRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +36,7 @@ public class AdvertService {
     private final CityService cityService;
     private final DistrictService districtService;
     private final AdvertTypeService advertTypeService;
+    private final PageableHelper pageableHelper;
 
     public Advert save(AdvertRequest advertRequest) {
 
@@ -86,5 +94,27 @@ public class AdvertService {
 
         return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
     }
+
+    public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, Integer status, int page, int size, String sort, String type) {
+        Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort.toLowerCase(),type.toLowerCase());
+        AdvertStatus aStatus = null;
+        if(status!=null) {
+            aStatus = AdvertStatus.getAdvertStatusByNumber(status);
+        }
+        if(q!=null){
+            q=q.trim().toLowerCase().replaceAll("-"," ");
+        }
+        Page<AdvertResponse> adverts = advertRepository.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,aStatus,pageable)
+                .map(advertMapper::mapAdvertToAdvertResponse);
+        Map<String, Object> responseBody = new HashMap<>();
+        if (adverts.isEmpty()){
+            responseBody.put("message", ErrorMessages.CRITERIA_ADVERT_NOT_FOUND);
+            return new ResponseEntity<>(responseBody,HttpStatus.OK);
+        }
+        responseBody.put("Message",SuccessMessages.CRITERIA_ADVERT_FOUND);
+        responseBody.put("Adverts",adverts);
+        return new ResponseEntity<>(responseBody,HttpStatus.OK);
+    }
+
 }
 

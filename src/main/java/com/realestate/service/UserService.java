@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -64,5 +66,10 @@ public class UserService
                 .message(SuccessMessages.USER_CREATE)
                 .httpStatus(HttpStatus.CREATED)
                 .build();
+    }
+
+
+    public List<User> getALlUsers() {
+        return userRepository.findAll();
     }
 }

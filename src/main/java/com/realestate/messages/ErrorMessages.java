@@ -23,6 +23,7 @@ public class ErrorMessages {
     public static final String ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG = "Error: Advert not found with slug %s";
     public static final String CATEGORY_NOT_FOUND = "%s category not found" ;
     public static final String TOUR_REQUEST_NOT_FOUND = "Tour request with id %s was not found";
+    public static final String CRITERIA_ADVERT_NOT_FOUND = "No advert was found according to your search criteria";
 
 
     // ---------------------- ERROR REGISTER -----------------------------------------------------------------------
