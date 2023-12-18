@@ -3,7 +3,6 @@ package com.realestate.messages;
 import com.realestate.entity.CategoryPropertyKey;
 
 public class SuccessMessages {
-
     private SuccessMessages(){
 
     }
@@ -23,5 +22,5 @@ public class SuccessMessages {
     public static final String USER_CREATE = "User Created Successfully";
     public static final String DELETE_CATEGORY = "Category Deleted Successfully" ;
     public static final String TOUR_REQUEST_DELETED = "Tour Request Successfully Deleted";
-
+    public static final String RETURNED_TOUR_REQUEST_DETAILS = "Tour request details have been successfully returned.";
 }

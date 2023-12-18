@@ -32,6 +32,9 @@ public class TourRequestMapper {
                 .status(tourRequest.getStatus())
                 .createAt(tourRequest.getCreateAt())
                 .updateAt(tourRequest.getUpdateAt())
+                .advert(tourRequest.getAdvert())
+                .ownerUser(tourRequest.getOwnerUser())
+                .guestUser(tourRequest.getGuestUser())
                 .build();
     }
 }
