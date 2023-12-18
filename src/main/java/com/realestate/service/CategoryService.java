@@ -10,7 +10,10 @@ import com.realestate.payload.request.CategoryRequest;
 import com.realestate.payload.response.CategoryResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.CategoryRepository;
+import com.realestate.service.helper.PageableHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,7 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryPropertyKeyService categoryPropertyKeyService;
     private final AdvertService advertService;
+    private final PageableHelper pageableHelper;
 
     public ResponseMessage<CategoryResponse> deleteCategory(Long categoryId) {
 
@@ -58,4 +62,18 @@ public class CategoryService {
     }
 
 
+    public Page<CategoryResponse> getAllCategoriesByPage(int page, int size, String sort, String type) {
+
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+
+        return categoryRepository.findAll(pageable).map(categoryMapper::mapCategoryToCategoryResponse);
+    }
+
+    public CategoryResponse getCategoryById(Long id) {
+
+        Category category = categoryPropertyKeyService.isCategoryExist(id);
+
+        return categoryMapper.mapCategoryToCategoryResponse(category);
+
+    }
 }
