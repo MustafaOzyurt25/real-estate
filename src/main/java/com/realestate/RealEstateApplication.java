@@ -26,7 +26,8 @@ public class RealEstateApplication implements CommandLineRunner {
 			roleService.saveRole(RoleType.CUSTOMER);
 			roleService.saveRole(RoleType.MANAGER);
 		}
-
-		userService.saveDefaultAdmin(User.builder().build());
+		if(userService.getALlUsers().isEmpty()) {
+			userService.saveDefaultAdmin(User.builder().build());
+		}
 	}
 }

@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -78,6 +78,10 @@ public class UserService
                 .build();
     }
 
+
+    public List<User> getALlUsers() {
+        return userRepository.findAll();
+    }
     public ResponseMessage<UserResponse> authenticatedUser(HttpServletRequest httpServletRequest) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
