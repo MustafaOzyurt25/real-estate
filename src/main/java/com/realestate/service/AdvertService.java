@@ -9,6 +9,7 @@ import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.request.AdvertRequest;
+import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
@@ -140,6 +141,11 @@ public class AdvertService {
     }
 
 
+    public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
+        return advertRepository.getAdvertAmountByCategories().stream().collect(Collectors.toList());
+    }
+
+
 
      public  List<AdvertResponse> getPopularAdvertsByAmount(Integer amount) {
 
@@ -232,6 +238,7 @@ public class AdvertService {
         responseBody.put("Adverts",adverts);
         return new ResponseEntity<>(responseBody,HttpStatus.OK);
     }
+
 
 
 }

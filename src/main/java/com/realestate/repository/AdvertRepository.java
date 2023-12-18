@@ -1,6 +1,7 @@
 package com.realestate.repository;
 
 import com.realestate.entity.Advert;
+import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
@@ -21,6 +22,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     List<AdvertCityResponse> getAdvertAmountByCity();
 
 
+    @Query("SELECT new com.realestate.payload.response.AdvertCategoriesResponse(a.categories.name, COUNT(a)) FROM Advert a GROUP BY a.categories.name")
+    List<AdvertCategoriesResponse> getAdvertAmountByCategories();
+
     @Query("SELECT a FROM Advert a WHERE (:q IS NULL OR Lower(a.title) LIKE %:q% OR Lower(a.description) LIKE %:q%) " +
             "AND (:categoryId IS NULL OR a.category.id = :categoryId) " +
             "AND (:advertTypeId IS NULL OR a.advertType.id = :advertTypeId) " +
@@ -30,6 +34,7 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
             "   (:priceStart IS NULL AND :priceEnd IS NOT NULL AND a.price <= :priceEnd)) " +
             "AND (:status IS NULL OR a.status = :status)")
     Page<Advert> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, AdvertStatus status, Pageable pageable);
+
 
 
 }

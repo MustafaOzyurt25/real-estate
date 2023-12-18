@@ -2,6 +2,7 @@ package com.realestate.controller;
 
 import com.realestate.entity.Advert;
 import com.realestate.payload.request.AdvertRequest;
+import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
@@ -41,6 +42,15 @@ public class AdvertController {
     }
 
 
+
+
+
+
+    @GetMapping("/categories")
+    public List<AdvertCategoriesResponse> getAdvertAmountByCategories(){return advertService.getAdvertAmountByCategories();}
+   
+
+
      @GetMapping(("/popular/{amount}"))
      public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable Integer amount){
              return advertService.getPopularAdvertsByAmount(amount);
@@ -66,4 +76,5 @@ public class AdvertController {
     public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id){
         return advertService.getAuthenticatedCustomerAdvertById(id);
     }
+
 }
