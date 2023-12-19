@@ -99,7 +99,7 @@ public class WebSecurityConfig
             "/auth/login",
             "/auth/register",
             "/auth/forgot-password",
-            "/adverts/**",
+           "/adverts/**",
             "/categories/**",
             "/tour-requests/**",
             "/categories/**",
@@ -108,8 +108,7 @@ public class WebSecurityConfig
             "/cities/**",
             "/districts/**",
             "/register",
-            "/tour-requests/**"
-
-
+            "/tour-requests/**",
+            "/settings/db-reset"
     };
 }

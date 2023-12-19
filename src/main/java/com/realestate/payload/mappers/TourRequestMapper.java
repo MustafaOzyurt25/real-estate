@@ -4,6 +4,7 @@ import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.payload.request.TourRequestRequest;
 import com.realestate.payload.response.TourRequestResponse;
+import com.realestate.service.AdvertService;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +13,13 @@ import java.time.LocalDateTime;
 @Data
 @Component
 public class TourRequestMapper {
+private final AdvertService advertService;   // DTO-->POJO
 
-   // DTO-->POJO
 
-    public TourRequest mapTourRequestRequestToTourRequest(TourRequestRequest tourRequestRequest, Advert advert){
+    public TourRequest mapTourRequestRequestToTourRequest(TourRequestRequest tourRequestRequest){
+        Advert advert= advertService.getAdvertById(tourRequestRequest.getAdvertId());
+
+
         return TourRequest.builder()
                 .advert(advert)
                 .tourDate(tourRequestRequest.getTourDate())
