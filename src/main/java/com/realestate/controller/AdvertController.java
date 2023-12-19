@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import java.util.Map;
 public class AdvertController {
 
     private final AdvertService advertService;
+
+
 
     @PostMapping("/save")
     public Advert save(@ModelAttribute AdvertRequest advertRequest){
@@ -71,10 +74,12 @@ public class AdvertController {
     }
 
 
+
+    //A08
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @GetMapping("/{id}/auth")
-    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id){
-        return advertService.getAuthenticatedCustomerAdvertById(id);
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest){
+        return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
     }
 
 }

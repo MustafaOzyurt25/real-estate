@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -92,7 +93,16 @@ public class AdvertService {
                  .build();
 
     }
+    public Advert getAdvertBySlug(String slug){
 
+        Advert advert= advertRepository.findBySlug(slug).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
+
+        Long advertId= advert.getId();// view_count güncellemek için eklendi
+        advert= advertView(advertId);
+
+        return advert;
+    }
   // public Advert getAdvertBySlug(String slug){
   //     return advertRepository.findBySlug(slug).orElseThrow(()->
   //             new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
@@ -105,24 +115,18 @@ public class AdvertService {
     }
 
 
-    public Advert getAdvertBySlug(String slug){
 
-        Advert advert= advertRepository.findBySlug(slug).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
 
-        Long advertId= advert.getId();// view_count güncellemek için eklendi
-        advert= advertView(advertId);
 
-        return advert;
+
+
+    public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
+        return advertRepository.getAdvertAmountByCategories().stream().collect(Collectors.toList());
     }
 
 
-
-
-
-
-
     //====================================popular================================================
+
 
 
     //view_count sayısını güncellemek için
@@ -141,65 +145,65 @@ public class AdvertService {
     }
 
 
-
-    public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
-        return advertRepository.getAdvertAmountByCategories().stream().collect(Collectors.toList());
-    }
-
-
-
-     public  List<AdvertResponse> getPopularAdvertsByAmount(Integer amount) {
+    public  List<AdvertResponse> getPopularAdvertsByAmount(Integer amount) {
 
         if (amount==null){
             amount= 10;
         }
         //tüm advertları almak için
-         List<Advert> allAdvert = advertRepository.findAll().stream().toList();
+        List<Advert> allAdvert = advertRepository.findAll().stream().toList();
 
 
 
-         List<PopularAdvert> popularAdvert = new ArrayList<>();
-         for (int i=0; i<allAdvert.size(); i++){
-             int tvoa= allAdvert.get(i).getViewCount();
-             int troa= tourRequestAmount(allAdvert.get(i).getId());
-             int pp= ((troa*3)+tvoa);
-             popularAdvert.add(new PopularAdvert(allAdvert.get(i).getId(),pp));
-         }
+        List<PopularAdvert> popularAdvert = new ArrayList<>();
+        for (int i=0; i<allAdvert.size(); i++){
+            int tvoa= allAdvert.get(i).getViewCount();
+            int troa= tourRequestAmount(allAdvert.get(i).getId());
+            int pp= ((troa*3)+tvoa);
+            popularAdvert.add(new PopularAdvert(allAdvert.get(i).getId(),pp));
+        }
 
 
-         //amount miktarı kadar popularAdvert ı büyükten küçüğe sıraladım topList e attım
-          List<PopularAdvert> topListPopularAdvert = popularAdvert.stream()
-                 .sorted(Comparator.comparingInt(PopularAdvert::getPpValue).reversed())
-                 .limit(amount)
-                 .toList();
+        //amount miktarı kadar popularAdvert ı büyükten küçüğe sıraladım topList e attım
+        List<PopularAdvert> topListPopularAdvert = popularAdvert.stream()
+                .sorted(Comparator.comparingInt(PopularAdvert::getPpValue).reversed())
+                .limit(amount)
+                .toList();
 
-         // topListPopularAdvert ten sadece idlerin oldugu liste oluşturdum
-         List<Long> advertIds=new ArrayList<>();
-         for (PopularAdvert popularAdverts:topListPopularAdvert){
-             advertIds.add(popularAdverts.getAdvertId());
-         }
+        // topListPopularAdvert ten sadece idlerin oldugu liste oluşturdum
+        List<Advert> adverts=new ArrayList<>();
+        for (PopularAdvert popularAdverts:topListPopularAdvert){
+            adverts.add(advertRepository.findById(popularAdverts.
+                    getAdvertId()).orElseThrow(()->new ResourceNotFoundException(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION)));
+        }
+        return adverts.stream().map(advertMapper::mapAdvertToAdvertResponse).collect(Collectors.toList());
 
 
-        return advertRepository.findAllById(advertIds).stream().map(advertMapper::mapAdvertToAdvertResponse).toList();
-
-         }
-
+    }
             //===================================================popular===================================================
 
 
 
 
     // =======================================A08================================================
-    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(Long advertId) {
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(Long advertId, HttpServletRequest httpServletRequest) {
 
+        // advert customer a mı ait kontrol yapılmalı
+
+        String email=(String) httpServletRequest.getAttribute("email");
         //id kontrol
         Advert advert=getAdvertById(advertId);
 
-        return ResponseMessage.<AdvertResponse>builder()
-                .object(advertMapper.mapAdvertToAdvertResponse(advert))
-                .message(SuccessMessages.ADVERT_FOUNDED)
-                .httpStatus(HttpStatus.OK)
-                .build();
+        if(advert.getUser().getEmail().equals(email)){
+            return ResponseMessage.<AdvertResponse>builder()
+                    .object(advertMapper.mapAdvertToAdvertResponse(advert))
+                    .message(SuccessMessages.ADVERT_FOUNDED)
+                    .httpStatus(HttpStatus.OK)
+                    .build();
+        }else {
+           throw new ResourceNotFoundException(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION);
+        }
+
 
     }
 
