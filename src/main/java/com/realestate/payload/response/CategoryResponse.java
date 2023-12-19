@@ -25,5 +25,4 @@ public class CategoryResponse {
     private LocalDateTime updateAt;
     private List<CategoryPropertyKey> categoryPropertyKeys;
 
-
 }

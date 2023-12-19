@@ -58,7 +58,6 @@ public class UserService
         defaultAdmin.setRole(role);
         defaultAdmin.setBuiltIn(true);
         userRepository.save(defaultAdmin);
-
     }
 
     public ResponseMessage<UserResponse> registerUser(RegisterRequest registerRequest) {
