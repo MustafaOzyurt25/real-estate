@@ -8,6 +8,7 @@ import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.CategoryMapper;
 import com.realestate.payload.request.CategoryRequest;
+import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.CategoryResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.CategoryRepository;
@@ -16,9 +17,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -78,5 +82,10 @@ public class CategoryService {
 
         return categoryMapper.mapCategoryToCategoryResponse(category);
 
+    }
+
+
+    public List<Category> getAllCategories(String q, int page, int size, String sort, String type) {
+      return categoryRepository.findAll();
     }
 }
