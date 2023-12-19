@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryPropertyKeyController {
 
-    // bu yorum
+    
 
     private final CategoryPropertyKeyService categoryPropertyKeyService;
     @PostMapping("/{categoryId}/properties")

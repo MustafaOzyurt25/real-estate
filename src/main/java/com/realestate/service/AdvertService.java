@@ -9,6 +9,7 @@ import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.request.AdvertRequest;
+import com.realestate.payload.request.AdvertUpdateRequest;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
@@ -20,9 +21,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,6 +43,7 @@ public class AdvertService {
     private final DistrictService districtService;
     private final AdvertTypeService advertTypeService;
     private final PageableHelper pageableHelper;
+    private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
 
 
@@ -52,7 +53,7 @@ public class AdvertService {
         City city = cityService.getCityById(advertRequest.getCityId());
         District district = districtService.getDistrictById(advertRequest.getDistrictId());
         AdvertType advertType = advertTypeService.getAdvertTypeById(advertRequest.getAdvertTypeId());
-
+                                
         String slug = advertRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
 
         List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
@@ -62,6 +63,7 @@ public class AdvertService {
         advert.setBuiltIn(false);
         advert.setIsActive(true);
         advert.setViewCount(0);
+        advert.getCategory();
 
         advertRepository.save(advert);
         return advert;
@@ -226,7 +228,15 @@ public class AdvertService {
         return new ResponseEntity<>(responseBody,HttpStatus.OK);
     }
 
+    
 
+    //--------------- updateAuthenticatedCustomersAdvertById ---------------------------//
+    public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(Long advertId, AdvertUpdateRequest updateRequest, HttpServletRequest httpServletRequest) {
+        String username = httpServletRequest.getUserPrincipal().getName();
+        
+        
+    
+    }
 
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(Long id) {
 
