@@ -1,5 +1,6 @@
 package com.realestate.payload.mappers;
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.payload.request.TourRequestRequest;
 import com.realestate.payload.response.TourRequestResponse;
@@ -14,8 +15,9 @@ public class TourRequestMapper {
 
    // DTO-->POJO
 
-    public TourRequest mapTourRequestRequestToTourRequest(TourRequestRequest tourRequestRequest){
+    public TourRequest mapTourRequestRequestToTourRequest(TourRequestRequest tourRequestRequest, Advert advert){
         return TourRequest.builder()
+                .advert(advert)
                 .tourDate(tourRequestRequest.getTourDate())
                 .tourTime(tourRequestRequest.getTourTime())
                 .createAt(LocalDateTime.now())

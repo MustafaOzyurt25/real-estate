@@ -1,6 +1,7 @@
 package com.realestate.service;
 
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.exception.ResourceNotFoundException;
@@ -21,16 +22,14 @@ public class TourRequestsService {
 
     private final TourRequestsRepository tourRequestsRepository;
     private final TourRequestMapper tourRequestMapper;
-
+    private final AdvertService advertService;
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest) {
 
         //DTO-->POJO
-       TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
+        Advert advert = advertService.getAdvertById(tourRequestRequest.getAdvertId());
+       TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest,advert);
        //default status atadık
        tourRequest.setStatus(TourRequestStatus.PENDING);
-
-
-
       TourRequest savedTourRequest= tourRequestsRepository.save(tourRequest);
 
       return ResponseMessage.<TourRequestResponse>builder()

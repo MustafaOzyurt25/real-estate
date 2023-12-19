@@ -77,4 +77,10 @@ public class AdvertController {
         return advertService.getAuthenticatedCustomerAdvertById(id);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @GetMapping("/{id}/admin")
+    public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(@PathVariable Long id){
+        return advertService.getAdvertBySlugAdminManager(id);
+    }
+
 }
