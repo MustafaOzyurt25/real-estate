@@ -37,6 +37,7 @@ public class TourRequest {
 
     @JsonIgnore
     @ManyToOne
+    @JsonIgnore
     private Advert advert;
 
     @ManyToOne

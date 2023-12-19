@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdvertService {
 
-
     private final AdvertRepository advertRepository;
     private final AdvertMapper advertMapper;
     private final ImageService imageService;
@@ -44,7 +43,6 @@ public class AdvertService {
     private final DistrictService districtService;
     private final AdvertTypeService advertTypeService;
     private final PageableHelper pageableHelper;
-
     private final TourRequestsRepository tourRequestsRepository;
 
 
@@ -80,8 +78,6 @@ public class AdvertService {
         advertRepository.save(updatedAdvert);
     }
 
-
-
     public ResponseMessage<Advert> getAdvertWithSlug(String slug) {
 
          Advert advert = getAdvertBySlug(slug);
@@ -108,16 +104,10 @@ public class AdvertService {
   //             new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
   // }
 
-
     public List<AdvertCityResponse> getAdvertAmountByCity() {
 
         return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
     }
-
-
-
-
-
 
 
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
@@ -182,9 +172,6 @@ public class AdvertService {
     }
             //===================================================popular===================================================
 
-
-
-
     // =======================================A08================================================
     public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(Long advertId, HttpServletRequest httpServletRequest) {
 
@@ -207,9 +194,8 @@ public class AdvertService {
 
     }
 
-
-
     //===========================ID kontrol============================================
+  
         public Advert getAdvertById(Long advertId){
             return isAdvertExists(advertId);
         }
@@ -218,10 +204,6 @@ public class AdvertService {
             return advertRepository.findById(advertId).orElseThrow(()->
                     new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION,advertId)));
         }
-
-
-
-
 
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, Integer status, int page, int size, String sort, String type) {
         Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort.toLowerCase(),type.toLowerCase());
@@ -246,5 +228,12 @@ public class AdvertService {
 
 
 
-}
+    public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(Long id) {
 
+            return ResponseMessage.<AdvertResponse>builder()
+                    .object(advertMapper.mapAdvertToAdvertResponse(advertRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION,id)))))
+                    .message(SuccessMessages.ADVERT_FOUNDED)
+                    .httpStatus(HttpStatus.OK)
+                    .build();
+    }
+}

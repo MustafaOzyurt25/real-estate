@@ -65,11 +65,9 @@ public class TourRequestsService {
        TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
 
 
+
        //default status atadık
        tourRequest.setStatus(TourRequestStatus.PENDING);
-
-
-
       TourRequest savedTourRequest= tourRequestsRepository.save(tourRequest);
 
       return ResponseMessage.<TourRequestResponse>builder()
