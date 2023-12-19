@@ -100,16 +100,14 @@ public class WebSecurityConfig
             "/auth/register",
             "/auth/forgot-password",
             "/adverts/**",
-//            "/categories/**",
+            "/categories/**",
             "/tour-requests/**",
-//            "/categories/**",
             "/countries/**",
             "/advert-types/**",
             "/cities/**",
             "/districts/**",
             "/register",
-            "/tour-requests/**"
-
-
+            "/tour-requests/**",
+            "/settings/db-reset"
     };
 }

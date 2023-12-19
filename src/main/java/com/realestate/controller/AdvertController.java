@@ -27,6 +27,8 @@ public class AdvertController {
 
     private final AdvertService advertService;
 
+
+
     @PostMapping("/save")
     public Advert save(@ModelAttribute AdvertRequest advertRequest){
 
@@ -75,10 +77,18 @@ public class AdvertController {
     }
 
 
+
+    //A08
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @GetMapping("/{id}/auth")
-    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id){
-        return advertService.getAuthenticatedCustomerAdvertById(id);
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest){
+        return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @GetMapping("/{id}/admin")
+    public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(@PathVariable Long id){
+        return advertService.getAdvertBySlugAdminManager(id);
     }
 
 
