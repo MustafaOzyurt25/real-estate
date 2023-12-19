@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface TourRequestsRepository extends JpaRepository<TourRequest,Long> {
 
+    // tour request
     @Query(value = "SELECT (count(t) = 0) FROM TourRequest t")
     boolean isEmpty();
 }
