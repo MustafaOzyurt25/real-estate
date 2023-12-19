@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +68,7 @@ public class CategoryService {
         categoryRepository.save(category);
 
         return category;
+
     }
 
 
@@ -96,5 +99,10 @@ public class CategoryService {
 
         return categoryMapper.mapCategoryToCategoryResponse(category);
 
+    }
+
+
+    public List<Category> getAllCategories(String q, int page, int size, String sort, String type) {
+      return categoryRepository.findAll();
     }
 }
