@@ -8,9 +8,11 @@ import com.realestate.payload.response.AdvertResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +22,10 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     @Query("SELECT new com.realestate.payload.response.AdvertCityResponse(a.city.name, COUNT(a)) FROM Advert a GROUP BY a.city.name")
     List<AdvertCityResponse> getAdvertAmountByCity();
+
+
+    @Query(value = "SELECT (count(a) = 0) FROM Advert a")
+    boolean isEmpty();
 
 
     @Query("SELECT new com.realestate.payload.response.AdvertCategoriesResponse(a.category.title, COUNT(a)) FROM Advert a GROUP BY a.category.title")
@@ -37,4 +43,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
 
 
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM Advert a  WHERE a.builtIn = false")
+    void deleteAdverts();
 }

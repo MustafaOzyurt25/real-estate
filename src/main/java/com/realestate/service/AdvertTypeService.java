@@ -26,9 +26,6 @@ public class AdvertTypeService {
 
     private final AdvertTypeMapper advertTypeMapper;
 
-
-
-
   public ResponseMessage<AdvertTypeResponse> advertTypeCreate(AdvertTypeRequest advertTypeRequest) {
 
       AdvertType advertType =advertTypeMapper.mapAdvertTypeRequestToAdvertType(advertTypeRequest);
@@ -39,7 +36,6 @@ public class AdvertTypeService {
               .httpStatus(HttpStatus.CREATED)
               .message(SuccessMessages.CREATE_ADVERT_TYPE)
               .build();
-
   }
 
     private AdvertType isAdvertTypeExists(Long id){
@@ -83,22 +79,14 @@ public class AdvertTypeService {
                 .message(SuccessMessages.ADVERT_TYPE_DELETE)
                 .httpStatus(HttpStatus.OK)
                 .build();
-
-
     }
-
-
     public ResponseMessage<AdvertTypeResponse> getAdvertTypeWithId(Long id) {
         return ResponseMessage.<AdvertTypeResponse>builder()
                 .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(advertTypeRepository.findById(id)
                         .orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE,id)))))
                 .httpStatus(HttpStatus.OK)
                 .build();
-
-
     }
-
-
     //T01 Get All
 
     public ResponseMessage<List<AdvertTypeResponse>> getAll() {

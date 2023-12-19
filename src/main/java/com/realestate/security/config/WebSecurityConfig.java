@@ -102,14 +102,12 @@ public class WebSecurityConfig
             "/adverts/**",
             "/categories/**",
             "/tour-requests/**",
-            "/categories/**",
             "/countries/**",
             "/advert-types/**",
             "/cities/**",
             "/districts/**",
             "/register",
-            "/tour-requests/**"
-
-
+            "/tour-requests/**",
+            "/settings/db-reset"
     };
 }
