@@ -1,6 +1,8 @@
 package com.realestate.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.realestate.entity.Advert;
+import com.realestate.entity.User;
 import com.realestate.entity.enums.TourRequestStatus;
 import lombok.*;
 
@@ -24,6 +26,9 @@ public class TourRequestResponse {
     private TourRequestStatus status;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private User ownerUser;
+    private User guestUser;
+    private Advert advert;
 
 
 }

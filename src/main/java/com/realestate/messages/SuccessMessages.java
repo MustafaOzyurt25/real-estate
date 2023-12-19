@@ -1,14 +1,11 @@
 package com.realestate.messages;
 
-import com.realestate.entity.CategoryPropertyKey;
-
 public class SuccessMessages {
-
     private SuccessMessages(){
 
     }
     
- 
+
     public static final String IMAGE_DELETE ="Image is Deleted Successfully";
     public static final String TOUR_REQUEST_CREATE = "Tour Request is Saved Successfully";
     public static final String SET_FEATURED_AREA = "Featured area has set successfully";
@@ -23,5 +20,14 @@ public class SuccessMessages {
     public static final String USER_CREATE = "User Created Successfully";
     public static final String DELETE_CATEGORY = "Category Deleted Successfully" ;
     public static final String TOUR_REQUEST_DELETED = "Tour Request Successfully Deleted";
+    public static final String CATEGORY_PROPERTY_KEY_DELETED ="Category Property Key is Deleted Successfully";
+    public static final String CATEGORY_PROPERTY_KEY_CREATE = "Category Property Key is created Successfully";
+    public static final String RETURNED_TOUR_REQUEST_DETAILS = "Tour request details have been successfully returned.";
+    public static final String CRITERIA_ADVERT_FOUND = "Successfully found adverts matching your search criteria";
+    public static final String USER_UPDATE = "User Successfully Updated";
+    public static final String USER_FOUNDED = "User Successfully Founded";
+    public static final String USER_PASSWORD_UPDATE = "User Password Successfully Updated";
+    public static final String USER_DELETE = "User Successfully Deleted";
+
 
 }

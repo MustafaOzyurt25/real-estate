@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface CategoryPropertyKeyRepository extends JpaRepository<CategoryPropertyKey, Long> {
     boolean existsByCategoryId(Long categoryId);
-
     List<CategoryPropertyKey> findByCategoryId(Long categoryId);
+
 
     @Query(value = "SELECT (count(c) = 0) FROM CategoryPropertyKey c ")
     boolean isEmpty();
@@ -21,4 +21,5 @@ public interface CategoryPropertyKeyRepository extends JpaRepository<CategoryPro
     @Modifying
     @Query(value = "DELETE FROM CategoryPropertyKey c WHERE c.builtIn = false")
     void deleteCategoryPropertyKeys();
+
 }

@@ -2,6 +2,7 @@ package com.realestate.service;
 
 import com.realestate.payload.request.LoginRequest;
 import com.realestate.payload.response.AuthResponse;
+import com.realestate.payload.response.ResponseMessage;
 import com.realestate.security.jwt.JwtUtils;
 import com.realestate.security.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,9 +22,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
-
-  
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
@@ -45,35 +44,22 @@ public class AuthenticationService {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        Set<String> roles = userDetails.getAuthorities()
 
+        Set<String> role = userDetails.getAuthorities()
                 .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toSet());
-
-
-        Optional<String> role = roles.stream().findFirst();
+                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
 
         System.out.println("role : " + role);
-
 
         AuthResponse.AuthResponseBuilder authResponse = AuthResponse.builder();
 
         authResponse.token(token.substring(7));
-        if(role.isPresent()){
-            authResponse.role(role.get());
-        }
+
+        authResponse.role(String.join(" ", role));
 
         return ResponseEntity.ok(authResponse.build());
 
-
-
-
-
-
-
     }
-
 
 }
 

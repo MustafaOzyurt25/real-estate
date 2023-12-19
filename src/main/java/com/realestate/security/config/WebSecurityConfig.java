@@ -98,6 +98,7 @@ public class WebSecurityConfig
             "/contactMessage/save",
             "/auth/login",
             "/auth/register",
+            "/auth/forgot-password",
             "/adverts/**",
             "/categories/**",
             "/tour-requests/**",
