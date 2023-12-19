@@ -9,6 +9,7 @@ import com.realestate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,18 +23,20 @@ public class UserController {
     private final UserService userService;
 
 
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','ADMIN','MANAGER')")
     @GetMapping("/auth")
     public ResponseMessage<UserResponse> authenticatedUser(HttpServletRequest httpServletRequest){
 
         return userService.authenticatedUser(httpServletRequest);
     }
 
+   //@PreAuthorize("hasAnyAuthority('CUSTOMER','ADMIN','MANAGER')")
     @PutMapping("/auth")
     public ResponseMessage<UserResponse> authenticatedUserUpdated(HttpServletRequest httpServletRequest, @RequestBody @Valid UserRequest userRequest){
 
         return userService.authenticatedUserUpdated(httpServletRequest,userRequest);
     }
-
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','ADMIN','MANAGER')")
     @PatchMapping("/auth")
     public ResponseMessage<UserResponse> authenticatedUserPasswordUpdated(HttpServletRequest httpServletRequest, @RequestBody @Valid PasswordUpdatedRequest passwordUpdatedRequest){
         return userService.authenticatedUserPasswordUpdated(httpServletRequest,passwordUpdatedRequest);
