@@ -99,7 +99,7 @@ public class WebSecurityConfig
             "/auth/login",
             "/auth/register",
             "/auth/forgot-password",
-            "/adverts/**",
+           "/adverts/**",
             "/categories/**",
             "/tour-requests/**",
             "/categories/**",
