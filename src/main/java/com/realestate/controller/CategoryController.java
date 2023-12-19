@@ -7,10 +7,12 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/categories")
@@ -33,17 +35,18 @@ public class CategoryController {
     }
 
     @GetMapping("/getAllCategoriesByPage")
-    public Page<CategoryResponse> getAllCategoriesByPage (
+    public ResponseEntity<Map<String, Object>> getAllCategoriesByPage (
+            @RequestParam(value = "q", required = false) String q,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") String sort,
             @RequestParam(value = "type") String type
     ){
-        return categoryService.getAllCategoriesByPage(page, size, sort, type);
+        return categoryService.getAllCategoriesByPage(q, page, size, sort, type);
     }
 
 
-    @GetMapping("/getById{id}")
+    @GetMapping("/getById/{id}")
     public CategoryResponse getCategoryById(@PathVariable Long id){
         return categoryService.getCategoryById(id);
     }
