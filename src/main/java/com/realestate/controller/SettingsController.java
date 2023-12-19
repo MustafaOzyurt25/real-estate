@@ -14,6 +14,7 @@ public class SettingsController
 {
     private final SettingsService settingsService;
 
+    // X01 endpointi
     @PostMapping("/db-reset")
     public ResponseMessage dataBaseReset()
     {
