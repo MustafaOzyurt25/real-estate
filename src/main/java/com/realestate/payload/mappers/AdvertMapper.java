@@ -24,6 +24,7 @@ public class AdvertMapper {
                 .district(district)
                 .advertType(advertType)
                 .images(imageList)
+                
                 .build();
     }
 
