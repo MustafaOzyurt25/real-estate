@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,7 @@ public class UserService
     public ResponseMessage<UserResponse> registerUser(RegisterRequest registerRequest) {
 
         uniquePropertyValidator.checkDuplicate(registerRequest.getPhone(),registerRequest.getEmail());
+
         User user = userMapper.mapRegisterRequestToUser(registerRequest);
 
         Set<Role> role = new HashSet<>();
@@ -82,6 +84,7 @@ public class UserService
     public List<User> getALlUsers() {
         return userRepository.findAll();
     }
+
     public ResponseMessage<UserResponse> authenticatedUser(HttpServletRequest httpServletRequest) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
@@ -135,7 +138,7 @@ public class UserService
 
 
         if(user.getBuiltIn().equals(false) &&
-                passwordEncoder.matches(passwordUpdatedRequest.getCurrentPassword(), user.getPasswordHash())&&
+                passwordEncoder.matches(passwordUpdatedRequest.getCurrentPassword(), user.getPasswordHash()) &&
            passwordUpdatedRequest.getNewPassword().equals(passwordUpdatedRequest.getRetryNewPassword()))
         {
 

@@ -43,7 +43,7 @@ public class AdvertService {
     private final DistrictService districtService;
     private final AdvertTypeService advertTypeService;
     private final PageableHelper pageableHelper;
-    private final CategoryService categoryService;
+    //private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
 
 
@@ -231,13 +231,12 @@ public class AdvertService {
     
 
     //--------------- updateAuthenticatedCustomersAdvertById ---------------------------//
+
+    /*
     public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(Long advertId, AdvertUpdateRequest updateRequest, HttpServletRequest httpServletRequest) {
         String username = httpServletRequest.getUserPrincipal().getName();
-        
-        
-    
     }
-
+   */
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(Long id) {
 
             return ResponseMessage.<AdvertResponse>builder()

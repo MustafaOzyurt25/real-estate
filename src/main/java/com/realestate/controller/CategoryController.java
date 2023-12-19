@@ -35,6 +35,7 @@ public class CategoryController {
         return categoryService.deleteCategory(categoryId);
     }
 
+   /*
     @GetMapping("/getAllCategoriesByPage")
     public ResponseEntity<Map<String, Object>> getAllCategoriesByPage (
             @RequestParam(value = "q", required = false) String q,
@@ -45,7 +46,7 @@ public class CategoryController {
     ){
         return categoryService.getAllCategoriesByPage(q, page, size, sort, type);
     }
-
+   */
 
     @GetMapping("/getById/{id}")
     public CategoryResponse getCategoryById(@PathVariable Long id){

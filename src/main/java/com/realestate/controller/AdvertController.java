@@ -93,7 +93,7 @@ public class AdvertController {
 
 
     //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
-    
+    /*
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PutMapping("/auth/{id}")
     public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId,
@@ -101,7 +101,7 @@ public class AdvertController {
                                                                                   HttpServletRequest httpServletRequest){
         return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
     }
-    
+    */
     
     
     

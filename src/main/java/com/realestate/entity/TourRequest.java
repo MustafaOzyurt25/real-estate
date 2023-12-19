@@ -35,7 +35,6 @@ public class TourRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateAt;
 
-    @JsonIgnore
     @ManyToOne
     @JsonIgnore
     private Advert advert;
