@@ -154,16 +154,13 @@ public class UserService
                     .message(SuccessMessages.USER_PASSWORD_UPDATE)
                     .httpStatus(HttpStatus.OK)
                     .build();
-
         }
-
         else
         {
             throw new ConflictException("User can not be updated");
         }
 
     }
-
 
     public ResponseMessage authenticatedUserDeleted(HttpServletRequest request) {
 

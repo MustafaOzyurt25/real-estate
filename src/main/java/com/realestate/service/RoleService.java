@@ -27,7 +27,6 @@ public class RoleService
         return roleRepository.findByEnumRoleEquals(roleType).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(RESOURCE_NOT_FOUND_EXCEPTION , "Role")));
     }
-
     public List<Role> getAllUserRoles()
     {
         return roleRepository.findAll();
@@ -37,15 +36,11 @@ public class RoleService
     {
         if(roleRepository.existsByEnumUserRole((roleType)))
         {
-            throw new ConflictException(String.format(RESOURCE_CONFLICT_EXCEPTION , roleType));
+            throw new ConflictException(String.format(RESOURCE_CONFLICT_EXCEPTION, roleType));
         }
 
         Role role = Role.builder().roleName(roleType).build();
         roleRepository.save(role);
         return role;
     }
-
-
-
-
 }

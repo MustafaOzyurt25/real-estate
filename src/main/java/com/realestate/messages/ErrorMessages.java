@@ -2,6 +2,7 @@ package com.realestate.messages;
 
 
 public class ErrorMessages {
+
     private ErrorMessages() {
     }
 
@@ -15,6 +16,7 @@ public class ErrorMessages {
     public static final String CITY_NOT_FOUND_MESSAGE = "%s city not found ";
     public static final String DISTRICT_NOT_FOUND_MESSAGE = "%s district not found ";
     public static final String ADVERT_TYPE_NOT_FOUND_MESSAGE = "%s advertType not found ";
+    public static final String ADVERT_TYPE_TITLE_FOUND ="%s title saved before";
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category with id %s Not Found";
     public static final String CRITERIA_CATEGORY_NOT_FOUND_MESSAGE = "No category was found according to your search criteria";
     public static final String CATEGORY_PROPERTY_KEY_NOT_FOUND_MESSAGE = "Category Property Key with id %s Not Found";
