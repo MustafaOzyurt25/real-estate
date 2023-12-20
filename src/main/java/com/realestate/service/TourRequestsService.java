@@ -1,6 +1,7 @@
 package com.realestate.service;
 
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.exception.ResourceNotFoundException;
@@ -12,8 +13,16 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.repository.TourRequestsRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -21,16 +30,44 @@ public class TourRequestsService {
 
     private final TourRequestsRepository tourRequestsRepository;
     private final TourRequestMapper tourRequestMapper;
+    private final AdvertService advertService;
 
-    public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest) {
+    public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest){
+
+      // //url den slug çekmek için
+
+      // HttpPost request=new HttpPost("http://localhost:8080/adverts/");
+
+      // CloseableHttpClient httpClient= HttpClients.createDefault();
+
+      // try {
+
+      //     CloseableHttpResponse  response = httpClient.execute(request);
+      //     response.close();
+      //     httpClient.close();
+      // } catch (IOException e) {
+      //     throw new RuntimeException(e);
+      // }
+
+      // String advertUrl=request.getURI().toString();
+      // String slug= advertUrl.substring(31);
+
+
+      // //Slug ile advert çektik
+      // Advert advert= advertService.getAdvertBySlug(slug);
+      // tourRequestRequest.setAdvertId(advert.getId());
+
+
+
+
 
         //DTO-->POJO
        TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
+
+
+
        //default status atadık
        tourRequest.setStatus(TourRequestStatus.PENDING);
-
-
-
       TourRequest savedTourRequest= tourRequestsRepository.save(tourRequest);
 
       return ResponseMessage.<TourRequestResponse>builder()

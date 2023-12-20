@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/tour-requests")
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class TourRequestsController {
 
 
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    @PostMapping("save")
+    @PostMapping("/save")
     public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest){
         return tourRequestsService.save(tourRequestRequest);
     }
