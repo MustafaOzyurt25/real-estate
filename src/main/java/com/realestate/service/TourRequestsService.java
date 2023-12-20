@@ -45,38 +45,12 @@ public class TourRequestsService {
     private final UserRepository userRepository;
     private final PageableHelper pageableHelper;
 
+
+    //S05
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest){
 
-      // //url den slug çekmek için
-
-      // HttpPost request=new HttpPost("http://localhost:8080/adverts/");
-
-      // CloseableHttpClient httpClient= HttpClients.createDefault();
-
-      // try {
-
-      //     CloseableHttpResponse  response = httpClient.execute(request);
-      //     response.close();
-      //     httpClient.close();
-      // } catch (IOException e) {
-      //     throw new RuntimeException(e);
-      // }
-
-      // String advertUrl=request.getURI().toString();
-      // String slug= advertUrl.substring(31);
-
-
-      // //Slug ile advert çektik
-      // Advert advert= advertService.getAdvertBySlug(slug);
-      // tourRequestRequest.setAdvertId(advert.getId());
-
-
-
-
-
-        //DTO-->POJO
+                //DTO-->POJO
        TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
-
 
 
        //default status atadık
@@ -88,8 +62,6 @@ public class TourRequestsService {
               .httpStatus(HttpStatus.CREATED)
               .object(tourRequestMapper.mapTourRequestToTourRequestResponse(savedTourRequest))
               .build();
-
-
     }
 
     public ResponseMessage<TourRequestResponse> delete(Long id) {
