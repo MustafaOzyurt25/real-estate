@@ -4,10 +4,9 @@ import com.realestate.payload.request.ContactRequest;
 import com.realestate.payload.response.ContactResponse;
 import com.realestate.payload.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -18,29 +17,23 @@ public class ContactController {
 
     private final ContactService contactService;
 
-
     //save--------------------------------------------------------------------------------------------------------------
     @PostMapping("/save")
     public ResponseMessage<ContactResponse> save(@RequestBody
                                                  @Valid ContactRequest contactRequest) {
         return contactService.save(contactRequest);
     }
+
+    //J01 getAllContactMessageAsPage -----------------------------------------------------------------------------------
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @GetMapping()
+    public Page<ContactResponse> getAllContactMessageAsPage(
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "20", required = false) int size,
+            @RequestParam(value = "sort", defaultValue = "create_at", required = false) String sort,
+            @RequestParam(value = "type", defaultValue = "asc", required = false) String type,
+            @RequestParam(value = "query", required = false) String query
+    ) {
+        return contactService.getAllContactMessageAsPage(page, size, sort, type, query);
+    }
 }
-
-/*
-contactmessage objesi save methodu
-role based
-preouthorized da has any authority de anonymous, rol koymayacagim.
-
-entity
-entity e request olustur service e al
-service de mapper olustur
-mapper request i pojoya donustursun
-pojo repository e ulas
-db ye save yap
-
-controller da respons entity icine ? yaz
-
-service de string dönebilirsin: "Contact Message created successfully!"
-
- */
