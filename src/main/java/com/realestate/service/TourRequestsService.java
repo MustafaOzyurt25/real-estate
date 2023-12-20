@@ -82,6 +82,8 @@ public class TourRequestsService {
                 .build();
     }
 
+
+
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q , int page, int size, String sort, String type) {
 
         String userEmail=(String)httpServletRequest.getAttribute("email");
@@ -102,5 +104,16 @@ public class TourRequestsService {
     }
     /*
 
-     */
+
+    public ResponseMessage<TourRequestResponse> getAuthTourRequestById(Long tourRequestId) {
+
+        TourRequest getAuthTourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND,tourRequestId)));
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(getAuthTourRequest))
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.RETURNED_TOUR_REQUEST_DETAILS)
+                .build();
+    }
+
 }

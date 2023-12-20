@@ -2,7 +2,6 @@ package com.realestate.controller;
 
 import com.realestate.entity.Advert;
 import com.realestate.payload.request.AdvertRequest;
-import com.realestate.payload.request.AdvertUpdateRequest;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
@@ -11,12 +10,9 @@ import com.realestate.service.AdvertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -47,15 +43,8 @@ public class AdvertController {
         return advertService.getAdvertAmountByCity();
     }
 
-
-
-
-
-
     @GetMapping("/categories")
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories(){return advertService.getAdvertAmountByCategories();}
-   
-
 
      @GetMapping(("/popular/{amount}"))
      public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable(required = false) Integer amount){
@@ -77,8 +66,6 @@ public class AdvertController {
         return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
     }
 
-
-
     //A08
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @GetMapping("/{id}/auth")
@@ -86,46 +73,24 @@ public class AdvertController {
         return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
     }
 
-    //A05
-
-   // @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-   // @GetMapping("/auth")
-   // public Page<AdvertResponse>getAuthenticatedUserAdverts(@RequestParam(value = "page",defaultValue = "0") int page,
-   //                                                        @RequestParam(value = "size",defaultValue = "20" ) int size,
-   //                                                        @RequestParam(value = "sort",defaultValue = "categoryId") String sort,
-   //                                                        @RequestParam(value = "type",defaultValue = "asc") String type,
-   //                                                        HttpServletRequest httpServletRequest   )
-   // {
-   //     return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
-   // }
-
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{id}/admin")
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(@PathVariable Long id){
         return advertService.getAdvertBySlugAdminManager(id);
     }
 
-
-    //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
-    /*
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    @PutMapping("/auth/{id}")
-    public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId,
-                                                                                  @RequestBody AdvertUpdateRequest updateRequest,
-                                                                                  HttpServletRequest httpServletRequest){
-        return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
+    @GetMapping("/admin")
+    public ResponseEntity<Map<String, Object>> getSortedAdvertValuesByAdmin(@RequestParam(value = "q", required = false) String q,
+                                                                        @RequestParam(value = "category_id", required = false) Long categoryId,
+                                                                        @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
+                                                                        @RequestParam(value = "price_start", required = false) Double priceStart,
+                                                                        @RequestParam(value = "price_end", required = false) Double priceEnd,
+                                                                        @RequestParam(value = "status", required = false) Integer status,
+                                                                        @RequestParam(value = "page",defaultValue = "0") int page,
+                                                                        @RequestParam(value = "size",defaultValue = "20") int size,
+                                                                        @RequestParam(value = "sort",defaultValue = "category") String sort,
+                                                                        @RequestParam(value = "type",defaultValue = "asc") String type){
+        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
     }
-    */
-
-    /*
-    @DeleteMapping("/delete/{id}")
-    //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseMessage deleteAdvertById(@PathVariable Long id) {
-        return advertService.deleteAdvertById(id);
-    }
-
-     */
-    
-    
 
 }

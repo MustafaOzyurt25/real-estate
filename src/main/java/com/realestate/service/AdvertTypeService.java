@@ -91,7 +91,9 @@ public class AdvertTypeService {
         List<AdvertType> advertTypes = advertTypeRepository.findAll();
 
         return ResponseMessage.<List<AdvertTypeResponse>>builder()
-                .object(advertTypes.stream().map(advertTypeMapper::mapAdvertTypeToAdvertTypeResponse).toList())
+                .object(advertTypes.stream()
+                        .map(advertTypeMapper::mapAdvertTypeToAdvertTypeResponse)
+                        .toList())
                 .message("Success")
                 .httpStatus(HttpStatus.OK)
                 .build();
