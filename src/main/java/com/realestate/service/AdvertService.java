@@ -245,4 +245,16 @@ public class AdvertService {
                     .httpStatus(HttpStatus.OK)
                     .build();
     }
+
+    /*
+    public ResponseMessage deleteAdvertById(Long id) {
+        Advert advert = isAdvertExists(id);
+        advertRepository.deleteById(id);
+
+        return ResponseMessage.builder()
+                .message(SuccessMessages.ADVERT_DELETE)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+     */
 }
