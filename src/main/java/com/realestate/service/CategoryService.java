@@ -2,6 +2,7 @@ package com.realestate.service;
 
 import com.realestate.entity.Category;
 import com.realestate.entity.CategoryPropertyKey;
+import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
@@ -110,5 +111,20 @@ public class CategoryService {
 
     public List<Category> getAllCategories(String q, int page, int size, String sort, String type) {
       return categoryRepository.findAll();
+    }
+
+    public ResponseMessage<CategoryResponse> updateCategoryWithId(Long id,CategoryRequest categoryRequest) {
+        Category oldCategory = categoryRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND,id)));
+        if (oldCategory.getBuiltIn()){
+            throw new ConflictException(ErrorMessages.BUILTIN_CATEGORY_CANT_BE_UPDATED);
+        }
+        List<CategoryPropertyKey> categoryPropertyKeys = categoryPropertyKeyService.getCategoryPropertyKeyByCategoryPropertyKeyIdList(categoryRequest.getCategoryPropertiesKeyId());
+        Category category = categoryMapper.mapCategoryRequestToUpdatedCategory(id,categoryRequest,categoryPropertyKeys);
+        category.setCreateAt(oldCategory.getCreateAt());
+        return ResponseMessage.<CategoryResponse>builder()
+                .object(categoryMapper.mapCategoryToCategoryResponse(categoryRepository.save(category)))
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.CATEGORY_SUCCESSFULLY_UPDATED)
+                .build();
     }
 }
