@@ -46,7 +46,6 @@ public class AdvertService {
     private final TourRequestsRepository tourRequestsRepository;
     private final UserRepository userRepository;
 
-    private final UserRepository userRepository;
 
 
     public Advert save(AdvertRequest advertRequest , HttpServletRequest httpServletRequest) {

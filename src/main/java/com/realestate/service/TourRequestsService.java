@@ -102,8 +102,6 @@ public class TourRequestsService {
 
 
     }
-    /*
-
 
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(Long tourRequestId) {
 
