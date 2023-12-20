@@ -40,9 +40,11 @@ public class TourRequest {
     private Advert advert;
 
     @ManyToOne
+    @JsonIgnore
     private User ownerUser;
 
     @ManyToOne
+    @JsonIgnore
     private User guestUser;
 
 }

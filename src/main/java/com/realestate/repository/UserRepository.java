@@ -1,6 +1,9 @@
 package com.realestate.repository;
 
+import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String userEmail);
 
+    @Query("SELECT t FROM TourRequest t WHERE t.guestUser =:user")
+    Page<TourRequest> getAuthCustomerTourRequestsPageable(/*String q,*/ User user, Pageable pageable);
 }
