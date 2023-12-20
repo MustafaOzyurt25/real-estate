@@ -6,6 +6,7 @@ import com.realestate.payload.request.CategoryRequest;
 import com.realestate.payload.response.CategoryResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -40,7 +41,15 @@ public class CategoryMapper {
                 .isActive(category.getIsActive())
                 .categoryPropertyKeys(category.getCategoryPropertyKeys())
                 .createAt(category.getCreateAt())
+                .updateAt(category.getUpdateAt())
                 .build();
     }
 
+    public Category mapCategoryRequestToUpdatedCategory(Long id, CategoryRequest categoryRequest,List<CategoryPropertyKey> categoryPropertyKeys) {
+        Category category = mapCategoryRequestToCategory(categoryRequest,categoryPropertyKeys);
+        category.setId(id);
+        category.setUpdateAt(LocalDateTime.now());
+        category.setBuiltIn(false);
+        return category;
+    }
 }

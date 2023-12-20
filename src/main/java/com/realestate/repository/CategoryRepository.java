@@ -15,8 +15,8 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
     boolean existsByIdAndAdvertsIsNotEmpty(Long id);
 
 
-    @Query("SELECT a FROM Category a WHERE (:q IS NULL OR Lower(a.title) LIKE %:q% OR Lower(a.description) LIKE %:q%)")
-    Page<Category> getAllCategoriesByPage(String q, Pageable pageable);
+    @Query("SELECT a FROM Category a WHERE (:q IS NULL OR Lower(a.title) LIKE %:q%) AND a.isActive = true")
+    Page<Category> getAllCategoriesByPage(@Param("q") String q, Pageable pageable);
 
 
     @Query(value = "SELECT (count(c) = 0) FROM Category c")
