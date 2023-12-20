@@ -29,6 +29,7 @@ public class SuccessMessages {
     public static final String USER_PASSWORD_UPDATE = "User Password Successfully Updated";
     public static final String USER_DELETE = "User Successfully Deleted";
     public static final String CRITERIA_CATEGORY_FOUND = "Successfully found category matching your search criteria";
+    public static final String CATEGORY_SUCCESSFULLY_UPDATED = "Category Successfully updated";
 
 
 }

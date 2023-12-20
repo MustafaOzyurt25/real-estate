@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +25,14 @@ public class CategoryController {
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-    public Category createCategory(@RequestBody @Valid CategoryRequest categoryRequest){
+    public Category createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
 
         return categoryService.createCategory(categoryRequest);
     }
 
     @DeleteMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-    public ResponseMessage<CategoryResponse> deleteCategory(@PathVariable("id") Long categoryId){
+    public ResponseMessage<CategoryResponse> deleteCategory(@PathVariable("id") Long categoryId) {
         return categoryService.deleteCategory(categoryId);
     }
 
@@ -49,7 +50,7 @@ public class CategoryController {
    */
 
     @GetMapping("/getById/{id}")
-    public CategoryResponse getCategoryById(@PathVariable Long id){
+    public CategoryResponse getCategoryById(@PathVariable Long id) {
         return categoryService.getCategoryById(id);
     }
 
@@ -57,10 +58,10 @@ public class CategoryController {
     @GetMapping("/getAllCategories")
     //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseEntity<List<Category>> getAllCategories(@RequestParam(value = "q", required = false) String q,
-                                                           @RequestParam(value = "page",defaultValue = "0") int page,
-                                                           @RequestParam(value = "size",defaultValue = "20") int size,
-                                                           @RequestParam(value = "sort",defaultValue = "category_id") String sort,
-                                                           @RequestParam(value = "type",defaultValue = "asc") String type){
+                                                           @RequestParam(value = "page", defaultValue = "0") int page,
+                                                           @RequestParam(value = "size", defaultValue = "20") int size,
+                                                           @RequestParam(value = "sort", defaultValue = "category_id") String sort,
+                                                           @RequestParam(value = "type", defaultValue = "asc") String type) {
         List<Category> categories = categoryService.getAllCategories(q, page, size, sort, type);
 
         if (q != null && !q.isEmpty()) {
@@ -82,7 +83,12 @@ public class CategoryController {
         return ResponseEntity.ok(categories.subList(startIndex, endIndex));
     }
 
-
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @PutMapping("/{id}")
+    public ResponseMessage<CategoryResponse> updateCategoryWithId(@PathVariable("id") Long id,@RequestBody @Valid CategoryRequest categoryRequest){
+        return categoryService.updateCategoryWithId(id,categoryRequest);
     }
+
+}
 
 
