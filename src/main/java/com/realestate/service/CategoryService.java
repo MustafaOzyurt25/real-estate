@@ -73,7 +73,8 @@ public class CategoryService {
     }
 
 
-    /*
+
+
     public ResponseEntity<Map<String, Object>> getAllCategoriesByPage(String q, int page, int size, String sort, String type) {
 
         Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort.toLowerCase(),type.toLowerCase());
@@ -91,10 +92,13 @@ public class CategoryService {
             return new ResponseEntity<>(responseBody,HttpStatus.OK);
         }
         responseBody.put("Message",SuccessMessages.CRITERIA_CATEGORY_FOUND);
-        responseBody.put("Adverts",categories);
+        responseBody.put("Categories",categories);
         return new ResponseEntity<>(responseBody,HttpStatus.OK);
     }
-    */
+
+
+
+
 
     public CategoryResponse getCategoryById(Long id) {
 
