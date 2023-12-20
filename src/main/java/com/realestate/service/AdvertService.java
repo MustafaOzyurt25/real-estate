@@ -111,15 +111,11 @@ public class AdvertService {
         return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
     }
 
-
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
         return advertRepository.getAdvertAmountByCategories().stream().collect(Collectors.toList());
     }
 
-
     //====================================popular================================================
-
-
 
     //view_count sayısını güncellemek için
     public Advert advertView(Long advertId){

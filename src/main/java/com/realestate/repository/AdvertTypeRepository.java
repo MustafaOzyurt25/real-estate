@@ -11,4 +11,6 @@ public interface AdvertTypeRepository extends JpaRepository <AdvertType, Long > 
 
     @Query(value = "SELECT (count(a) = 0) FROM AdvertType a")
     boolean isEmpty();
+
+    boolean existsByTitle(String title);
 }
