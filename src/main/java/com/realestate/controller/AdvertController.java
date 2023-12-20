@@ -58,8 +58,9 @@ public class AdvertController {
 
 
      @GetMapping(("/popular/{amount}"))
-     public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable Integer amount){
-             return advertService.getPopularAdvertsByAmount(amount);
+     public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable(required = false) Integer amount){
+         Integer defaultAmount = (amount == null) ? 10 : amount;
+             return advertService.getPopularAdvertsByAmount(defaultAmount);
       }
 
     @GetMapping()
@@ -84,6 +85,19 @@ public class AdvertController {
     public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest){
         return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
     }
+
+    //A05
+
+   // @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+   // @GetMapping("/auth")
+   // public Page<AdvertResponse>getAuthenticatedUserAdverts(@RequestParam(value = "page",defaultValue = "0") int page,
+   //                                                        @RequestParam(value = "size",defaultValue = "20" ) int size,
+   //                                                        @RequestParam(value = "sort",defaultValue = "categoryId") String sort,
+   //                                                        @RequestParam(value = "type",defaultValue = "asc") String type,
+   //                                                        HttpServletRequest httpServletRequest   )
+   // {
+   //     return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
+   // }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{id}/admin")

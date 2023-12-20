@@ -16,6 +16,7 @@ import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.AdvertRepository;
 import com.realestate.repository.TourRequestsRepository;
+import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +46,8 @@ public class AdvertService {
     private final PageableHelper pageableHelper;
     //private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
+
+    private final UserRepository userRepository;
 
 
     public Advert save(AdvertRequest advertRequest) {
@@ -137,11 +140,9 @@ public class AdvertService {
     }
 
 
-    public  List<AdvertResponse> getPopularAdvertsByAmount(Integer amount) {
+    public  List<AdvertResponse> getPopularAdvertsByAmount(Integer defaultAmount) {
 
-        if (amount==null){
-            amount= 10;
-        }
+        Integer amount = (defaultAmount == null) ? 10 : defaultAmount;
         //tüm advertları almak için
         List<Advert> allAdvert = advertRepository.findAll().stream().toList();
 
@@ -179,11 +180,12 @@ public class AdvertService {
 
         // advert customer a mı ait kontrol yapılmalı
 
-        String email=(String) httpServletRequest.getAttribute("email");
+        String userEmail=(String) httpServletRequest.getAttribute("email");
         //id kontrol
         Advert advert=getAdvertById(advertId);
+        User user=userRepository.findByEmailEquals(userEmail);
 
-        if(advert.getUser().getEmail().equals(email)){
+        if(advert.getUser().equals(user)){
             return ResponseMessage.<AdvertResponse>builder()
                     .object(advertMapper.mapAdvertToAdvertResponse(advert))
                     .message(SuccessMessages.ADVERT_FOUNDED)
@@ -245,4 +247,22 @@ public class AdvertService {
                     .httpStatus(HttpStatus.OK)
                     .build();
     }
+
+    //A05
+  // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
+
+  //     Pageable pageable=pageableHelper.getPageableWithProperties(page,size,sort,type);
+  //     String userEmail =(String) httpServletRequest.getAttribute("email");
+
+  //     User user = userRepository.findByEmailEquals(userEmail);
+  //
+  //     List<Advert> adverts =
+
+  //     Page<Advert> advertPage= advertRepository.findAll;
+
+  //  }
+
+ // private List<Advert> getAdvertsbyUser(String userEmail){
+ //     advertRepository.findAllById()
+ // }
 }
