@@ -29,6 +29,7 @@ public class ErrorMessages {
     public static final String TOUR_REQUEST_NOT_FOUND = "Tour request with id %s was not found";
     public static final String CRITERIA_ADVERT_NOT_FOUND = "No advert was found according to your search criteria";
     public static final String NOT_FOUND_USER_MESSAGE = "Error: User with id %s was not found";
+    public static final String BUILTIN_CATEGORY_CANT_BE_UPDATED = "The category whose builtIn property is true can not be updated.";
 
     // ---------------------- ERROR REGISTER -----------------------------------------------------------------------
     public static final String ALREADY_REGISTER_MESSAGE_PHONE = "Error: User with phone %s is already registered";
