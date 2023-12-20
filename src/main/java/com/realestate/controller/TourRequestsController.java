@@ -32,4 +32,12 @@ public class TourRequestsController {
     public ResponseMessage<TourRequestResponse> getTourRequestById(@PathVariable("id") Long tourRequestId){
         return tourRequestsService.getTourRequestById(tourRequestId);
     }
+
+    @GetMapping("/{id}/auth")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public ResponseMessage<TourRequestResponse> getAuthTourRequestById(@PathVariable("id") Long tourRequestId){
+        return tourRequestsService.getAuthTourRequestById(tourRequestId);
+    }
+
+
 }
