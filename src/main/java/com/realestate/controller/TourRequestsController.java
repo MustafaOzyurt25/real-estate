@@ -42,6 +42,14 @@ public class TourRequestsController {
         return tourRequestsService.getTourRequestById(tourRequestId);
     }
 
+
+    @GetMapping("/{id}/auth")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public ResponseMessage<TourRequestResponse> getAuthTourRequestById(@PathVariable("id") Long tourRequestId){
+        return tourRequestsService.getAuthTourRequestById(tourRequestId);
+    }
+
+
     @GetMapping("auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest,
@@ -54,5 +62,6 @@ public class TourRequestsController {
 
 
     }
+
 
 }
