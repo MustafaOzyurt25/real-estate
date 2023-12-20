@@ -259,6 +259,19 @@ public class AdvertService {
                     .build();
     }
 
+
+    /*
+    public ResponseMessage deleteAdvertById(Long id) {
+        Advert advert = isAdvertExists(id);
+        advertRepository.deleteById(id);
+
+        return ResponseMessage.builder()
+                .message(SuccessMessages.ADVERT_DELETE)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+     */
+
     //A05
   // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
 
@@ -276,4 +289,5 @@ public class AdvertService {
  // private List<Advert> getAdvertsbyUser(String userEmail){
  //     advertRepository.findAllById()
  // }
+
 }
