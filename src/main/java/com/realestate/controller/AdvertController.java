@@ -28,11 +28,11 @@ public class AdvertController {
     private final AdvertService advertService;
 
 
-
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PostMapping("/save")
-    public Advert save(@ModelAttribute AdvertRequest advertRequest){
+    public Advert save(@ModelAttribute AdvertRequest advertRequest, HttpServletRequest httpServletRequest){
 
-        return advertService.save(advertRequest);
+        return advertService.save(advertRequest , httpServletRequest);
 
     }
 
