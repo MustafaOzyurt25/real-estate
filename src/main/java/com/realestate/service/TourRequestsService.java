@@ -123,8 +123,8 @@ public class TourRequestsService {
 
 
     public ResponseMessage<TourRequestResponse> approveTourRequest(Long tourRequestId) {
-        TourRequest tourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(()->
-                new ResourceNotFoundException( String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND,tourRequestId)));
+        TourRequest tourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourRequestId)));
         tourRequest.setStatus(TourRequestStatus.APPROVED);
         tourRequest.setUpdateAt(LocalDateTime.now());
         tourRequestsRepository.save(tourRequest);
@@ -134,7 +134,7 @@ public class TourRequestsService {
                 .httpStatus(HttpStatus.OK)
                 .message(SuccessMessages.TOUR_REQUEST_APPROVE)
                 .build();
-
+    }
 
     public ResponseMessage<TourRequestResponse> declineTourRequest(Long id) {
         TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
