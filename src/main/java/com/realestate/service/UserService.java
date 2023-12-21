@@ -172,7 +172,6 @@ public class UserService
             User user = userRepository.findByEmailEquals(userEmail);
 
             if(user.getBuiltIn().equals(false)){
-
                 userRepository.deleteById(user.getId());
             }
 
