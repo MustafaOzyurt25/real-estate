@@ -16,12 +16,11 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.UserResponse;
 import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -164,23 +163,27 @@ public class UserService
 
     public ResponseMessage authenticatedUserDeleted(HttpServletRequest request) {
 
-        String userEmail = (String) request.getAttribute("email");
+        try{
+            String userEmail = (String) request.getAttribute("email");
 
-        User user = userRepository.findByEmailEquals(userEmail);
+            User user = userRepository.findByEmailEquals(userEmail);
 
-        //user in advert veya tour request i varsa silmeye izin verilmeyecek
+            if(user.getBuiltIn().equals(false)){
 
-        if(user.getBuiltIn().equals(false)){
+                userRepository.deleteById(user.getId());
+            }
 
-            userRepository.deleteById(user.getId());
+            else throw new ConflictException("You do not have permission to delete this user");
+
+            return ResponseMessage.builder()
+                    .message(SuccessMessages.USER_DELETE)
+                    .httpStatus(HttpStatus.OK)
+                    .build();
+
+
+        }catch (RuntimeException e){
+            throw new ConflictException(ErrorMessages.USER_CANNOT_BE_DELETED);
         }
-
-        else throw new ConflictException("You do not have permission to delete this user");
-
-        return ResponseMessage.builder()
-                .message(SuccessMessages.USER_DELETE)
-                .httpStatus(HttpStatus.OK)
-                .build();
 
     }
 
@@ -195,8 +198,7 @@ public class UserService
 
         User user = isUserExists(userId);
 
-        //user in adverti da frontend de gozuktugu icin response da olmasi gerekiyor
-
+        //F09 un fronted sayfasinda advert gozukmuyor eger lazim olursa tekrar kontrol edecegiz
         return ResponseMessage.<UserResponse>builder()
                 .object(userMapper.mapUserToUserResponse(user))
                 .message(SuccessMessages.USER_FOUNDED)
