@@ -21,7 +21,6 @@ public class TourRequestResponse {
 
     private Long tourRequestId;
     private LocalDate tourDate;
-
     private LocalTime tourTime;
     private TourRequestStatus status;
     private LocalDateTime createAt;

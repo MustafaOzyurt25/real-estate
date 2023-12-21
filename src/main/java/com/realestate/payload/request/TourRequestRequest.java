@@ -28,5 +28,4 @@ public class TourRequestRequest {
     private LocalTime tourTime;
 
 
-
 }
