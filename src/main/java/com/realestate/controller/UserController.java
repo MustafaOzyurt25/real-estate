@@ -61,6 +61,11 @@ public class UserController {
         return  userService.getUserByAdmin(userId);
     }
 
-
+    @DeleteMapping("/{userId}/admin")
+    @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")
+    public ResponseMessage<UserResponse> deleteUser(@PathVariable("userId") Long userId)
+    {
+        return userService.deleteUserById(userId);
+    }
 
 }

@@ -212,6 +212,14 @@ public class AdvertService {
 
     }
 
+
+
+    // UserService için yazıldı, id si ile gelen kullanıcınının advert'ü var mı diye kontrol edicelek
+    public boolean controlAdvertByUserId(Long userId)
+    {
+        return advertRepository.existsByUserId(userId);
+    }
+
     //===========================ID kontrol============================================
 
 
@@ -371,4 +379,6 @@ public class AdvertService {
         }
     
 
-   
+
+}
+
