@@ -26,8 +26,10 @@ public class AdvertUpdateRequest {
     private String description;
     @NotNull
     private Double price;
+    @NotNull
+    private String location; // bu document  de yok.ama gorselde var.
     
-    // simdilik bunlari @NotNull yapmadim.
+    
     private Long advertTypeId;
     private Long countryId;
     private Long cityId;
@@ -36,18 +38,11 @@ public class AdvertUpdateRequest {
     private Boolean isActive;
     private List<CategoryPropertyKey> properties;
     
+    
             
     
     
-    // bunlar AdvertRequest var ama updateAdvertRequest'te yok: 
-//    @NotNull
-//    private String location;
-    
-//    private List<MultipartFile> images;
-    
-//    private LocalDateTime createAt = LocalDateTime.now();
-    
-//    private LocalDateTime updateAt;
+
    
    
     
