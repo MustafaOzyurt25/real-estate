@@ -1,5 +1,3 @@
-
-
 CREATE TABLE IF NOT EXISTS countries (
   id int NOT NULL,
   name varchar(80) NOT NULL,
