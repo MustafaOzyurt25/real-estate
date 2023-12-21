@@ -62,8 +62,10 @@ public class AdvertService {
 
         User user = userRepository.findByEmailEquals(userEmail);
 
+
         if (!(user.getId() == null)) {
             Country country = countryService.getCountyById(advertRequest.getCountryId());
+
             City city = cityService.getCityById(advertRequest.getCityId());
             District district = districtService.getDistrictById(advertRequest.getDistrictId());
             AdvertType advertType = advertTypeService.getAdvertTypeById(advertRequest.getAdvertTypeId());
@@ -386,6 +388,27 @@ public class AdvertService {
     }
      */
 
+
+    //A05
+ public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
+
+     Pageable pageable=pageableHelper.getPageableWithProperties(page,size,sort,type);
+     String userEmail =(String) httpServletRequest.getAttribute("email");
+
+     User user = userRepository.findByEmailEquals(userEmail);
+
+     if (user == null) {
+         throw new ResourceNotFoundException(ErrorMessages.NOT_FOUND_USER_MESSAGE);
+     }
+
+
+
+     return advertRepository.findByUserEmail(user.getEmail(), pageable)
+             .map(advertMapper::mapAdvertToAdvertResponse);
+  }
+
+
+
             //A05
             // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
 
@@ -405,9 +428,10 @@ public class AdvertService {
             // }
 
 
-        }
+
     
 
 
 }
+
 

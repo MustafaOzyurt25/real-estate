@@ -69,4 +69,9 @@ public class User {
     @OneToMany(mappedBy = "guestUser",cascade = CascadeType.REMOVE)
     private List<TourRequest> tourRequestGuest;
 
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private List<Advert> adverts;
+
+
 }
