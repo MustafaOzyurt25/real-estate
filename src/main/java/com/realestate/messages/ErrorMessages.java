@@ -2,6 +2,8 @@ package com.realestate.messages;
 
 
 public class ErrorMessages {
+
+
     private ErrorMessages() {
     }
 
@@ -33,6 +35,8 @@ public class ErrorMessages {
     public static final String ALREADY_REGISTER_MESSAGE_EMAIL = "Error: User with email %s is already registered";
     // -------------------------------------------------------------------------------------------------------------
 
+    public static final String NOT_FOUND_TOUR_REQUEST = "Error: Tour Request not found with id %s";
+    public static final String TOUR_REQUEST_CANNOT_BE_UPDATED = "Error: Tour Request can not be updated!";
 
 
 }

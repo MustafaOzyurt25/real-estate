@@ -48,6 +48,7 @@ public class ContactService {
     //J01 getAllContactMessageAsPage -----------------------------------------------------------------------------------
     @Transactional
     public Page<ContactResponse> getAllContactMessageAsPage(int page, int size, String sort, String type, String query) {
+
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
 
         if (Objects.equals(type, "desc")) {
