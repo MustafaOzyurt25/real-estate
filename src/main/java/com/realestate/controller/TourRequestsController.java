@@ -50,7 +50,7 @@ public class TourRequestsController {
     }
 
 
-    @GetMapping("auth")
+    @GetMapping("/auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest,
                                                                                    @RequestParam(value = "q", required = false) String q,
@@ -63,10 +63,21 @@ public class TourRequestsController {
 
     }
 
+
+    @PatchMapping("/{id}/approve")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public ResponseMessage<TourRequestResponse> approveTourRequest (@PathVariable("id") Long tourRequestId){
+        return tourRequestsService.approveTourRequest(tourRequestId);
+    }
+
+
+
+
     @PatchMapping("/{id}/decline")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseMessage<TourRequestResponse> declineTourRequest(@PathVariable("id") Long id){
         return tourRequestsService.declineTourRequest(id);
     }
+
 
 }

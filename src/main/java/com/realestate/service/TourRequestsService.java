@@ -20,8 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -107,6 +107,21 @@ public class TourRequestsService {
                 .build();
     }
 
+
+    public ResponseMessage<TourRequestResponse> approveTourRequest(Long tourRequestId) {
+        TourRequest tourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(()->
+                new ResourceNotFoundException( String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND,tourRequestId)));
+        tourRequest.setStatus(TourRequestStatus.APPROVED);
+        tourRequest.setUpdateAt(LocalDateTime.now());
+        tourRequestsRepository.save(tourRequest);
+
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequest))
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.TOUR_REQUEST_APPROVE)
+                .build();
+
+
     public ResponseMessage<TourRequestResponse> declineTourRequest(Long id) {
         TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
         tourRequest.setStatus(TourRequestStatus.DECLINED);
@@ -116,5 +131,6 @@ public class TourRequestsService {
                 .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_DECLINED)
                 .httpStatus(HttpStatus.OK)
                 .build();
+
     }
 }
