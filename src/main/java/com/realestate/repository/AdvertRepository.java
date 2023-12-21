@@ -22,9 +22,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     List<AdvertCityResponse> getAdvertAmountByCity();
 
 
-
     @Query(value = "SELECT (count(a) = 0) FROM Advert a")
     boolean isEmpty();
+
 
     @Query("SELECT new com.realestate.payload.response.AdvertCategoriesResponse(a.category.title, COUNT(a)) FROM Advert a GROUP BY a.category.title")
     List<AdvertCategoriesResponse> getAdvertAmountByCategories();

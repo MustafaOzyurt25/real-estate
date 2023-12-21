@@ -1,6 +1,7 @@
 package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.realestate.entity.enums.TourRequestStatus;
 import lombok.*;
 
@@ -35,12 +36,15 @@ public class TourRequest {
     private LocalDateTime updateAt;
 
     @ManyToOne
+    @JsonIgnore
     private Advert advert;
 
     @ManyToOne
+    @JsonIgnore
     private User ownerUser;
 
     @ManyToOne
+    @JsonIgnore
     private User guestUser;
 
 }

@@ -1,6 +1,5 @@
 package com.realestate.service;
 
-
 import com.realestate.entity.AdvertType;
 import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
@@ -10,38 +9,33 @@ import com.realestate.payload.mappers.AdvertTypeMapper;
 import com.realestate.payload.request.AdvertTypeRequest;
 import com.realestate.payload.response.AdvertTypeResponse;
 import com.realestate.payload.response.ResponseMessage;
+import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.AdvertTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AdvertTypeService {
 
     private final AdvertTypeRepository advertTypeRepository;
-
     private final AdvertTypeMapper advertTypeMapper;
-
-
-
+    private final UniquePropertyValidator uniquePropertyValidator;
 
   public ResponseMessage<AdvertTypeResponse> advertTypeCreate(AdvertTypeRequest advertTypeRequest) {
+      uniquePropertyValidator.checkDuplicateWithTitle(advertTypeRequest.getTitle());
 
-      AdvertType advertType =advertTypeMapper.mapAdvertTypeRequestToAdvertType(advertTypeRequest);
-      AdvertType savedAdvertType=advertTypeRepository.save(advertType);
+      AdvertType advertType = advertTypeMapper.mapAdvertTypeRequestToAdvertType(advertTypeRequest);
+      AdvertType savedAdvertType = advertTypeRepository.save(advertType);
 
       return ResponseMessage.<AdvertTypeResponse>builder()
               .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(savedAdvertType))
               .httpStatus(HttpStatus.CREATED)
-              .message(SuccessMessages.CREATE_ADVERT_TYPE)
+              .message(SuccessMessages.ADVERT_TYPE_CREATED)
               .build();
-
   }
-
     private AdvertType isAdvertTypeExists(Long id){
 
         return advertTypeRepository.findById(id).orElseThrow(()->
@@ -83,22 +77,14 @@ public class AdvertTypeService {
                 .message(SuccessMessages.ADVERT_TYPE_DELETE)
                 .httpStatus(HttpStatus.OK)
                 .build();
-
-
     }
-
-
     public ResponseMessage<AdvertTypeResponse> getAdvertTypeWithId(Long id) {
         return ResponseMessage.<AdvertTypeResponse>builder()
                 .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(advertTypeRepository.findById(id)
                         .orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE,id)))))
                 .httpStatus(HttpStatus.OK)
                 .build();
-
-
     }
-
-
     //T01 Get All
 
     public ResponseMessage<List<AdvertTypeResponse>> getAll() {

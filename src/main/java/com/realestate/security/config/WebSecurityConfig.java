@@ -102,7 +102,6 @@ public class WebSecurityConfig
             "/adverts/**",
             "/categories/**",
             "/tour-requests/**",
-            "/categories/**",
             "/countries/**",
             "/advert-types/**",
             "/cities/**",
