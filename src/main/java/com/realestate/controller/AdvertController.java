@@ -9,6 +9,7 @@ import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.AdvertService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -54,10 +55,10 @@ public class AdvertController {
 
     @GetMapping("/categories")
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories(){return advertService.getAdvertAmountByCategories();}
-   
 
 
-     @GetMapping(("/popular/{amount}"))
+
+     @GetMapping(value = {"/popular","/popular/{amount}"})
      public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable(required = false) Integer amount){
          Integer defaultAmount = (amount == null) ? 10 : amount;
              return advertService.getPopularAdvertsByAmount(defaultAmount);
@@ -88,16 +89,16 @@ public class AdvertController {
 
     //A05
 
-   // @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-   // @GetMapping("/auth")
-   // public Page<AdvertResponse>getAuthenticatedUserAdverts(@RequestParam(value = "page",defaultValue = "0") int page,
-   //                                                        @RequestParam(value = "size",defaultValue = "20" ) int size,
-   //                                                        @RequestParam(value = "sort",defaultValue = "categoryId") String sort,
-   //                                                        @RequestParam(value = "type",defaultValue = "asc") String type,
-   //                                                        HttpServletRequest httpServletRequest   )
-   // {
-   //     return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
-   // }
+ @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+ @GetMapping("/auth")
+ public Page<AdvertResponse> getAuthenticatedUserAdverts(@RequestParam(value = "page",defaultValue = "0") int page,
+                                                         @RequestParam(value = "size",defaultValue = "20" ) int size,
+                                                         @RequestParam(value = "sort",defaultValue = "categoryId") String sort,
+                                                         @RequestParam(value = "type",defaultValue = "asc") String type,
+                                                         HttpServletRequest httpServletRequest   )
+ {
+     return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
+ }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{id}/admin")
@@ -107,16 +108,19 @@ public class AdvertController {
 
 
     //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
-    /*
+   
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    @PutMapping("/auth/{id}")
+    @PutMapping("/auth/{advertId}")
     public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId,
-                                                                                  @RequestBody AdvertUpdateRequest updateRequest,
+                                                                                  @RequestBody @Valid AdvertUpdateRequest updateRequest,
                                                                                   HttpServletRequest httpServletRequest){
         return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
     }
-    */
 
+   
+    
+
+   
     /*
     @DeleteMapping("/delete/{id}")
     //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
@@ -125,6 +129,7 @@ public class AdvertController {
     }
 
      */
+
     
     
 
