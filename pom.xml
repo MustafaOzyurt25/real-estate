@@ -75,12 +75,7 @@
 			<artifactId>java-uuid-generator</artifactId>
 			<version>4.0.1</version>
 		</dependency>
-		<!-- Apache HttpClient -->
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.13</version> <!-- Güncel versiyonu kontrol edebilirsiniz -->
-		</dependency>
+
 	</dependencies>
 
 	<build>
