@@ -15,9 +15,14 @@ import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.repository.TourRequestsRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+//import org.apache.http.client.methods.CloseableHttpResponse;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.HttpClients;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
@@ -39,13 +44,22 @@ public class TourRequestsService {
 
 
     //S05
-    public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest){
+    public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest, String userEmail){
 
+        // bu kullanıcı tourrequest oluşturan kullanıcıdır. guest_user_id field'ına kaydedilmesi gerekir.
+        // Buradaki email'e sahip user'ı bulup guest_user atamamız gerekiyor.
+        System.out.println("User Email : " + userEmail);
+        if(!userRepository.existsByEmail(userEmail))
+        {
+            throw new ResourceNotFoundException(String.format(ErrorMessages.USER_NOT_FOUND_BY_EMAIL,userEmail));
+        }
+        User guestUser = userRepository.findByEmailEquals(userEmail);
                 //DTO-->POJO
-       TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
 
+        TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
+        tourRequest.setGuestUser(guestUser);
 
-       //default status atadık
+       //default status atadıks
        tourRequest.setStatus(TourRequestStatus.PENDING);
       TourRequest savedTourRequest= tourRequestsRepository.save(tourRequest);
 
