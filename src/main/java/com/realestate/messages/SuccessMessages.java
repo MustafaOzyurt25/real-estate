@@ -31,6 +31,7 @@ public class SuccessMessages {
     public static final String CRITERIA_CATEGORY_FOUND = "Successfully found category matching your search criteria";
     public static final String CATEGORY_SUCCESSFULLY_UPDATED = "Category Successfully updated";
     public static final String ADVERT_DELETE="Advert is Deleted Successfully";
+    public static final String TOUR_REQUEST_SUCCESSFULLY_DECLINED = "Tour Request Successfully Declined";
 
 
 
