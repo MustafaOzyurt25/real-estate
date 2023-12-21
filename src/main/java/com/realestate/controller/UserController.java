@@ -9,6 +9,7 @@ import com.realestate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +59,11 @@ public class UserController {
         return  userService.getUserByAdmin(userId);
     }
 
-
+    @DeleteMapping("/{userId}/admin")
+    @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")
+    public ResponseMessage<UserResponse> deleteUser(@PathVariable("userId") Long userId)
+    {
+        return userService.deleteUserById(userId);
+    }
 
 }

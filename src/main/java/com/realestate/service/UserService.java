@@ -1,8 +1,10 @@
 package com.realestate.service;
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.Role;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.RoleType;
+import com.realestate.exception.BadRequestException;
 import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
@@ -40,6 +42,7 @@ public class UserService
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final PageableHelper pageableHelper;
+    private final AdvertService advertService;
 
 
     public void saveDefaultAdmin(User defaultAdmin)
@@ -209,5 +212,29 @@ public class UserService
         return userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, userId)));
 
+    }
+
+    public ResponseMessage<UserResponse> deleteUserById(Long userId)
+    {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.RESOURCE_NOT_FOUND_EXCEPTION,"User")));
+
+        if(user.getBuiltIn())
+        {
+            throw new BadRequestException(ErrorMessages.USER_CAN_NOT_DELETE_HAS_BUILT_IN_TRUE_MESSAGE);
+        }
+
+        boolean advertControlByUserId = advertService.controlAdvertByUserId(userId);
+
+        if(advertControlByUserId)
+        {
+            System.out.println("User'ın advert'ı var.");
+        }
+        else
+        {
+            System.out.println("User'ın advert'ı yok.");
+        }
+
+        return ResponseMessage.<UserResponse>builder()
+                .build();
     }
 }
