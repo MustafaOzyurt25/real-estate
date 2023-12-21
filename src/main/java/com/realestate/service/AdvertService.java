@@ -55,24 +55,7 @@ public class AdvertService {
 
     private final CategoryPropertyKeyService categoryPropertyKeyService;
 
-
-//        Country country = countryService.getCountyById(advertRequest.getCountryId());
-//        City city = cityService.getCityById(advertRequest.getCityId());
-//        District district = districtService.getDistrictById(advertRequest.getDistrictId());
-//        AdvertType advertType = advertTypeService.getAdvertTypeById(advertRequest.getAdvertTypeId());
-//
-//        String slug = advertRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
-//
-//        List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
-//        Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest, images, country, city, district, advertType, slug);
-//
-//        advert.setStatus(AdvertStatus.PENDING);
-//        advert.setBuiltIn(false);
-//        advert.setIsActive(true);
-//        advert.setViewCount(0);
-//        
-//        advert.getCategory();
-
+    
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
@@ -288,7 +271,7 @@ public class AdvertService {
                 User currentUser = userRepository.findByEmailEquals(currentUserEmail);
 
                 // id kontrolu 
-                getAdvertById(advertId);
+                Advert existAdvert = getAdvertById(advertId);
 
                 City city = cityService.getCityById(advertUpdateRequest.getCityId());
                 Country country = countryService.getCountyById(advertUpdateRequest.getCountryId());
@@ -299,12 +282,12 @@ public class AdvertService {
                         categoryPropertyKeyService.getCategoryPropertyKeys(advertUpdateRequest.getCategoryId());
 
                 // diger serviceler
-                // CategoryPropertyValue ile ilgili service den value'lar mesela.
+                // CategoryPropertyValue ile ilgili service'den value'lar mesela.
 
 
                 Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(advertUpdateRequest);
 
-                advert.setStatus(AdvertStatus.PENDING);
+                
                 advert.setBuiltIn(false);
                 advert.setAdvertType(advertType);
                 advert.setCity(city);
@@ -315,27 +298,33 @@ public class AdvertService {
                 advert.setUpdateAt(LocalDateTime.now());
 
                 // diger setlemeler.....
-                advert.setCategoryPropertyValue(advert.getCategoryPropertyValue());
-                advert.setFavorites(advert.getFavorites());
-                advert.setCreateAt(advert.getCreateAt());
-                advert.setImages(advert.getImages());
-                advert.setSlug(advert.getSlug());
-                advert.setLogs(advert.getLogs());
-                advert.setId(advert.getId());
-                advert.setTourRequests(advert.getTourRequests());
-                advert.setUser(advert.getUser());
-                advert.setViewCount(advert.getViewCount());
+                advert.setCategoryPropertyValue(existAdvert.getCategoryPropertyValue());
+                advert.setFavorites(existAdvert.getFavorites());
+                advert.setCreateAt(existAdvert.getCreateAt());
+                advert.setImages(existAdvert.getImages());
+                advert.setSlug(existAdvert.getSlug());
+                advert.setLogs(existAdvert.getLogs());
+                advert.setId(existAdvert.getId());
+                advert.setTourRequests(existAdvert.getTourRequests());
+                advert.setUser(existAdvert.getUser());
+                advert.setViewCount(existAdvert.getViewCount());
 
 
                 // "builtIn" özelliği kontrolü
-                if (advert.getBuiltIn()) {
+                if (existAdvert.getBuiltIn()) {
                     throw new ConflictException(ErrorMessages.ADVERT_BUILT_IN_CAN_NOT_BE_UPDATED);
                 }
 
                 // Kullanıcının kendi reklamını güncelleme yetkisi kontrolü
-                if (!advert.getUser().getId().equals(currentUser.getId())) {
-                    throw new ConflictException(String.format(ErrorMessages.ADVERT_CAN_NOT_BE_UPDATED));
+                if (!existAdvert.getUser().getId().equals(currentUser.getId())) {
+                    throw new ConflictException(String.format(ErrorMessages.ADVERT_CAN_NOT_BE_UPDATED,advertId));
                 }
+                
+                
+                // Durumu "PENDING" olarak ayarla 
+                advert.setStatus(AdvertStatus.PENDING);  
+                
+                
 
                 Advert savedAdvert = advertRepository.save(advert);
 

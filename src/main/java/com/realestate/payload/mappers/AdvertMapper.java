@@ -94,15 +94,6 @@ public class AdvertMapper {
 //                .district(advertUpdateRequest.getDistrictId())
 //                .category(advertUpdateRequest.getCategoryId())
                 
-                
-               
-                
-            
-                
-              
-                
-                
-
                 .build();
     }
 
