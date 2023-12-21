@@ -1,8 +1,10 @@
 package com.realestate.service;
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.Role;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.RoleType;
+import com.realestate.exception.BadRequestException;
 import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
@@ -16,12 +18,11 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.UserResponse;
 import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class UserService
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final PageableHelper pageableHelper;
+    private final AdvertService advertService;
 
 
     public void saveDefaultAdmin(User defaultAdmin)
@@ -154,9 +156,7 @@ public class UserService
                     .message(SuccessMessages.USER_PASSWORD_UPDATE)
                     .httpStatus(HttpStatus.OK)
                     .build();
-
         }
-
         else
         {
             throw new ConflictException("User can not be updated");
@@ -164,26 +164,29 @@ public class UserService
 
     }
 
-
     public ResponseMessage authenticatedUserDeleted(HttpServletRequest request) {
 
-        String userEmail = (String) request.getAttribute("email");
+        try{
+            String userEmail = (String) request.getAttribute("email");
 
-        User user = userRepository.findByEmailEquals(userEmail);
+            User user = userRepository.findByEmailEquals(userEmail);
 
-        //user in advert veya tour request i varsa silmeye izin verilmeyecek
+            if(user.getBuiltIn().equals(false)){
 
-        if(user.getBuiltIn().equals(false)){
+                userRepository.deleteById(user.getId());
+            }
 
-            userRepository.deleteById(user.getId());
+            else throw new ConflictException("You do not have permission to delete this user");
+
+            return ResponseMessage.builder()
+                    .message(SuccessMessages.USER_DELETE)
+                    .httpStatus(HttpStatus.OK)
+                    .build();
+
+
+        }catch (RuntimeException e){
+            throw new ConflictException(ErrorMessages.USER_CANNOT_BE_DELETED);
         }
-
-        else throw new ConflictException("You do not have permission to delete this user");
-
-        return ResponseMessage.builder()
-                .message(SuccessMessages.USER_DELETE)
-                .httpStatus(HttpStatus.OK)
-                .build();
 
     }
 
@@ -198,8 +201,7 @@ public class UserService
 
         User user = isUserExists(userId);
 
-        //user in adverti da frontend de gozuktugu icin response da olmasi gerekiyor
-
+        //F09 un fronted sayfasinda advert gozukmuyor eger lazim olursa tekrar kontrol edecegiz
         return ResponseMessage.<UserResponse>builder()
                 .object(userMapper.mapUserToUserResponse(user))
                 .message(SuccessMessages.USER_FOUNDED)
@@ -212,5 +214,29 @@ public class UserService
         return userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, userId)));
 
+    }
+
+    public ResponseMessage<UserResponse> deleteUserById(Long userId)
+    {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.RESOURCE_NOT_FOUND_EXCEPTION,"User")));
+
+        if(user.getBuiltIn())
+        {
+            throw new BadRequestException(ErrorMessages.USER_CAN_NOT_DELETE_HAS_BUILT_IN_TRUE_MESSAGE);
+        }
+
+        boolean advertControlByUserId = advertService.controlAdvertByUserId(userId);
+
+        if(advertControlByUserId)
+        {
+            System.out.println("User'ın advert'ı var.");
+        }
+        else
+        {
+            System.out.println("User'ın advert'ı yok.");
+        }
+
+        return ResponseMessage.<UserResponse>builder()
+                .build();
     }
 }

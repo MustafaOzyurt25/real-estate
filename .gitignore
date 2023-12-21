@@ -19,6 +19,9 @@ target/
 *.iml
 *.ipr
 dev.properties
+*.properties
+data.sql
+application.properties
 
 
 ### NetBeans ###
@@ -35,3 +38,4 @@ build/
 .vscode/
 
 !**\src\main\resources\application.properties
+!**\src\main\resources\dev.properties
