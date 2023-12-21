@@ -4,13 +4,11 @@ import com.realestate.entity.Advert;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.payload.response.AdvertCityResponse;
-import com.realestate.payload.response.AdvertResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -50,6 +48,10 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     @Query(value = "DELETE FROM Advert a  WHERE a.builtIn = false")
     void deleteAdverts();
 
+
     Page<Advert> findByUserEmail(String email, Pageable pageable);
    // List<Advert> findByUserId(Long userId);
+
+    boolean existsByUserId(Long userId);
+
 }
