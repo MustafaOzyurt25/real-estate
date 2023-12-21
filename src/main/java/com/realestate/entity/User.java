@@ -70,8 +70,4 @@ public class User {
     private List<TourRequest> tourRequestGuest;
 
 
-    //@OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
-    //private List<Advert> adverts;
-
-
 }

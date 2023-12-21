@@ -16,11 +16,6 @@ import com.realestate.repository.TourRequestsRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-//import org.apache.http.client.methods.CloseableHttpResponse;
-//import org.apache.http.client.methods.HttpPost;
-//import org.apache.http.impl.client.CloseableHttpClient;
-//import org.apache.http.impl.client.HttpClients;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +34,8 @@ public class TourRequestsService {
     private final TourRequestsRepository tourRequestsRepository;
     private final TourRequestMapper tourRequestMapper;
     private final AdvertService advertService;
-
+    private final UserRepository userRepository;
+    private final PageableHelper pageableHelper;
 
 
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest) {
@@ -67,8 +63,9 @@ public class TourRequestsService {
         // Advert advert= advertService.getAdvertBySlug(slug);
         // tourRequestRequest.setAdvertId(advert.getId());
 
-    private final UserRepository userRepository;
-    private final PageableHelper pageableHelper;
+        return null; // hata almamasi icin eklendi yorumda olan kodlar duzelince silebilirsiniz
+
+    }
 
 
     //S05
@@ -85,9 +82,8 @@ public class TourRequestsService {
         User guestUser = userRepository.findByEmailEquals(userEmail);
                 //DTO-->POJO
 
-
-        //DTO-->POJO
-        TourRequest tourRequest = tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
+        TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
+        tourRequest.setGuestUser(guestUser);
 
 
         //default status atadık
@@ -101,19 +97,6 @@ public class TourRequestsService {
                 .build();
 
 
-
-        TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
-        tourRequest.setGuestUser(guestUser);
-
-       //default status atadıks
-       tourRequest.setStatus(TourRequestStatus.PENDING);
-      TourRequest savedTourRequest= tourRequestsRepository.save(tourRequest);
-
-      return ResponseMessage.<TourRequestResponse>builder()
-              .message(SuccessMessages.TOUR_REQUEST_CREATE)
-              .httpStatus(HttpStatus.CREATED)
-              .object(tourRequestMapper.mapTourRequestToTourRequestResponse(savedTourRequest))
-              .build();
 
     }
 

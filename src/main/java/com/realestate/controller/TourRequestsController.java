@@ -32,6 +32,7 @@ public class TourRequestsController {
     @PostMapping("/save")
     public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest) {
         return tourRequestsService.save(tourRequestRequest);
+    }
     public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest, HttpServletRequest request)
     {
         String userEmail = (String) request.getAttribute("email");

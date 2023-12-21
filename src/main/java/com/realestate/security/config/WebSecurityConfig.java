@@ -108,7 +108,6 @@ public class WebSecurityConfig
             "/districts/**",
             "/register",
             "/tour-requests/**",
-            "/settings/db-reset",
-            "/auth/**"
+            "/settings/db-reset"
     };
 }
