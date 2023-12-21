@@ -29,6 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,4 +115,18 @@ public class TourRequestsService {
                 .build();
     }
 
+    public ResponseMessage<TourRequestResponse> approveTourRequest(Long tourRequestId) {
+        TourRequest tourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(()->
+                new ResourceNotFoundException( String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND,tourRequestId)));
+        tourRequest.setStatus(TourRequestStatus.APPROVED);
+        tourRequest.setUpdateAt(LocalDateTime.now());
+        tourRequestsRepository.save(tourRequest);
+
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequest))
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.TOUR_REQUEST_APPROVE)
+                .build();
+
+    }
 }
