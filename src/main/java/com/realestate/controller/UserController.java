@@ -47,6 +47,7 @@ public class UserController {
         return userService.authenticatedUserDeleted(request);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/admin")
     public Page<UserResponse> getAllUsersByPage(@RequestParam(value = "page", defaultValue = "0") int page,
                                                 @RequestParam(value = "size", defaultValue = "10") int size,
@@ -56,6 +57,7 @@ public class UserController {
         return userService.getAllUsersByPage(page,size,sort,type);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/{userId}/admin")
     public ResponseMessage<UserResponse> getUserByAdmin(@PathVariable Long userId){
         return  userService.getUserByAdmin(userId);

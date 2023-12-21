@@ -107,16 +107,19 @@ public class AdvertController {
 
 
     //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
-    /*
+   
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    @PutMapping("/auth/{id}")
+    @PutMapping("/auth/{advertId}")
     public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId,
-                                                                                  @RequestBody AdvertUpdateRequest updateRequest,
+                                                                                  @RequestBody @Valid AdvertUpdateRequest updateRequest,
                                                                                   HttpServletRequest httpServletRequest){
         return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
     }
-    */
 
+   
+    
+
+   
     /*
     @DeleteMapping("/delete/{id}")
     //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
@@ -125,6 +128,7 @@ public class AdvertController {
     }
 
      */
+
     
     
 
