@@ -12,7 +12,10 @@ import java.util.List;
 public class AdvertMapper {
 
     //DTO --> POJO
-    public Advert mapToAdvertRequestToAdvert(AdvertRequest advertRequest, List<Image> imageList, Country country, City city, District district, AdvertType advertType, String slug) {
+
+   
+    public Advert mapToAdvertRequestToAdvert(AdvertRequest advertRequest , List<Image> imageList, Country country , City city, District district,AdvertType advertType, String slug ,User user){
+
         Advert advert = new Advert();
         return Advert.builder()
                 .title(advertRequest.getTitle())
@@ -26,6 +29,10 @@ public class AdvertMapper {
                 .district(district)
                 .advertType(advertType)
                 .images(imageList)
+
+
+
+                .user(user)
 
                 .build();
     }
