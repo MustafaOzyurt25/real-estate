@@ -20,7 +20,6 @@ target/
 *.ipr
 dev.properties
 *.properties
-data.sql
 application.properties
 
 
