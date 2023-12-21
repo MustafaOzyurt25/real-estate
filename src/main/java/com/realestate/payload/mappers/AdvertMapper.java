@@ -2,15 +2,17 @@ package com.realestate.payload.mappers;
 
 import com.realestate.entity.*;
 import com.realestate.payload.request.AdvertRequest;
+import com.realestate.payload.request.AdvertUpdateRequest;
 import com.realestate.payload.response.AdvertResponse;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 @Component
 public class AdvertMapper {
 
     //DTO --> POJO
-    public Advert mapToAdvertRequestToAdvert(AdvertRequest advertRequest , List<Image> imageList, Country country , City city, District district,AdvertType advertType, String slug){
+    public Advert mapToAdvertRequestToAdvert(AdvertRequest advertRequest, List<Image> imageList, Country country, City city, District district, AdvertType advertType, String slug) {
         Advert advert = new Advert();
         return Advert.builder()
                 .title(advertRequest.getTitle())
@@ -24,7 +26,7 @@ public class AdvertMapper {
                 .district(district)
                 .advertType(advertType)
                 .images(imageList)
-                
+
                 .build();
     }
 
@@ -32,8 +34,7 @@ public class AdvertMapper {
     //POJO--> DTO
 
 
-
-    public AdvertResponse mapAdvertToAdvertResponse(Advert advert){
+    public AdvertResponse mapAdvertToAdvertResponse(Advert advert) {
         return AdvertResponse.builder()
                 .advertId(advert.getId())
                 .title(advert.getTitle())
@@ -54,5 +55,49 @@ public class AdvertMapper {
                 .advertType(advert.getAdvertType())
                 .build();
     }
+
+
+    //  DTO --> POJO( update )
+    public Advert mapAdvertRequestToUpdatedAdvert(AdvertUpdateRequest advertUpdateRequest) {
+
+        return Advert.builder()
+                .title(advertUpdateRequest.getTitle())
+                .description(advertUpdateRequest.getDescription())
+                .price(advertUpdateRequest.getPrice())
+                .location(advertUpdateRequest.getLocation())
+                .isActive(advertUpdateRequest.getIsActive())
+               
+//                .id()
+//                .logs()
+//                .categoryPropertyValue()
+//                .advertType()
+//                .builtIn()
+//                .category()
+//                .city()
+//                .country()
+//                .tourRequests()
+//                .user()
+//                .status()
+//                .updateAt()
+//                .favorites()
+//                .slug()
+//                .createAt()
+//                .images()
+//                .viewCount()
+//                .district(advertUpdateRequest.getDistrictId())
+//                .category(advertUpdateRequest.getCategoryId())
+                
+                
+               
+                
+            
+                
+              
+                
+                
+
+                .build();
+    }
+
 
 }

@@ -26,6 +26,8 @@ public class AdvertUpdateRequest {
     private String description;
     @NotNull
     private Double price;
+    @NotNull
+    private String location; // bu doc da yok.
     
     // simdilik bunlari @NotNull yapmadim.
     private Long advertTypeId;
@@ -35,6 +37,7 @@ public class AdvertUpdateRequest {
     private Long categoryId;
     private Boolean isActive;
     private List<CategoryPropertyKey> properties;
+    
     
             
     

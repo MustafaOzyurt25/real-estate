@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Table(name="adverts")
-public class Advert {
+public class Advert {  // 23 tane field..vs
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
