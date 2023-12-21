@@ -32,7 +32,7 @@ public class CountryService {
                 new ResourceNotFoundException(String.format(ErrorMessages.COUNTRY_NOT_FOUND_MESSAGE,id)));
 
     }
-    public Country getCounrtyById(Long countryId) {
+    public Country getCountryById(Long countryId) {
         return isCountryExists(countryId);
     }
 }
