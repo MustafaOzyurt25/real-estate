@@ -33,6 +33,8 @@ public class ErrorMessages {
     public static final String ADVERT_BUILT_IN_CAN_NOT_BE_UPDATED = "Advert whose builtIn property is true can not be updated.";
     public static final String USER_CAN_NOT_DELETE_HAS_BUILT_IN_TRUE_MESSAGE = "Error : User , if the built in field is true, can not be deleted.";
     public static final String BUILTIN_CATEGORY_CANT_BE_UPDATED = "The category whose builtIn property is true can not be updated.";
+    public static final String USER_CANNOT_BE_DELETED = "First you need to delete your Adverts and Tour Requests.";
+    public static final String PASSWORD_NOT_MATCH = "Passwords do not match, please try again";
 
 
     // ---------------------- ERROR REGISTER -----------------------------------------------------------------------

@@ -75,6 +75,11 @@
 			<artifactId>java-uuid-generator</artifactId>
 			<version>4.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.9</version>
+		</dependency>
 		<!-- Apache HttpClient -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
