@@ -63,5 +63,10 @@ public class TourRequestsController {
 
     }
 
+    @PatchMapping("/{id}/decline")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public ResponseMessage<TourRequestResponse> declineTourRequest(@PathVariable("id") Long id){
+        return tourRequestsService.declineTourRequest(id);
+    }
 
 }
