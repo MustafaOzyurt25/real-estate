@@ -39,12 +39,41 @@ public class TourRequestsService {
     private final TourRequestsRepository tourRequestsRepository;
     private final TourRequestMapper tourRequestMapper;
     private final AdvertService advertService;
+
+
+
+    public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest) {
+
+        // //url den slug çekmek için
+
+        // HttpPost request=new HttpPost("http://localhost:8080/adverts/");
+
+        // CloseableHttpClient httpClient= HttpClients.createDefault();
+
+        // try {
+
+        //     CloseableHttpResponse  response = httpClient.execute(request);
+        //     response.close();
+        //     httpClient.close();
+        // } catch (IOException e) {
+        //     throw new RuntimeException(e);
+        // }
+
+        // String advertUrl=request.getURI().toString();
+        // String slug= advertUrl.substring(31);
+
+
+        // //Slug ile advert çektik
+        // Advert advert= advertService.getAdvertBySlug(slug);
+        // tourRequestRequest.setAdvertId(advert.getId());
+
     private final UserRepository userRepository;
     private final PageableHelper pageableHelper;
 
 
     //S05
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest, String userEmail){
+
 
         // bu kullanıcı tourrequest oluşturan kullanıcıdır. guest_user_id field'ına kaydedilmesi gerekir.
         // Buradaki email'e sahip user'ı bulup guest_user atamamız gerekiyor.
@@ -55,6 +84,23 @@ public class TourRequestsService {
         }
         User guestUser = userRepository.findByEmailEquals(userEmail);
                 //DTO-->POJO
+
+
+        //DTO-->POJO
+        TourRequest tourRequest = tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
+
+
+        //default status atadık
+        tourRequest.setStatus(TourRequestStatus.PENDING);
+        TourRequest savedTourRequest = tourRequestsRepository.save(tourRequest);
+
+        return ResponseMessage.<TourRequestResponse>builder()
+                .message(SuccessMessages.TOUR_REQUEST_CREATE)
+                .httpStatus(HttpStatus.CREATED)
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(savedTourRequest))
+                .build();
+
+
 
         TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
         tourRequest.setGuestUser(guestUser);
@@ -68,10 +114,11 @@ public class TourRequestsService {
               .httpStatus(HttpStatus.CREATED)
               .object(tourRequestMapper.mapTourRequestToTourRequestResponse(savedTourRequest))
               .build();
+
     }
 
     public ResponseMessage<TourRequestResponse> delete(Long id) {
-        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND,id)));
+        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, id)));
         tourRequestsRepository.deleteById(id);
         return ResponseMessage.<TourRequestResponse>builder()
                 .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequest))
@@ -79,15 +126,72 @@ public class TourRequestsService {
                 .message(SuccessMessages.TOUR_REQUEST_DELETED)
                 .build();
     }
+
     public ResponseMessage<TourRequestResponse> getTourRequestById(Long tourRequestId) {
-        TourRequest getTourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND,tourRequestId)));
+        TourRequest getTourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourRequestId)));
         return ResponseMessage.<TourRequestResponse>builder()
                 .object(tourRequestMapper.mapTourRequestToTourRequestResponse(getTourRequest))
                 .httpStatus(HttpStatus.OK)
                 .message(SuccessMessages.RETURNED_TOUR_REQUEST_DETAILS)
                 .build();
     }
+
+
+    /*
+
+     */
+
+    /**
+     //S06 put   //It will update a tour request -> tur talebini guncelle ----------------------------------------------
+
+     //1--It will return the updated tour request object/    - Güncellenmis tur istegini nesnesini dondurecektir.
+
+     //2-Only the tour requests whose status pending or rejected can be updated./  -Yalnızca beklemede/pending veya reddedilmiş/rejected/DECLINED durumu olan tur talepleri güncellenebilir.
+     --------------------------------------------------------------//pending veya rejected olup olmadigini kontrol et!!!
+     //3-If a request is updated, the status field should reset to “pending” / -Bir istek güncellenirse durum alanı "beklemede/pending" olarak sıfırlanmalıdır
+     ---------------------------------------------------//gonderilen tourRequest guncellenirse pending olarak sifirla!!!
+
+
+     public static ResponseMessage<TourRequestResponse> updatedTourRequest(TourRequest tourRequest, Long tourRequestId) {
+     //!!! id kontrol ---> pending veya reddedilmis tur taleplerini guncelle. update edilecek tourrequest var mi?
+
+     TourRequest tourRequest1 = isTourRequestExist(tourRequestId);
+
+     //-----------------------------------------------------------------------------------------------------------------
+
+    public ResponseMessage<TourRequestResponse> updatedTourRequest(Long tourRequestId, TourRequestRequest TourRequestRequest) {
+        TourRequest tourRequest = tourRequestsRepository.findById(tourRequestId)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourRequestId)));
+
+        // Sadece "pending" veya "rejected/DECLINED" durumundaki istekleri güncelle -> REJECTED dokumantasyonda yazan, projede yazan DECLINED!!!
+        if (tourRequest.getStatus() == TourRequestStatus.PENDING || tourRequest.getStatus() == TourRequestStatus.DECLINED) {
+            tourRequest.setTourDate(TourRequestRequest.getTourDate());
+            tourRequest.setTourTime(TourRequestRequest.getTourTime());
+           // tourRequest.setTourId(TourRequestRequest.getTourId()); ---> TODO advert_id, tour_id ?????????????????????????
+
+            //gonderilen tourRequest guncellenirse pending olarak sifirla!!!
+            tourRequest.setStatus(TourRequestStatus.PENDING);
+
+
+            TourRequest updatedTourRequest = tourRequestsRepository.save(tourRequest);
+            return ResponseMessage.<TourRequestResponse>builder()
+                    .message(SuccessMessages.TOUR_REQUEST_UPDATED)
+                    .httpStatus(HttpStatus.OK)
+                    .object(tourRequestMapper.mapTourRequestToTourRequestResponse(updatedTourRequest))
+                    .build();
+        } else {
+            return ResponseMessage.<TourRequestResponse>builder()
+                    .message(ErrorMessages.TOUR_REQUEST_CANNOT_BE_UPDATED)
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+    }
+
+*/
+
+
+
 
 
 
@@ -147,4 +251,5 @@ public class TourRequestsService {
                 .build();
 
     }
+
 }
