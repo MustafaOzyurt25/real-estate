@@ -38,6 +38,8 @@ public class SuccessMessages {
     public static final String ADVERT_DELETE="Advert is Deleted Successfully";
     public static final String TOUR_REQUEST_SUCCESSFULLY_DECLINED = "Tour Request Successfully Declined";
 
+    public static final String  REPORT_TOUR_REQUEST= "Tour Request is Found Successfully";
+
 
 
 

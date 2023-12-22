@@ -80,12 +80,7 @@ public class AdvertController {
 
 
 
-    //A08
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    @GetMapping("/{id}/auth")
-    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest){
-        return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
-    }
+  
 
     //A05
 
@@ -98,8 +93,17 @@ public class AdvertController {
                                                          HttpServletRequest httpServletRequest   )
  {
      return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
+     
  }
 
+    //A08
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/{id}/auth")
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest){
+        return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
+    }
+ 
+            // A09
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{id}/admin")
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(@PathVariable Long id){

@@ -1,8 +1,12 @@
 package com.realestate.repository;
 
 import com.realestate.entity.TourRequest;
+import com.realestate.entity.enums.TourRequestStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface TourRequestsRepository extends JpaRepository<TourRequest,Long> {
 
@@ -13,4 +17,6 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest,Long> 
 
     int countByAdvertId(Long advertId);
 
+    List<TourRequest> findByTourDateBetweenAndStatus(LocalDate startDate, LocalDate endDate, TourRequestStatus status);
+    
 }
