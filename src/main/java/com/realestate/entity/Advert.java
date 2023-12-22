@@ -1,6 +1,7 @@
 package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.realestate.entity.enums.AdvertStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Table(name="adverts")
-public class Advert {
+public class Advert {  // 23 tane field..vs
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -80,6 +81,6 @@ public class Advert {
 
     @ManyToOne
     private Category category;
-//yorum
+
 
 }

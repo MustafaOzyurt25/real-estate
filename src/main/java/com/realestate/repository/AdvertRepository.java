@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.DoubleStream;
 
 public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
@@ -44,4 +45,11 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     @Transactional
     @Query(value = "DELETE FROM Advert a  WHERE a.builtIn = false")
     void deleteAdverts();
+
+
+    Page<Advert> findByUserEmail(String email, Pageable pageable);
+   // List<Advert> findByUserId(Long userId);
+
+    boolean existsByUserId(Long userId);
+
 }

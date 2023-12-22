@@ -63,7 +63,7 @@ public class CategoryPropertyKeyService {
                 .build();
     }
 
-    private List<CategoryPropertyKey> getCategoryPropertyKeys(Long categoryId) {
+    public List<CategoryPropertyKey> getCategoryPropertyKeys(Long categoryId) {
         return categoryPropertyKeyRepository.existsByCategoryId(categoryId) ?
                 categoryPropertyKeyRepository.findByCategoryId(categoryId) :
                 Collections.emptyList();

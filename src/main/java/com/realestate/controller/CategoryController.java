@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,7 +47,8 @@ public class CategoryController {
             @RequestParam(value = "size",defaultValue = "20") int size,
             @RequestParam(value = "sort",defaultValue = "id") String sort,
             @RequestParam(value = "type",defaultValue = "asc") String type
-    ){
+    )
+    {
         return categoryService.getAllCategoriesByPage(q, page, size, sort, type);
     }
 
