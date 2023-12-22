@@ -41,8 +41,6 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     Page<Advert> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, AdvertStatus status, Pageable pageable);
 
 
-
-
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM Advert a  WHERE a.builtIn = false")
@@ -53,5 +51,12 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
    // List<Advert> findByUserId(Long userId);
 
     boolean existsByUserId(Long userId);
+
+    /*
+    * Aşağıdaki method çalışmadı. NEDEN?
+    *
+    * User findUserById(Long advertId)
+    * */
+
 
 }

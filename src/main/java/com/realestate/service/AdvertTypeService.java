@@ -62,6 +62,9 @@ public class AdvertTypeService {
                 .message(SuccessMessages.UPDATE_ADVERT_TYPE)
                 .build();
     }
+
+
+    //T05
     public ResponseMessage<AdvertTypeResponse> advertTypeDeleteById(Long advertTypeId) {
         //id kontrol
         AdvertType advertType = isAdvertTypeExists(advertTypeId);
@@ -91,7 +94,9 @@ public class AdvertTypeService {
         List<AdvertType> advertTypes = advertTypeRepository.findAll();
 
         return ResponseMessage.<List<AdvertTypeResponse>>builder()
-                .object(advertTypes.stream().map(advertTypeMapper::mapAdvertTypeToAdvertTypeResponse).toList())
+                .object(advertTypes.stream()
+                        .map(advertTypeMapper::mapAdvertTypeToAdvertTypeResponse)
+                        .toList())
                 .message("Success")
                 .httpStatus(HttpStatus.OK)
                 .build();

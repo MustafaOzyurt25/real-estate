@@ -28,13 +28,12 @@ public class TourRequestsController {
     private final TourRequestsService tourRequestsService;
 
 
+
+
+
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PostMapping("/save")
-    public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest) {
-        return tourRequestsService.save(tourRequestRequest);
-    }
-    
-    
     public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest, HttpServletRequest request)
     {
         String userEmail = (String) request.getAttribute("email");
@@ -60,10 +59,10 @@ public class TourRequestsController {
 
     //S06 put ----------------------------------------------------------------------------------------------------------
     //It will update a tour request -> tur talebini guncelle
-    @PutMapping("/{id}/auth")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')") //http://localhost:8080/tour-requests//{id}/auth + PUT
+    //@PutMapping("/{id}/auth")
+    //@PreAuthorize("hasAnyAuthority('CUSTOMER')") //http://localhost:8080/tour-requests//{id}/auth + PUT
     public ResponseMessage<TourRequestResponse> updatedTourRequest(@RequestBody @Valid TourRequest tourRequest,
-                                                                   @PathVariable Long tourRequestId){
+     //@PathVariable Long tourRequestId){
         return TourRequestsService.updatedTourRequest(tourRequest, tourRequestId);
 
     }
@@ -71,6 +70,7 @@ public class TourRequestsController {
 
     
     @GetMapping("/{id}/auth")
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(@PathVariable("id") Long tourRequestId){
         return tourRequestsService.getAuthTourRequestById(tourRequestId);
@@ -106,6 +106,11 @@ public class TourRequestsController {
         return tourRequestsService.declineTourRequest(id);
     }
 
+    @PatchMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public  ResponseMessage<TourRequestResponse> cancelTourReguest(@PathVariable("id") Long id){
+        return tourRequestsService.cancelTourRequest(id);
+    }
 
 
 }

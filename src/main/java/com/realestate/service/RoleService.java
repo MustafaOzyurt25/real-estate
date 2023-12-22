@@ -7,9 +7,11 @@ import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.repository.RoleRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.realestate.messages.ErrorMessages.RESOURCE_CONFLICT_EXCEPTION;
 import static com.realestate.messages.ErrorMessages.RESOURCE_NOT_FOUND_EXCEPTION;
@@ -43,4 +45,5 @@ public class RoleService
         roleRepository.save(role);
         return role;
     }
+
 }

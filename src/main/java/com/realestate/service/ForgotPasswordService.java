@@ -2,6 +2,7 @@ package com.realestate.service;
 
 import com.realestate.entity.User;
 import com.realestate.exception.PasswordResetException;
+import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.payload.request.ForgotPasswordRequest;
 import com.realestate.payload.request.ResetPasswordRequest;
@@ -12,7 +13,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
@@ -25,22 +26,22 @@ public class ForgotPasswordService {
 
     private final PasswordEncoder passwordEncoder;
 
+
     public void forgotPasswordUser(ForgotPasswordRequest forgotPasswordRequest) {
-        // Kullanıcıyı e-posta adresine göre bul
-        Optional<User> optionalUser = userRepository.findByEmail(forgotPasswordRequest.getEmail());
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+        try{
 
-            // Reset token oluştur
+            User user = userRepository.findByEmailEquals(forgotPasswordRequest.getEmail());
+
             String resetToken = generateResetToken();
 
-            // Token'i kullanıcıya kaydet (veritabanına)
             user.setResetPasswordCode(resetToken);
             userRepository.save(user);
 
-            // E-posta gönderme işlemi
             sendEmail(forgotPasswordRequest.getEmail(), resetToken);
+
+        }catch (RuntimeException e){
+            throw new ResourceNotFoundException(ErrorMessages.NOT_VALID_EMAIL);
         }
     }
 
@@ -68,11 +69,10 @@ public class ForgotPasswordService {
         //Yeni şifrenin encode edilmesi ve kaydedilmesi
         if(resetPasswordRequest.getRetryNewPassword().equals(resetPasswordRequest.getRetryNewPassword())){
             user.setPasswordHash(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));
-            user.setResetPasswordCode(null); // Token'ı geçersiz kıl
+            //user.setResetPasswordCode(null); // Token'ı geçersiz kıl
             userRepository.save(user);
         }else{
             throw new PasswordResetException(ErrorMessages.PASSWORD_NOT_MATCH);
         }
-
     }
 }
