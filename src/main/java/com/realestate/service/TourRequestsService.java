@@ -38,34 +38,7 @@ public class TourRequestsService {
     private final PageableHelper pageableHelper;
 
 
-    public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest) {
 
-        // //url den slug çekmek için
-
-        // HttpPost request=new HttpPost("http://localhost:8080/adverts/");
-
-        // CloseableHttpClient httpClient= HttpClients.createDefault();
-
-        // try {
-
-        //     CloseableHttpResponse  response = httpClient.execute(request);
-        //     response.close();
-        //     httpClient.close();
-        // } catch (IOException e) {
-        //     throw new RuntimeException(e);
-        // }
-
-        // String advertUrl=request.getURI().toString();
-        // String slug= advertUrl.substring(31);
-
-
-        // //Slug ile advert çektik
-        // Advert advert= advertService.getAdvertBySlug(slug);
-        // tourRequestRequest.setAdvertId(advert.getId());
-
-        return null; // hata almamasi icin eklendi yorumda olan kodlar duzelince silebilirsiniz
-
-    }
 
 
     //S05
@@ -235,4 +208,16 @@ public class TourRequestsService {
 
     }
 
+    public ResponseMessage<TourRequestResponse> cancelTourRequest(Long id) {
+        TourRequest tourRequest=tourRequestsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
+        tourRequest.setStatus(TourRequestStatus.CANCELED);
+        tourRequest.setUpdateAt(LocalDateTime.now());
+
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequestsRepository.save(tourRequest)))
+                .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_CANCELED)
+                .httpStatus(HttpStatus.OK)
+                .build();
+
+    }
 }

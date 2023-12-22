@@ -62,6 +62,9 @@ public class AdvertTypeService {
                 .message(SuccessMessages.UPDATE_ADVERT_TYPE)
                 .build();
     }
+
+
+    //T05
     public ResponseMessage<AdvertTypeResponse> advertTypeDeleteById(Long advertTypeId) {
         //id kontrol
         AdvertType advertType = isAdvertTypeExists(advertTypeId);
