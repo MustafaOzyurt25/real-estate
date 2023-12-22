@@ -14,7 +14,7 @@ public class AdvertMapper {
     //DTO --> POJO
 
    
-    public Advert mapToAdvertRequestToAdvert(AdvertRequest advertRequest , List<Image> imageList, Country country , City city, District district,AdvertType advertType, String slug ,User user){
+    public Advert mapToAdvertRequestToAdvert(AdvertRequest advertRequest , List<Image> imageList, Country country , City city, District district,AdvertType advertType, String slug ,User user,Category category){
 
         Advert advert = new Advert();
         return Advert.builder()
@@ -29,7 +29,7 @@ public class AdvertMapper {
                 .district(district)
                 .advertType(advertType)
                 .images(imageList)
-
+                .category(category)
 
 
                 .user(user)
@@ -60,6 +60,7 @@ public class AdvertMapper {
                 .updateAt(advert.getUpdateAt())
                 .category(advert.getCategory())
                 .advertType(advert.getAdvertType())
+                .categoryPropertyValues(advert.getCategoryPropertyValue())
                 .build();
     }
 

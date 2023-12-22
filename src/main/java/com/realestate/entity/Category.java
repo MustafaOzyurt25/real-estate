@@ -39,11 +39,13 @@ public class Category {
     private LocalDateTime updateAt;
     
     
-    @JsonIgnore 
+
     @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<CategoryPropertyKey> categoryPropertyKeys;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<Advert> adverts;
 }

@@ -10,6 +10,7 @@ import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
+import com.realestate.payload.mappers.CategoryPropertyValueMapper;
 import com.realestate.payload.request.AdvertRequest;
 
 import com.realestate.payload.request.AdvertUpdateRequest;
@@ -21,6 +22,7 @@ import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 
 import com.realestate.repository.AdvertRepository;
+import com.realestate.repository.CategoryPropertyValueRepository;
 import com.realestate.repository.TourRequestsRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -50,8 +53,10 @@ public class AdvertService {
     //    private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
     private final UserRepository userRepository;
-
+    private final UserRepository serRepository;
     private final CategoryPropertyKeyService categoryPropertyKeyService;
+    private final CategoryPropertyValueRepository categoryPropertyValueRepository;
+    private final CategoryPropertyValueMapper categoryPropertyValueMapper;
 
 
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
@@ -71,21 +76,28 @@ public class AdvertService {
             String slug = advertRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
 
             List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
-            Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest, images, country, city, district, advertType, slug, user);
+            Category category = categoryPropertyKeyService.isCategoryExist(advertRequest.getCategoryId());
+            Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest, images, country, city, district, advertType, slug, user, category);
 
             advert.setStatus(AdvertStatus.PENDING);
             advert.setBuiltIn(false);
             advert.setIsActive(true);
             advert.setViewCount(0);
-            advert.getCategory();
 
+            advertRepository.save(advert);
+            List<CategoryPropertyValue> categoryPropertyValues = new ArrayList<>();
+            for (int i = 0; i < advertRequest.getPropertyValues().size(); i++) {
+                CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
+                        .save(categoryPropertyValueMapper
+                                .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertRequest.getPropertyValues().get(i)));
+                categoryPropertyValues.add(categoryPropertyValue);
+            }
+            advert.setCategoryPropertyValue(categoryPropertyValues);
             advertRepository.save(advert);
             return advert;
         } else {
             throw new ConflictException("You must log in to create an advert.");
         }
-
-
     }
 
     public void addImageToAdvert(Long advertId, List<Image> images) {
@@ -156,11 +168,11 @@ public class AdvertService {
 
     public List<AdvertResponse> getPopularAdvertsByAmount(Integer defaultAmount) {
 
+
         Integer amount = (defaultAmount == null) ? 10 : defaultAmount;
 
         //tüm advertları almak için
         List<Advert> allAdvert = advertRepository.findAll().stream().toList();
-
 
         List<PopularAdvert> popularAdvert = new ArrayList<>();
         for (int i = 0; i < allAdvert.size(); i++) {
@@ -169,7 +181,6 @@ public class AdvertService {
             int pp = ((troa * 3) + tvoa);
             popularAdvert.add(new PopularAdvert(allAdvert.get(i).getId(), pp));
         }
-
 
         //amount miktarı kadar popularAdvert ı büyükten küçüğe sıraladım topList e attım
         List<PopularAdvert> topListPopularAdvert = popularAdvert.stream()
@@ -184,7 +195,6 @@ public class AdvertService {
                     getAdvertId()).orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION)));
         }
         return adverts.stream().map(advertMapper::mapAdvertToAdvertResponse).collect(Collectors.toList());
-
 
     }
     //===================================================popular===================================================
@@ -253,7 +263,7 @@ public class AdvertService {
     }
 
 
-
+    // A09
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(Long id) {
 
         return ResponseMessage.<AdvertResponse>builder()
@@ -299,7 +309,7 @@ public class AdvertService {
         advert.setCategory(category);
         advert.setUpdateAt(LocalDateTime.now());
         advert.setCountry(country);
-        advert.setUpdateAt(LocalDateTime.now());
+
 
         // diger setlemeler.....
         advert.setCategoryPropertyValue(existAdvert.getCategoryPropertyValue());
@@ -353,6 +363,9 @@ public class AdvertService {
      */
 
 
+    // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
+
+
     //A05
     public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
 
@@ -371,25 +384,8 @@ public class AdvertService {
     }
 
 
-    //A05
-    // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
-
-    //     Pageable pageable=pageableHelper.getPageableWithProperties(page,size,sort,type);
-    //     String userEmail =(String) httpServletRequest.getAttribute("email");
-
-    //     User user = userRepository.findByEmailEquals(userEmail);
-    //
-    //     List<Advert> adverts =
-
-    //     Page<Advert> advertPage= advertRepository.findAll;
-
-    //  }
-
-    // private List<Advert> getAdvertsbyUser(String userEmail){
-    //     advertRepository.findAllById()
-    // }
-
 
 }
+
 
 

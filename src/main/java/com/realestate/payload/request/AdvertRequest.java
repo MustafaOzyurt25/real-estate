@@ -33,4 +33,6 @@ public class AdvertRequest {
     private Long cityId;
     private Long districtId;
     private Long advertTypeId;
+    private Long categoryId;
+    private List<String> propertyValues;
 }

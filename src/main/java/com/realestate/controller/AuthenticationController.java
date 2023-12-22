@@ -25,7 +25,6 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final UserService userService;
-
     private final ForgotPasswordService forgotPasswordService;
 
     @PostMapping("/login")

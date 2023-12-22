@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
@@ -48,16 +45,11 @@ public class AdvertController {
         return advertService.getAdvertAmountByCity();
     }
 
-
-
-
-
-
     @GetMapping("/categories")
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories(){return advertService.getAdvertAmountByCategories();}
 
 
-
+    //A04
      @GetMapping(value = {"/popular","/popular/{amount}"})
      public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable(required = false) Integer amount){
          Integer defaultAmount = (amount == null) ? 10 : amount;
@@ -80,12 +72,16 @@ public class AdvertController {
 
 
 
+ 
     //A08
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @GetMapping("/{id}/auth")
     public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest){
         return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
     }
+
+
+
 
     //A05
 
@@ -98,7 +94,14 @@ public class AdvertController {
                                                          HttpServletRequest httpServletRequest   )
  {
      return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
+     
  }
+
+
+
+ 
+ // A09
+
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{id}/admin")
@@ -106,13 +109,29 @@ public class AdvertController {
         return advertService.getAdvertBySlugAdminManager(id);
     }
 
+    @GetMapping("/admin")
+    public ResponseEntity<Map<String, Object>> getSortedAdvertValuesByAdmin(@RequestParam(value = "q", required = false) String q,
+                                                                        @RequestParam(value = "category_id", required = false) Long categoryId,
+                                                                        @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
+                                                                        @RequestParam(value = "price_start", required = false) Double priceStart,
+                                                                        @RequestParam(value = "price_end", required = false) Double priceEnd,
+                                                                        @RequestParam(value = "status", required = false) Integer status,
+                                                                        @RequestParam(value = "page",defaultValue = "0") int page,
+                                                                        @RequestParam(value = "size",defaultValue = "20") int size,
+                                                                        @RequestParam(value = "sort",defaultValue = "category") String sort,
+                                                                        @RequestParam(value = "type",defaultValue = "asc") String type){
+        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
+
+
+
+    }
+
 
     //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
    
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PutMapping("/auth/{advertId}")
-    public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId,
-                                                                                  @RequestBody @Valid AdvertUpdateRequest updateRequest,
+    public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest,
                                                                                   HttpServletRequest httpServletRequest){
         return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
     }
@@ -132,5 +151,6 @@ public class AdvertController {
 
     
     
+
 
 }
