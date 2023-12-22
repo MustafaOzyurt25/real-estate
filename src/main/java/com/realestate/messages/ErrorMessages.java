@@ -37,6 +37,7 @@ public class ErrorMessages {
     public static final String USER_NOT_FOUND_BY_EMAIL = "Could not find user with \"%s\" email";
     public static final String USER_CANNOT_BE_DELETED = "First you need to delete your Adverts and Tour Requests.";
     public static final String PASSWORD_NOT_MATCH = "Passwords do not match, please try again";
+    public static final String REPORT_TOUR_REQUEST_NOT_FOUND = "Error: Tour Request  not found ";
     public static final String CAN_NOT_BE_DELETABLE_USER = "User, has tour request or advert, can not be deletable";
     public static final String CUSTOMER_CAN_NOT_DELETE_ANY_USER = "User, has just Customer Role, can not delete any user";
     public static final String MANAGER_CAN_DELETE_ONLY_A_CUSTOMER = "A Manager can delete only a Customer.";

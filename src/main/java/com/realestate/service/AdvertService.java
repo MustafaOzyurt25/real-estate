@@ -268,7 +268,7 @@ public class AdvertService {
     }
 
 
-
+// A09
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(Long id) {
 
         return ResponseMessage.<AdvertResponse>builder()
@@ -277,6 +277,7 @@ public class AdvertService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+    
 
 
     //--------------- updateAuthenticatedCustomersAdvertById ---------------------------//
@@ -314,7 +315,7 @@ public class AdvertService {
         advert.setCategory(category);
         advert.setUpdateAt(LocalDateTime.now());
         advert.setCountry(country);
-        advert.setUpdateAt(LocalDateTime.now());
+      
 
         // diger setlemeler.....
         advert.setCategoryPropertyValue(existAdvert.getCategoryPropertyValue());
