@@ -68,6 +68,7 @@ public class TourRequestsController {
      */
 
     @GetMapping("/{id}/auth")
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(@PathVariable("id") Long tourRequestId){
         return tourRequestsService.getAuthTourRequestById(tourRequestId);
@@ -103,6 +104,11 @@ public class TourRequestsController {
         return tourRequestsService.declineTourRequest(id);
     }
 
+    @PatchMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public  ResponseMessage<TourRequestResponse> cancelTourReguest(@PathVariable("id") Long id){
+        return tourRequestsService.cancelTourRequest(id);
+    }
 
 
 }
