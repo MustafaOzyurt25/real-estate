@@ -10,6 +10,7 @@ import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
+import com.realestate.payload.mappers.CategoryPropertyValueMapper;
 import com.realestate.payload.request.AdvertRequest;
 
 import com.realestate.payload.request.AdvertUpdateRequest;
@@ -21,6 +22,7 @@ import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 
 import com.realestate.repository.AdvertRepository;
+import com.realestate.repository.CategoryPropertyValueRepository;
 import com.realestate.repository.TourRequestsRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +54,8 @@ public class AdvertService {
     private final UserRepository userRepository;
 
     private final CategoryPropertyKeyService categoryPropertyKeyService;
-
+    private final CategoryPropertyValueRepository categoryPropertyValueRepository;
+    private final CategoryPropertyValueMapper categoryPropertyValueMapper;
 
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
 
@@ -71,14 +74,23 @@ public class AdvertService {
             String slug = advertRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
 
             List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
-            Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest, images, country, city, district, advertType, slug, user);
+            Category category = categoryPropertyKeyService.isCategoryExist(advertRequest.getCategoryId());
+            Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest, images, country, city, district, advertType, slug, user,category);
 
             advert.setStatus(AdvertStatus.PENDING);
             advert.setBuiltIn(false);
             advert.setIsActive(true);
             advert.setViewCount(0);
-            advert.getCategory();
 
+            advertRepository.save(advert);
+            List<CategoryPropertyValue> categoryPropertyValues = new ArrayList<>();
+            for (int i = 0;i<advertRequest.getPropertyValues().size();i++) {
+                CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
+                        .save(categoryPropertyValueMapper
+                                .mapValuesToCategoryPropertyValue(advert,category.getCategoryPropertyKeys().get(i),advertRequest.getPropertyValues().get(i)));
+                categoryPropertyValues.add(categoryPropertyValue);
+            }
+            advert.setCategoryPropertyValue(categoryPropertyValues);
             advertRepository.save(advert);
             return advert;
         } else {

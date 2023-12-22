@@ -1,5 +1,6 @@
 package com.realestate.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,10 +27,12 @@ public class CategoryPropertyKey {
 
 
     @ManyToOne
+    @JsonIgnore
     private Category category;
 
 
     @OneToMany(mappedBy = "categoryPropertyKey", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<CategoryPropertyValue> categoryPropertyValue;
 
 }
