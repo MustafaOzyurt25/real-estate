@@ -33,5 +33,6 @@ public class AdvertResponse {
     private District district;
     private Category category;
     private AdvertType advertType;
+    private List<CategoryPropertyValue> categoryPropertyValues;
 
 }

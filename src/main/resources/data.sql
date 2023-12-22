@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS countries (
 )  ;
 --
 --
-
 INSERT INTO countries (id, name) VALUES
 (1, 'AFGHANISTAN'),
 (2, 'ALBANIA'),
@@ -48,8 +47,6 @@ INSERT INTO countries (id, name) VALUES
 (39,'TURKEY')
 ON CONFLICT (id) DO NOTHING;
 
-
-
 CREATE TABLE IF NOT EXISTS cities (
   id int NOT NULL,
   name varchar(80) NOT NULL,
@@ -59,7 +56,6 @@ CREATE TABLE IF NOT EXISTS cities (
 --
 --
 INSERT INTO cities (id, name, country_id) VALUES
-
 (1, 'ADANA',39),
 (2, 'ADIYAMAN',39),
 (3, 'AFYON',39),
@@ -70,16 +66,12 @@ INSERT INTO cities (id, name, country_id) VALUES
 (34, 'ISTANBUL',39)
 ON CONFLICT (id) DO NOTHING;
 
-
-
-
 CREATE TABLE IF NOT EXISTS districts (
   id int NOT NULL,
   name varchar(80) NOT NULL,
   city_id int NOT NULL,
   PRIMARY KEY(id)
 )  ;
-
 INSERT INTO districts (id, name, city_id) VALUES
 (1, 'KADIKOY', 34),
 (2, 'BESIKTAS', 34),
