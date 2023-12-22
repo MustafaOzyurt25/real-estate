@@ -1,20 +1,19 @@
 package com.realestate.service;
 
 import com.realestate.entity.Image;
-import com.realestate.payload.mappers.ImageMapper;
-import com.realestate.payload.request.ImageRequest;
-import com.realestate.payload.response.ImageResponse;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
+import com.realestate.payload.mappers.ImageMapper;
+import com.realestate.payload.request.ImageRequest;
+import com.realestate.payload.response.ImageResponse;
 import com.realestate.payload.response.ResponseMessage;
-import com.realestate.repository.AdvertRepository;
 import com.realestate.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

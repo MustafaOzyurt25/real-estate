@@ -80,6 +80,6 @@ public class Advert {  // 23 tane field..vs
 
     @ManyToOne
     private Category category;
-//yorum
+
 
 }

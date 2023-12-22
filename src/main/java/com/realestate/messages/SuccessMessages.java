@@ -1,6 +1,8 @@
 package com.realestate.messages;
 
 public class SuccessMessages {
+
+
     private SuccessMessages(){
 
     }
@@ -8,6 +10,7 @@ public class SuccessMessages {
 
     public static final String IMAGE_DELETE ="Image is Deleted Successfully";
     public static final String TOUR_REQUEST_CREATE = "Tour Request is Saved Successfully";
+    public static final String TOUR_REQUEST_APPROVE = "Tour Request is Approved Successfully";
     public static final String SET_FEATURED_AREA = "Featured area has set successfully";
     public static final String CREATE_IMAGE = "Image has created successfully";
     public static final String ADVERT_TYPE_CREATED = "Advert Type is created successfully";
@@ -29,11 +32,12 @@ public class SuccessMessages {
     public static final String USER_PASSWORD_UPDATE = "User Password Successfully Updated";
     public static final String USER_DELETE = "User Successfully Deleted";
     public static final String CRITERIA_CATEGORY_FOUND = "Successfully found category matching your search criteria";
-
+    public static final String TOUR_REQUEST_UPDATED = "Tour request updated successfully!";
     public static final String ADVERT_UPDATE = "Advert is Updated Successfully";
-
     public static final String CATEGORY_SUCCESSFULLY_UPDATED = "Category Successfully updated";
     public static final String ADVERT_DELETE="Advert is Deleted Successfully";
+    public static final String TOUR_REQUEST_SUCCESSFULLY_DECLINED = "Tour Request Successfully Declined";
+
 
 
 

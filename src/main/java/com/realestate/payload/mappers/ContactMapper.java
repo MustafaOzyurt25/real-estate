@@ -29,7 +29,7 @@ public class ContactMapper {
                 .lastName(contact.getLastName())
                 .message(contact.getMessage())
                 .email(contact.getEmail())
-                .createAt(LocalDateTime.now())
+                .createAt(contact.getCreateAt())
                 .build();
     }
 }
