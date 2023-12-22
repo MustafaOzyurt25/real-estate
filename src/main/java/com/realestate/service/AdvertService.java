@@ -383,23 +383,7 @@ public class AdvertService {
     }
 
 
-    //A05
-    // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
 
-    //     Pageable pageable=pageableHelper.getPageableWithProperties(page,size,sort,type);
-    //     String userEmail =(String) httpServletRequest.getAttribute("email");
-
-    //     User user = userRepository.findByEmailEquals(userEmail);
-    //
-    //     List<Advert> adverts =
-
-    //     Page<Advert> advertPage= advertRepository.findAll;
-
-    //  }
-
-    // private List<Advert> getAdvertsbyUser(String userEmail){
-    //     advertRepository.findAllById()
-    // }
 
 // deneme
 }

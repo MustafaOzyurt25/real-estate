@@ -46,6 +46,7 @@ INSERT INTO countries (id, name) VALUES
 (38, 'CAYMAN ISLANDS'),
 (39,'TURKEY')
 ON CONFLICT (id) DO NOTHING;
+
 CREATE TABLE IF NOT EXISTS cities (
   id int NOT NULL,
   name varchar(80) NOT NULL,
@@ -64,6 +65,7 @@ INSERT INTO cities (id, name, country_id) VALUES
 (7 , 'Antalya' , 39),
 (34, 'ISTANBUL',39)
 ON CONFLICT (id) DO NOTHING;
+
 CREATE TABLE IF NOT EXISTS districts (
   id int NOT NULL,
   name varchar(80) NOT NULL,
