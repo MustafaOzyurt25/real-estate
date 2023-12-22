@@ -41,6 +41,9 @@ public class TourRequestsService {
 
 
 
+
+
+
     //S05
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest, String userEmail){
 
@@ -210,11 +213,25 @@ public class TourRequestsService {
 
     }
 
+
     public boolean controlTourRequestByUserId(Long userId)
     {
         boolean isExistsByGuestUserId = tourRequestsRepository.existsByGuestUserId(userId);
         boolean isExistsByOwnerUserId = tourRequestsRepository.existsByOwnerUserId(userId);
 
         return isExistsByGuestUserId || isExistsByOwnerUserId;
+
+    public ResponseMessage<TourRequestResponse> cancelTourRequest(Long id) {
+        TourRequest tourRequest=tourRequestsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
+        tourRequest.setStatus(TourRequestStatus.CANCELED);
+        tourRequest.setUpdateAt(LocalDateTime.now());
+
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequestsRepository.save(tourRequest)))
+                .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_CANCELED)
+                .httpStatus(HttpStatus.OK)
+                .build();
+
+
     }
 }

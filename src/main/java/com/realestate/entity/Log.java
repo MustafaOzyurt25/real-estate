@@ -1,6 +1,7 @@
 package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.realestate.entity.enums.LogType;
 import lombok.*;
 
@@ -30,5 +31,6 @@ public class Log {
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     private Advert advert;
 }

@@ -29,7 +29,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "DELETE FROM User u WHERE u.builtIn = false")
     void deleteUsers();
 
-    Optional<User> findByEmail(String userEmail);
 
     @Query("SELECT t FROM TourRequest t WHERE t.guestUser =:user")
     Page<TourRequest> getAuthCustomerTourRequestsPageable(/*String q,*/ User user, Pageable pageable);

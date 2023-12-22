@@ -28,6 +28,10 @@ public class TourRequestsController {
     private final TourRequestsService tourRequestsService;
 
 
+
+
+
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PostMapping("/save")
     public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest, HttpServletRequest request)
@@ -64,6 +68,7 @@ public class TourRequestsController {
      */
 
     @GetMapping("/{id}/auth")
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(@PathVariable("id") Long tourRequestId){
         return tourRequestsService.getAuthTourRequestById(tourRequestId);
@@ -99,6 +104,11 @@ public class TourRequestsController {
         return tourRequestsService.declineTourRequest(id);
     }
 
+    @PatchMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public  ResponseMessage<TourRequestResponse> cancelTourReguest(@PathVariable("id") Long id){
+        return tourRequestsService.cancelTourRequest(id);
+    }
 
 
 }
