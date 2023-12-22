@@ -28,6 +28,8 @@ public class RealEstateApplication implements CommandLineRunner {
 		}
 		if(userService.getALlUsers().isEmpty()) {
 			userService.saveDefaultAdmin(User.builder().build());
+			userService.saveManagerForTest();
 		}
+
 	}
 }

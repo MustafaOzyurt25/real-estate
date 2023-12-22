@@ -15,7 +15,13 @@ public class FavoritesService {
     private final UserRepository userRepository;
     private final AdvertService advertService;
 
-  // public ResponseMessage<AdvertResponse> addOrRemoveAdvertToFavorites(Long id, HttpServletRequest httpServletRequest) {
+    // UserService'den çağırılıyor
+    public void deleteByUserId(Long userId)
+    {
+        favoritesRepository.deleteByUserId(userId);
+    }
+
+    // public ResponseMessage<AdvertResponse> addOrRemoveAdvertToFavorites(Long id, HttpServletRequest httpServletRequest) {
   //     String userEmail = (String) httpServletRequest.getAttribute("email");
 
   //     Advert advert=advertService.getAdvertById(id);

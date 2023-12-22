@@ -65,9 +65,9 @@ public class UserController {
 
     @DeleteMapping("/{userId}/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")
-    public ResponseMessage<UserResponse> deleteUser(@PathVariable("userId") Long userId)
+    public ResponseMessage<UserResponse> deleteUser(@PathVariable("userId") Long userId , HttpServletRequest request)
     {
-        return userService.deleteUserById(userId);
+        return userService.deleteUserById(userId , request);
     }
 
 }

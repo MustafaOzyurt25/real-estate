@@ -1,6 +1,7 @@
 package com.realestate.service;
 
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.TourRequestStatus;
@@ -38,34 +39,6 @@ public class TourRequestsService {
     private final PageableHelper pageableHelper;
 
 
-    public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest) {
-
-        // //url den slug çekmek için
-
-        // HttpPost request=new HttpPost("http://localhost:8080/adverts/");
-
-        // CloseableHttpClient httpClient= HttpClients.createDefault();
-
-        // try {
-
-        //     CloseableHttpResponse  response = httpClient.execute(request);
-        //     response.close();
-        //     httpClient.close();
-        // } catch (IOException e) {
-        //     throw new RuntimeException(e);
-        // }
-
-        // String advertUrl=request.getURI().toString();
-        // String slug= advertUrl.substring(31);
-
-
-        // //Slug ile advert çektik
-        // Advert advert= advertService.getAdvertBySlug(slug);
-        // tourRequestRequest.setAdvertId(advert.getId());
-
-        return null; // hata almamasi icin eklendi yorumda olan kodlar duzelince silebilirsiniz
-
-    }
 
 
     //S05
@@ -80,10 +53,12 @@ public class TourRequestsService {
             throw new ResourceNotFoundException(String.format(ErrorMessages.USER_NOT_FOUND_BY_EMAIL,userEmail));
         }
         User guestUser = userRepository.findByEmailEquals(userEmail);
+        Advert ownerUserAdvert = advertService.getAdvertById(tourRequestRequest.getAdvertId());
                 //DTO-->POJO
 
         TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
         tourRequest.setGuestUser(guestUser);
+        tourRequest.setOwnerUser(ownerUserAdvert.getUser());
 
 
         //default status atadık
@@ -235,4 +210,11 @@ public class TourRequestsService {
 
     }
 
+    public boolean controlTourRequestByUserId(Long userId)
+    {
+        boolean isExistsByGuestUserId = tourRequestsRepository.existsByGuestUserId(userId);
+        boolean isExistsByOwnerUserId = tourRequestsRepository.existsByOwnerUserId(userId);
+
+        return isExistsByGuestUserId || isExistsByOwnerUserId;
+    }
 }

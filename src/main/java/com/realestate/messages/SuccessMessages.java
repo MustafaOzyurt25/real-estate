@@ -37,6 +37,7 @@ public class SuccessMessages {
     public static final String CATEGORY_SUCCESSFULLY_UPDATED = "Category Successfully updated";
     public static final String ADVERT_DELETE="Advert is Deleted Successfully";
     public static final String TOUR_REQUEST_SUCCESSFULLY_DECLINED = "Tour Request Successfully Declined";
+    public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
 
 
 
