@@ -401,7 +401,7 @@ public class AdvertService {
     //     advertRepository.findAllById()
     // }
 
-
+// deneme
 }
 
 
