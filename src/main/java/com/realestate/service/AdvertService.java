@@ -32,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -76,7 +77,7 @@ public class AdvertService {
 
             List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
             Category category = categoryPropertyKeyService.isCategoryExist(advertRequest.getCategoryId());
-            Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest, images, country, city, district, advertType, slug, user,category);
+            Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest, images, country, city, district, advertType, slug, user, category);
 
             advert.setStatus(AdvertStatus.PENDING);
             advert.setBuiltIn(false);
@@ -85,10 +86,10 @@ public class AdvertService {
 
             advertRepository.save(advert);
             List<CategoryPropertyValue> categoryPropertyValues = new ArrayList<>();
-            for (int i = 0;i<advertRequest.getPropertyValues().size();i++) {
+            for (int i = 0; i < advertRequest.getPropertyValues().size(); i++) {
                 CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
                         .save(categoryPropertyValueMapper
-                                .mapValuesToCategoryPropertyValue(advert,category.getCategoryPropertyKeys().get(i),advertRequest.getPropertyValues().get(i)));
+                                .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertRequest.getPropertyValues().get(i)));
                 categoryPropertyValues.add(categoryPropertyValue);
             }
             advert.setCategoryPropertyValue(categoryPropertyValues);
@@ -246,16 +247,10 @@ public class AdvertService {
             responseBody.put("message", ErrorMessages.CRITERIA_ADVERT_NOT_FOUND);
             return new ResponseEntity<>(responseBody, HttpStatus.OK);
         }
-            responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
-            responseBody.put("Adverts", adverts);
-            return new ResponseEntity<>(responseBody, HttpStatus.OK);
-        }
-
         responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
         responseBody.put("Adverts", adverts);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
-
 
 
     public Advert getAdvertById(Long advertId) {
@@ -268,7 +263,7 @@ public class AdvertService {
     }
 
 
-// A09
+    // A09
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(Long id) {
 
         return ResponseMessage.<AdvertResponse>builder()
@@ -277,7 +272,6 @@ public class AdvertService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
-    
 
 
     //--------------- updateAuthenticatedCustomersAdvertById ---------------------------//
@@ -315,7 +309,7 @@ public class AdvertService {
         advert.setCategory(category);
         advert.setUpdateAt(LocalDateTime.now());
         advert.setCountry(country);
-      
+
 
         // diger setlemeler.....
         advert.setCategoryPropertyValue(existAdvert.getCategoryPropertyValue());
@@ -369,7 +363,7 @@ public class AdvertService {
      */
 
 
-  // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
+    // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
 
 
     //A05
@@ -389,12 +383,6 @@ public class AdvertService {
                 .map(advertMapper::mapAdvertToAdvertResponse);
     }
 
-
-
-
-
-// deneme
-}
 
 
 }
