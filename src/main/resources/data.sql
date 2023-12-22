@@ -45,7 +45,8 @@ INSERT INTO countries (id, name) VALUES
 (36, 'CANADA'),
 (37, 'CAPE VERDE'),
 (38, 'CAYMAN ISLANDS'),
-(39,'TURKEY');
+(39,'TURKEY')
+ON CONFLICT (id) DO NOTHING;
 
 
 
@@ -66,8 +67,8 @@ INSERT INTO cities (id, name, country_id) VALUES
 (5, 'AMASYA',39),
 (6, 'ANKARA',39),
 (7 , 'Antalya' , 39),
-(34, 'ISTANBUL',39);
-
+(34, 'ISTANBUL',39)
+ON CONFLICT (id) DO NOTHING;
 
 
 
@@ -80,10 +81,10 @@ CREATE TABLE IF NOT EXISTS districts (
 )  ;
 
 INSERT INTO districts (id, name, city_id) VALUES
-
-(1, 'KADIKOY',34),
-(2, 'BESIKTAS',34),
-(3, 'EYUP',34),
-(4, 'PENDIK',34),
-(5, 'MALTAPE',34),
-(6, 'USKUDAR',34);
+(1, 'KADIKOY', 34),
+(2, 'BESIKTAS', 34),
+(3, 'EYUP', 34),
+(4, 'PENDIK', 34),
+(5, 'MALTAPE', 34),
+(6, 'USKUDAR', 34)
+ON CONFLICT (id) DO NOTHING;
