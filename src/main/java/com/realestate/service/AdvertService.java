@@ -31,7 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -52,10 +52,11 @@ public class AdvertService {
     //    private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
     private final UserRepository userRepository;
-
+    private final UserRepository serRepository;
     private final CategoryPropertyKeyService categoryPropertyKeyService;
     private final CategoryPropertyValueRepository categoryPropertyValueRepository;
     private final CategoryPropertyValueMapper categoryPropertyValueMapper;
+
 
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
 
@@ -96,8 +97,6 @@ public class AdvertService {
         } else {
             throw new ConflictException("You must log in to create an advert.");
         }
-
-
     }
 
     public void addImageToAdvert(Long advertId, List<Image> images) {
@@ -168,11 +167,11 @@ public class AdvertService {
 
     public List<AdvertResponse> getPopularAdvertsByAmount(Integer defaultAmount) {
 
+
         Integer amount = (defaultAmount == null) ? 10 : defaultAmount;
 
         //tüm advertları almak için
         List<Advert> allAdvert = advertRepository.findAll().stream().toList();
-
 
         List<PopularAdvert> popularAdvert = new ArrayList<>();
         for (int i = 0; i < allAdvert.size(); i++) {
@@ -181,7 +180,6 @@ public class AdvertService {
             int pp = ((troa * 3) + tvoa);
             popularAdvert.add(new PopularAdvert(allAdvert.get(i).getId(), pp));
         }
-
 
         //amount miktarı kadar popularAdvert ı büyükten küçüğe sıraladım topList e attım
         List<PopularAdvert> topListPopularAdvert = popularAdvert.stream()
@@ -196,7 +194,6 @@ public class AdvertService {
                     getAdvertId()).orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION)));
         }
         return adverts.stream().map(advertMapper::mapAdvertToAdvertResponse).collect(Collectors.toList());
-
 
     }
     //===================================================popular===================================================
@@ -249,10 +246,16 @@ public class AdvertService {
             responseBody.put("message", ErrorMessages.CRITERIA_ADVERT_NOT_FOUND);
             return new ResponseEntity<>(responseBody, HttpStatus.OK);
         }
+            responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
+            responseBody.put("Adverts", adverts);
+            return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        }
+
         responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
         responseBody.put("Adverts", adverts);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
 
 
     public Advert getAdvertById(Long advertId) {
@@ -365,6 +368,9 @@ public class AdvertService {
      */
 
 
+  // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
+
+
     //A05
     public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
 
@@ -385,7 +391,12 @@ public class AdvertService {
 
 
 
+
 // deneme
 }
+
+
+}
+
 
 
