@@ -27,6 +27,7 @@ public class AdvertTypeController {
     }
 
 
+    //T05
     @DeleteMapping("/delete/{id}")
     public ResponseMessage<AdvertTypeResponse> advertTypeDelete(@PathVariable Long id) {
 

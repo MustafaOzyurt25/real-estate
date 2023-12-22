@@ -28,11 +28,12 @@ public class TourRequestsController {
     private final TourRequestsService tourRequestsService;
 
 
+
+
+
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PostMapping("/save")
-    public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest) {
-        return tourRequestsService.save(tourRequestRequest);
-    }
     public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest, HttpServletRequest request)
     {
         String userEmail = (String) request.getAttribute("email");
