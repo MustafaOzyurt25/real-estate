@@ -58,10 +58,10 @@ public class TourRequestsController {
 
     //S06 put ----------------------------------------------------------------------------------------------------------
     //It will update a tour request -> tur talebini guncelle
-    @PutMapping("/{id}/auth")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')") //http://localhost:8080/tour-requests//{id}/auth + PUT
+    //@PutMapping("/{id}/auth")
+    //@PreAuthorize("hasAnyAuthority('CUSTOMER')") //http://localhost:8080/tour-requests//{id}/auth + PUT
     public ResponseMessage<TourRequestResponse> updatedTourRequest(@RequestBody @Valid TourRequest tourRequest,
-                                                                   @PathVariable Long tourRequestId){
+     //@PathVariable Long tourRequestId){
         return TourRequestsService.updatedTourRequest(tourRequest, tourRequestId);
 
     }

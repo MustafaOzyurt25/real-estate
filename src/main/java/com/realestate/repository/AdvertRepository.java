@@ -52,4 +52,11 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     boolean existsByUserId(Long userId);
 
+    /*
+    * Aşağıdaki method çalışmadı. NEDEN?
+    *
+    * User findUserById(Long advertId)
+    * */
+
+
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface RoleRepository extends JpaRepository<Role, Long>
 {
@@ -15,4 +16,7 @@ public interface RoleRepository extends JpaRepository<Role, Long>
 
     @Query("SELECT (count(r) > 0) FROM Role r WHERE r.roleName = ?1")
     boolean existsByEnumUserRole(RoleType role);
+
+
+
 }

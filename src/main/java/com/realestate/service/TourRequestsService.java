@@ -1,6 +1,7 @@
 package com.realestate.service;
 
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.TourRequestStatus;
@@ -41,6 +42,8 @@ public class TourRequestsService {
 
 
 
+
+
     //S05
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest, String userEmail){
 
@@ -53,10 +56,12 @@ public class TourRequestsService {
             throw new ResourceNotFoundException(String.format(ErrorMessages.USER_NOT_FOUND_BY_EMAIL,userEmail));
         }
         User guestUser = userRepository.findByEmailEquals(userEmail);
+        Advert ownerUserAdvert = advertService.getAdvertById(tourRequestRequest.getAdvertId());
                 //DTO-->POJO
 
         TourRequest tourRequest= tourRequestMapper.mapTourRequestRequestToTourRequest(tourRequestRequest);
         tourRequest.setGuestUser(guestUser);
+        tourRequest.setOwnerUser(ownerUserAdvert.getUser());
 
 
         //default status atadık
@@ -208,6 +213,14 @@ public class TourRequestsService {
 
     }
 
+
+    public boolean controlTourRequestByUserId(Long userId)
+    {
+        boolean isExistsByGuestUserId = tourRequestsRepository.existsByGuestUserId(userId);
+        boolean isExistsByOwnerUserId = tourRequestsRepository.existsByOwnerUserId(userId);
+
+        return isExistsByGuestUserId || isExistsByOwnerUserId;
+
     public ResponseMessage<TourRequestResponse> cancelTourRequest(Long id) {
         TourRequest tourRequest=tourRequestsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
         tourRequest.setStatus(TourRequestStatus.CANCELED);
@@ -218,6 +231,7 @@ public class TourRequestsService {
                 .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_CANCELED)
                 .httpStatus(HttpStatus.OK)
                 .build();
+
 
     }
 }

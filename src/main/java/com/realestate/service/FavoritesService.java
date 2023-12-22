@@ -29,6 +29,16 @@ public class FavoritesService {
     private final FavoriteMapper favoriteMapper;
 
 
+    // UserService'den çağırılıyor
+    public void deleteByUserId(Long userId)
+    {
+        favoritesRepository.deleteByUserId(userId);
+    }
+
+    // public ResponseMessage<AdvertResponse> addOrRemoveAdvertToFavorites(Long id, HttpServletRequest httpServletRequest) {
+  //     String userEmail = (String) httpServletRequest.getAttribute("email");
+
+
     //K03
     public ResponseMessage<FavoriteResponse> addOrRemoveAdvertToFavorites(Long id, HttpServletRequest httpServletRequest) {
         String userEmail = (String) httpServletRequest.getAttribute("email");
