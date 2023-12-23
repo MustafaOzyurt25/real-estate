@@ -60,7 +60,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/getAllCategories")
+    @GetMapping("/categories/admin")
     //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseEntity<List<Category>> getAllCategories(@RequestParam(value = "q", required = false) String q,
                                                            @RequestParam(value = "page", defaultValue = "0") int page,
