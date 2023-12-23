@@ -4,6 +4,8 @@ package com.realestate.service;
 import com.realestate.entity.Advert;
 import com.realestate.entity.Favorite;
 import com.realestate.entity.User;
+import com.realestate.exception.ResourceNotFoundException;
+import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.FavoriteMapper;
 import com.realestate.payload.response.AdvertResponse;
@@ -30,8 +32,18 @@ public class FavoritesService {
 
 
     // UserService'den çağırılıyor
+    public void deleteByUserId(Long userId , User user)
+    {
+        if(favoritesRepository.existsByUserId(userId))
+            throw new ResourceNotFoundException(String.format(ErrorMessages.COULD_NOT_FIND_FAVORITES_BY_USER_ID,user.getFirstName()));
+        favoritesRepository.deleteByUserId(userId);
+    }
+
+    // Override edilmiştir.
     public void deleteByUserId(Long userId)
     {
+        if(!favoritesRepository.existsByUserId(userId))
+            throw new ResourceNotFoundException(String.format(ErrorMessages.COULD_NOT_FIND_FAVORITES_BELONG_USER));
         favoritesRepository.deleteByUserId(userId);
     }
 
