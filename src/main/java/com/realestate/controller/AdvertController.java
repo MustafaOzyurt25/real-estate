@@ -70,12 +70,16 @@ public class AdvertController {
         return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
     }
 
+
+
+ 
     //A08
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @GetMapping("/{id}/auth")
     public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest){
         return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
     }
+
 
 
 
@@ -90,7 +94,13 @@ public class AdvertController {
                                                          HttpServletRequest httpServletRequest   )
  {
      return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
+     
  }
+
+
+
+ 
+ // A09
 
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
@@ -121,8 +131,7 @@ public class AdvertController {
    
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PutMapping("/auth/{advertId}")
-    public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId,
-                                                                                  @RequestBody @Valid AdvertUpdateRequest updateRequest,
+    public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest,
                                                                                   HttpServletRequest httpServletRequest){
         return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
     }

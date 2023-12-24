@@ -20,6 +20,7 @@ public class CategoryPropertyKeyController {
     
 
     private final CategoryPropertyKeyService categoryPropertyKeyService;
+    
     @PostMapping("/{categoryId}/properties")
     //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<CategoryPropertyKey> createCategoryPropertyKey(
