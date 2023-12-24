@@ -119,7 +119,7 @@ public class TourRequestsService {
                 .build();
     }
 
-    /*S06 -----------------------------------------------------------------------------------------------------------*/
+    /*S06 --------------------------- kontrol edilecek ---------------------------------------------------------------*/
     public ResponseMessage<TourRequestResponse> updatedTourRequestAuthById(TourRequest tourRequest,
 
                                                                            Long tourRequestId) {
