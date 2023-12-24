@@ -52,10 +52,13 @@ public class AdvertService {
     //    private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
     private final UserRepository userRepository;
-    private final UserRepository serRepository;
-    private final CategoryPropertyKeyService categoryPropertyKeyService;
+    
+    private final CategoryPropertyKeyService categoryPropertyKeyServi
     private final CategoryPropertyValueRepository categoryPropertyValueRepository;
     private final CategoryPropertyValueMapper categoryPropertyValueMapper;
+    
+    private  AdvertUpdateRequest advertUpdateRequest;
+
 
 
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
@@ -388,6 +391,64 @@ public class AdvertService {
                 .map(advertMapper::mapAdvertToAdvertResponse);
     }
 
+    public ResponseMessage<AdvertResponse> updateAdminAdvertById(Long advertId, AdvertUpdateRequest updateRequest) {
+        Advert existAdvert = getAdvertById(advertId);
+        City city = cityService.getCityById(advertUpdateRequest.getCityId());
+        Country country = countryService.getCountryById(advertUpdateRequest.getCountryId());
+        District district = districtService.getDistrictById(advertUpdateRequest.getDistrictId());
+        AdvertType advertType = advertTypeService.getAdvertTypeById(advertUpdateRequest.getAdvertTypeId());
+        Category category = categoryPropertyKeyService.isCategoryExist(advertUpdateRequest.getCategoryId());
+        List<CategoryPropertyKey> categoryPropertyKeys =
+                categoryPropertyKeyService.getCategoryPropertyKeys(advertUpdateRequest.getCategoryId());
+        Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(advertUpdateRequest);
+
+
+        advert.setBuiltIn(false);
+        advert.setAdvertType(advertType);
+        advert.setCity(city);
+        advert.setDistrict(district);
+        advert.setCategory(category);
+        advert.setUpdateAt(LocalDateTime.now());
+        advert.setCountry(country);
+        advert.setUpdateAt(LocalDateTime.now());
+
+        
+        advert.setCategoryPropertyValue(existAdvert.getCategoryPropertyValue());
+        advert.setFavorites(existAdvert.getFavorites());
+        advert.setCreateAt(existAdvert.getCreateAt());
+        advert.setImages(existAdvert.getImages());
+        advert.setSlug(existAdvert.getSlug());
+        advert.setLogs(existAdvert.getLogs());
+        advert.setId(existAdvert.getId());
+        advert.setTourRequests(existAdvert.getTourRequests());
+        advert.setUser(existAdvert.getUser());
+        advert.setViewCount(existAdvert.getViewCount());
+
+
+        
+        if (existAdvert.getBuiltIn()) {
+            throw new ConflictException(ErrorMessages.ADVERT_BUILT_IN_CAN_NOT_BE_UPDATED);
+        }
+       
+        return ResponseMessage.<AdvertResponse>builder()
+               // .object(advertMapper.mapAdvertToAdvertResponse(savedAdvert))
+                .message(SuccessMessages.ADVERT_UPDATE)
+                .httpStatus(HttpStatus.OK).build();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -396,7 +457,6 @@ public class AdvertService {
 }
 
 
+
+
 }
-
-
-

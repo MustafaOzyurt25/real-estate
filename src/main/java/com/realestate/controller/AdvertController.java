@@ -2,6 +2,7 @@ package com.realestate.controller;
 
 import com.realestate.entity.Advert;
 import com.realestate.payload.request.AdvertRequest;
+import com.realestate.payload.request.AdvertUpdateRequest;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -123,6 +125,14 @@ public class AdvertController {
                                                                                   @RequestBody @Valid AdvertUpdateRequest updateRequest,
                                                                                   HttpServletRequest httpServletRequest){
         return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    @PutMapping("/advert/{advertId}")
+    public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest){
+
+        return advertService.updateAdminAdvertById(advertId,updateRequest);
     }
 
    
