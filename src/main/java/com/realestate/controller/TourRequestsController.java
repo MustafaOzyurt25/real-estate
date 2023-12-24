@@ -51,20 +51,16 @@ public class TourRequestsController {
         return tourRequestsService.getTourRequestById(tourRequestId);
     }
 
-
-
-    /**
-
-    //S06 put ----------------------------------------------------------------------------------------------------------
-    //It will update a tour request -> tur talebini guncelle
+    /**S06 put -------------------------------------------------------------------------------------------------------*/
+//It will update a tour request -> tur talebini guncelle
     @PutMapping("/{id}/auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')") //http://localhost:8080/tour-requests//{id}/auth + PUT
-    public ResponseMessage<TourRequestResponse> updatedTourRequest(@RequestBody @Valid TourRequest tourRequest,
-                                                                   @PathVariable Long tourRequestId){
-        return TourRequestsService.updatedTourRequest(tourRequest, tourRequestId);
-
+    public ResponseMessage<TourRequestResponse> updatedTourRequestAuthById(@RequestBody @Valid TourRequest tourRequest,
+                                                                           @PathVariable("id") Long tourRequestId){
+        return tourRequestsService.updatedTourRequestAuthById(tourRequest, tourRequestId);
     }
-     */
+    /**S06 put end ---------------------------------------------------------------------------------------------------*/
+
 
     @GetMapping("/{id}/auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
