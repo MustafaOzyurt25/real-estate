@@ -8,6 +8,7 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.FavoritesService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,4 +48,10 @@ public class FavoritesController {
   //  public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest){
   //     return favoritesService.getAuthenticatedCustomerAllFavorites(httpServletRequest);
   //  }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<List<FavoriteResponse>> getUsersFavorites(@PathVariable("id") Long id){
+       return favoritesService.getUsersFavorites(id);
+    }
 }

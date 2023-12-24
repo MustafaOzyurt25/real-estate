@@ -4,6 +4,8 @@ package com.realestate.service;
 import com.realestate.entity.Advert;
 import com.realestate.entity.Favorite;
 import com.realestate.entity.User;
+import com.realestate.exception.ResourceNotFoundException;
+import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.FavoriteMapper;
 import com.realestate.payload.response.AdvertResponse;
@@ -13,11 +15,13 @@ import com.realestate.repository.FavoritesRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -85,6 +89,11 @@ public class FavoritesService {
                 .httpStatus(HttpStatus.OK)
                 .message(SuccessMessages.ALL_FAVORITES_DELETED).build();
 
+    }
+
+    public ResponseEntity<List<FavoriteResponse>> getUsersFavorites(Long id) {
+
+        return ResponseEntity.ok(favoritesRepository.findByUser(userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,id)))).stream().map(favoriteMapper::mapToFavoriteToFavoriteResponse).collect(Collectors.toList()));
     }
 
 
