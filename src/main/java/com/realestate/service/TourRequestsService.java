@@ -70,6 +70,7 @@ public class TourRequestsService {
                 .build();
 
 
+
     }
 
     public ResponseMessage<TourRequestResponse> delete(Long id) {
@@ -92,57 +93,45 @@ public class TourRequestsService {
                 .build();
     }
 
+    /*S06 --------------------------- kontrol edilecek ---------------------------------------------------------------*/
+    public ResponseMessage<TourRequestResponse> updatedTourRequestAuthById(TourRequest tourRequest,
 
-    /*
+                                                                           Long tourRequestId) {
+        TourRequest tourRequestExist = isTourRequestExist(tourRequestId);
 
-     */
+        //2-Only the tour requests whose status pending or rejected/DECLINED can be updated./  -Yalnızca beklemede/pending veya reddedilmiş/rejected/DECLINED durumu olan tur talepleri güncellenebilir.
+        //--------------------------------------------------------------//pending veya rejected olup olmadigini kontrol et!!!
+        if (tourRequestExist.getStatus() == TourRequestStatus.PENDING || tourRequestExist.getStatus() == TourRequestStatus.DECLINED) {
+            tourRequestExist.setTourDate(tourRequestExist.getTourDate());
+            tourRequestExist.setTourTime(tourRequestExist.getTourTime());
+            tourRequestExist.setId(tourRequestExist.getId());//id yi guncelle!!! advert_id mi tour_id mi?-----------guncellenecek------------------
 
-    /**
-     * //S06 put   //It will update a tour request -> tur talebini guncelle ----------------------------------------------
-     * <p>
-     * //1--It will return the updated tour request object/    - Güncellenmis tur istegini nesnesini dondurecektir.
-     * <p>
-     * //2-Only the tour requests whose status pending or rejected can be updated./  -Yalnızca beklemede/pending veya reddedilmiş/rejected/DECLINED durumu olan tur talepleri güncellenebilir.
-     * --------------------------------------------------------------//pending veya rejected olup olmadigini kontrol et!!!
-     * //3-If a request is updated, the status field should reset to “pending” / -Bir istek güncellenirse durum alanı "beklemede/pending" olarak sıfırlanmalıdır
-     * ---------------------------------------------------//gonderilen tourRequest guncellenirse pending olarak sifirla!!!
-     * <p>
-     * <p>
-     * public static ResponseMessage<TourRequestResponse> updatedTourRequest(TourRequest tourRequest, Long tourRequestId) {
-     * //!!! id kontrol ---> pending veya reddedilmis tur taleplerini guncelle. update edilecek tourrequest var mi?
-     * <p>
-     * TourRequest tourRequest1 = isTourRequestExist(tourRequestId);
-     * <p>
-     * //-----------------------------------------------------------------------------------------------------------------
-     * <p>
-     * public ResponseMessage<TourRequestResponse> updatedTourRequest(Long tourRequestId, TourRequestRequest TourRequestRequest) {
-     * TourRequest tourRequest = tourRequestsRepository.findById(tourRequestId)
-     * .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourRequestId)));
-     * <p>
-     * // Sadece "pending" veya "rejected/DECLINED" durumundaki istekleri güncelle -> REJECTED dokumantasyonda yazan, projede yazan DECLINED!!!
-     * if (tourRequest.getStatus() == TourRequestStatus.PENDING || tourRequest.getStatus() == TourRequestStatus.DECLINED) {
-     * tourRequest.setTourDate(TourRequestRequest.getTourDate());
-     * tourRequest.setTourTime(TourRequestRequest.getTourTime());
-     * // tourRequest.setTourId(TourRequestRequest.getTourId()); ---> TODO advert_id, tour_id ?????????????????????????
-     * <p>
-     * //gonderilen tourRequest guncellenirse pending olarak sifirla!!!
-     * tourRequest.setStatus(TourRequestStatus.PENDING);
-     * <p>
-     * <p>
-     * TourRequest updatedTourRequest = tourRequestsRepository.save(tourRequest);
-     * return ResponseMessage.<TourRequestResponse>builder()
-     * .message(SuccessMessages.TOUR_REQUEST_UPDATED)
-     * .httpStatus(HttpStatus.OK)
-     * .object(tourRequestMapper.mapTourRequestToTourRequestResponse(updatedTourRequest))
-     * .build();
-     * } else {
-     * return ResponseMessage.<TourRequestResponse>builder()
-     * .message(ErrorMessages.TOUR_REQUEST_CANNOT_BE_UPDATED)
-     * .httpStatus(HttpStatus.BAD_REQUEST)
-     * .build();
-     * }
-     * }
-     */
+
+            //3-If a request is updated, the status field should reset to “pending” / -Bir istek güncellenirse durum alanı "beklemede/pending" olarak sifirlamali
+            tourRequestExist.setStatus(TourRequestStatus.PENDING);//gonderilen tourRequest guncellenirse pending olarak sifirla!!!
+
+            //1--It will return the updated tour request object/    - Güncellenmis tur istegini nesnesini dondurecektir.
+            TourRequest updatedTourRequestAuthById = tourRequestsRepository.save(tourRequest);
+            return ResponseMessage.<TourRequestResponse>builder()
+                    .message(SuccessMessages.TOUR_REQUEST_UPDATED)
+                    .httpStatus(HttpStatus.OK)
+                    .object(tourRequestMapper.mapTourRequestToTourRequestResponse(updatedTourRequestAuthById))
+                    .build();
+        } else {
+            return ResponseMessage.<TourRequestResponse>builder()
+                    .message(ErrorMessages.TOUR_REQUEST_CANNOT_BE_UPDATED)
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+    }
+
+    //ilgili id li tourRequest var mi?
+    private TourRequest isTourRequestExist(Long tourRequestId) {
+        return tourRequestsRepository.findById(tourRequestId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourRequestId)));
+    }
+    /*S06 put end ----------------------------------------------------------------------------------------------------*/
 
 
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
@@ -203,7 +192,7 @@ public class TourRequestsService {
 
 
     public boolean controlTourRequestByUserId(Long userId) {
-        
+
         boolean isExistsByGuestUserId = tourRequestsRepository.existsByGuestUserId(userId);
         boolean isExistsByOwnerUserId = tourRequestsRepository.existsByOwnerUserId(userId);
 
