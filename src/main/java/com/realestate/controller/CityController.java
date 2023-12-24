@@ -20,7 +20,7 @@ public class CityController {
     private final CityService cityService;
 
     @GetMapping
-    public ResponseEntity<List<City>> getCountry(){
+    public ResponseEntity<List<City>> getCity(){
         return cityService.getCity();
     }
 }
