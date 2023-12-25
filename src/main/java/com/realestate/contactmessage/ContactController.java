@@ -30,7 +30,7 @@ public class ContactController {
     public Page<ContactResponse> getAllContactMessageAsPage(
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "size", defaultValue = "20", required = false) int size,
-            @RequestParam(value = "sort", defaultValue = "create_at", required = false) String sort,
+            @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,
             @RequestParam(value = "type", defaultValue = "asc", required = false) String type,
             @RequestParam(value = "query", required = false) String query
     ) {
