@@ -318,7 +318,7 @@ public class AdvertService {
                 .httpStatus(HttpStatus.OK).build();
     }
 
-    /*
+
     public ResponseMessage deleteAdvertById(Long id) {
         Advert advert = isAdvertExists(id);
         advertRepository.deleteById(id);
@@ -328,7 +328,7 @@ public class AdvertService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
-     */
+
 
     // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
 
