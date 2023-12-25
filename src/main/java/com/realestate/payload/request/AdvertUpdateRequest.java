@@ -33,7 +33,8 @@ public class AdvertUpdateRequest {
     private Long districtId;
     private Long categoryId;
     private Boolean isActive;
-    private List<CategoryPropertyKey> properties;
+
+    private List<String> propertyValues;
     
     
             

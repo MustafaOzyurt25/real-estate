@@ -1,6 +1,6 @@
 package com.realestate.service;
 
-import com.realestate.entity.User;
+import com.realestate.entity.Log;
 import com.realestate.repository.LogsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,5 +15,9 @@ public class LogsService
     {
 
         logsRepository.deleteByUserId(userId);
+    }
+
+    public void save(Log log) {
+        logsRepository.save(log);
     }
 }
