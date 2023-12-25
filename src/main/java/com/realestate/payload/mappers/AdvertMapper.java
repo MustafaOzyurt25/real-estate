@@ -97,6 +97,16 @@ public class AdvertMapper {
                 
                 .build();
     }
+    public Advert updateAdminAdvertById(AdvertUpdateRequest advertUpdateRequest) {
+
+        return Advert.builder()
+                .title(advertUpdateRequest.getTitle())
+                .description(advertUpdateRequest.getDescription())
+                .price(advertUpdateRequest.getPrice())
+                .location(advertUpdateRequest.getLocation())
+                .build();
 
 
 }
+
+ }
