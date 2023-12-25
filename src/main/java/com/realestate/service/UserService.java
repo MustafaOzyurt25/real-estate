@@ -250,7 +250,7 @@ public class UserService {
         }
 
         logsService.deleteByUserId(userId); // ÇALIŞIYOR
-        favoritesService.deleteByUserId(userId); // ÇALIŞIYOR
+        favoritesService.deleteByUserId(userId , user); // ÇALIŞIYOR
 
 
         userRepository.deleteById(userId);
