@@ -342,11 +342,6 @@ public class AdvertService {
     }
 
 
-
-
-
-
-
     public ResponseMessage deleteAdvertById(Long id) {
 
         Optional<Advert> advert = advertRepository.findById(id);
