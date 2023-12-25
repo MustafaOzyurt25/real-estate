@@ -21,6 +21,8 @@ public class ImageController {
     private final AdvertImageService advertImageService;
     private final ImageService imageService;
 
+    //I02
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','ADMIN','MANAGER')")
     @PostMapping("/{advertId}")
     public ResponseEntity<Map<String, Object>> addImageToAdvert(@PathVariable("advertId") Long advertId,
                                                                 @ModelAttribute List<MultipartFile> imageFiles) {
@@ -29,6 +31,10 @@ public class ImageController {
 
     }
 
+
+
+
+    //I04
     @PutMapping("/{imageId}")
     //@PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
     public ResponseMessage<ImageResponse> setFeaturedArea(@PathVariable Long imageId) {
@@ -36,6 +42,8 @@ public class ImageController {
     }
 
 
+
+    //I03
     @DeleteMapping("/delete/{id}")
     public ResponseMessage deleteImagesById(@PathVariable List<Long> ids){
         return imageService.deleteImagesById(ids);
@@ -43,6 +51,7 @@ public class ImageController {
     }
 
 
+    //I01
     @GetMapping("/{imageId}")
     public ImageResponse getImageAnAdvert(@PathVariable("imageId") Long imageId)
     {

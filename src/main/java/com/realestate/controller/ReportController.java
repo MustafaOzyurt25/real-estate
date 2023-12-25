@@ -2,7 +2,8 @@ package com.realestate.controller;
 
 
 import com.realestate.entity.enums.TourRequestStatus;
-import com.realestate.payload.request.AdvertUpdateRequest;
+
+
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.TourRequestResponse;
@@ -36,6 +37,12 @@ public class ReportController {
             @RequestParam("status") TourRequestStatus status
     ){
         return reportService.getTourRequestsReport(date1,date2,status);
+    }
+
+    @GetMapping("/most-popular-properties")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    public ResponseMessage<List<AdvertResponse>> getMostPopularProperties(@PathVariable Long amount){
+        return reportService.getMostPopularProperties(amount);
     }
     
     
