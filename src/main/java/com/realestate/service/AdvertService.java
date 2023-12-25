@@ -53,7 +53,7 @@ public class AdvertService {
     //    private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
     private final UserRepository userRepository;
-    private final UserRepository serRepository;
+
     private final CategoryPropertyKeyService categoryPropertyKeyService;
     private final CategoryPropertyValueRepository categoryPropertyValueRepository;
     private final CategoryPropertyValueMapper categoryPropertyValueMapper;
