@@ -162,7 +162,24 @@ public class TourRequestsService {
 
 
     }
+    public ResponseEntity<Map<String, Object>> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
+        String userEmail = (String) httpServletRequest.getAttribute("email");
+        User user = userRepository.findByEmailEquals(userEmail);
+
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+
+        if (q != null) {
+            q = q.trim().toLowerCase().replaceAll("-", " ");
+        }
+
+        Page<TourRequest> tourRequestPage = userRepository.getTourRequestByAdmin(/*q,*/ user, pageable);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
+        responseBody.put("tourRequest", tourRequestPage);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(Long tourRequestId) {
 
         TourRequest getAuthTourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(() ->
@@ -221,4 +238,4 @@ public class TourRequestsService {
                     .httpStatus(HttpStatus.OK)
                     .build();
         }
-    }
+}
