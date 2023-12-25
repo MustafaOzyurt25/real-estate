@@ -31,10 +31,10 @@ public class TourRequestsController {
 
 
 
-
+    //S05
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PostMapping("/save")
-    public ResponseMessage<TourRequestResponse> save(@RequestBody TourRequestRequest tourRequestRequest, HttpServletRequest request)
+    public ResponseMessage<TourRequestResponse> save(@RequestBody @Valid TourRequestRequest tourRequestRequest, HttpServletRequest request)
     {
         String userEmail = (String) request.getAttribute("email");
         return tourRequestsService.save(tourRequestRequest , userEmail);
@@ -42,11 +42,14 @@ public class TourRequestsController {
     }
     
 
+    //S10
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<TourRequestResponse> delete(@PathVariable("id") Long id) {
         return tourRequestsService.delete(id);
     }
 
+    //S04
     @GetMapping("/{id}/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<TourRequestResponse> getTourRequestById(@PathVariable("id") Long tourRequestId) {
@@ -68,15 +71,16 @@ public class TourRequestsController {
     }
      */
 
-    
-    @GetMapping("/{id}/auth")
 
+    //S03
+    @GetMapping("/{id}/auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(@PathVariable("id") Long tourRequestId){
         return tourRequestsService.getAuthTourRequestById(tourRequestId);
     }
 
 
+    //S01
     @GetMapping("/auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest,
@@ -100,6 +104,7 @@ public class TourRequestsController {
     }
 
 
+    //S08
     @PatchMapping("/{id}/approve")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseMessage<TourRequestResponse> approveTourRequest (@PathVariable("id") Long tourRequestId){
@@ -109,12 +114,14 @@ public class TourRequestsController {
 
 
 
+    //S09
     @PatchMapping("/{id}/decline")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseMessage<TourRequestResponse> declineTourRequest(@PathVariable("id") Long id){
         return tourRequestsService.declineTourRequest(id);
     }
 
+    //S07
     @PatchMapping("/{id}/cancel")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public  ResponseMessage<TourRequestResponse> cancelTourReguest(@PathVariable("id") Long id){
