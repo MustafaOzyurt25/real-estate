@@ -65,8 +65,7 @@ public class CategoryController {
         return categoryService.getCategoryById(id);
     }
 
-
-
+  
     //C02
     @GetMapping("/admin")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
