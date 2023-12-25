@@ -1,6 +1,7 @@
 package com.realestate.service;
 
 
+import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.messages.ErrorMessages;
@@ -45,7 +46,8 @@ public class ReportService {
 
     }
 
-    public ResponseMessage<List<AdvertResponse>> getMostPopularProperties(Long amount) {
+    public List<Advert> getMostPopularProperties(Long amount) {
         return advertRepository.findTopNByOrderByTourRequestsDesc(amount);
+
     }
 }
