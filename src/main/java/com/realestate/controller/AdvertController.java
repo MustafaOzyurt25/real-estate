@@ -101,7 +101,6 @@ public class AdvertController {
 
 
     //A06
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Map<String, Object>> getSortedAdvertValuesByAdmin(@RequestParam(value = "q", required = false) String q,

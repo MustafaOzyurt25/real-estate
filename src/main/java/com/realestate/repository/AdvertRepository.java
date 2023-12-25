@@ -58,8 +58,8 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     @Query("SELECT COUNT(a) FROM Advert a WHERE a.isActive = true")
     long countPublishedAdverts();
 
+    //List<Advert> findTopByOrderByTourRequestsDesc(Integer amount);
 
-    List<Advert> findTopNByOrderByTourRequestsDesc(Long amount);
 
 
     /*

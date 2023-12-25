@@ -50,7 +50,6 @@ public class AdvertService {
     private final CategoryPropertyKeyService categoryPropertyKeyService;
     private final CategoryPropertyValueRepository categoryPropertyValueRepository;
     private final CategoryPropertyValueMapper categoryPropertyValueMapper;
-    private final  AdvertUpdateRequest advertUpdateRequest;
 
 
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
@@ -353,14 +352,14 @@ public class AdvertService {
 
     public ResponseMessage<AdvertResponse> updateAdminAdvertById(Long advertId, AdvertUpdateRequest updateRequest) {
         Advert existAdvert = getAdvertById(advertId);
-        City city = cityService.getCityById(advertUpdateRequest.getCityId());
-        Country country = countryService.getCountryById(advertUpdateRequest.getCountryId());
-        District district = districtService.getDistrictById(advertUpdateRequest.getDistrictId());
-        AdvertType advertType = advertTypeService.getAdvertTypeById(advertUpdateRequest.getAdvertTypeId());
-        Category category = categoryPropertyKeyService.isCategoryExist(advertUpdateRequest.getCategoryId());
+        City city = cityService.getCityById(updateRequest.getCityId());
+        Country country = countryService.getCountryById(updateRequest.getCountryId());
+        District district = districtService.getDistrictById(updateRequest.getDistrictId());
+        AdvertType advertType = advertTypeService.getAdvertTypeById(updateRequest.getAdvertTypeId());
+        Category category = categoryPropertyKeyService.isCategoryExist(updateRequest.getCategoryId());
         List<CategoryPropertyKey> categoryPropertyKeys =
-                categoryPropertyKeyService.getCategoryPropertyKeys(advertUpdateRequest.getCategoryId());
-        Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(advertUpdateRequest);
+                categoryPropertyKeyService.getCategoryPropertyKeys(updateRequest.getCategoryId());
+        Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(updateRequest);
 
 
         advert.setBuiltIn(false);

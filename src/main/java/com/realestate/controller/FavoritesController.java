@@ -1,5 +1,6 @@
 package com.realestate.controller;
 
+import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.FavoriteResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.FavoritesService;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
