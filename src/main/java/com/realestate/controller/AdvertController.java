@@ -141,17 +141,16 @@ public class AdvertController {
    
     
 
-   
-    /*
 
 
-    @DeleteMapping("/delete/{id}")
-    //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    //A13 advert delete
+    @DeleteMapping("/admin/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage deleteAdvertById(@PathVariable Long id) {
         return advertService.deleteAdvertById(id);
     }
 
-     */
+
 
     
     

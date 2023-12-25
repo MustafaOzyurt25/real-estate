@@ -4,6 +4,7 @@ import com.realestate.entity.*;
 import com.realestate.entity.enums.AdvertStatus;
 
 
+import com.realestate.entity.enums.LogType;
 import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
@@ -11,6 +12,7 @@ import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.mappers.CategoryPropertyValueMapper;
+import com.realestate.payload.mappers.LogMapper;
 import com.realestate.payload.request.AdvertRequest;
 import com.realestate.payload.request.AdvertUpdateRequest;
 import com.realestate.payload.response.AdvertCategoriesResponse;
@@ -50,6 +52,8 @@ public class AdvertService {
     private final CategoryPropertyKeyService categoryPropertyKeyService;
     private final CategoryPropertyValueRepository categoryPropertyValueRepository;
     private final CategoryPropertyValueMapper categoryPropertyValueMapper;
+    private final LogMapper logMapper;
+    private final LogsService logsService;
 
 
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
@@ -85,6 +89,11 @@ public class AdvertService {
                 categoryPropertyValues.add(categoryPropertyValue);
             }
             advert.setCategoryPropertyValue(categoryPropertyValues);
+            Log log = logMapper.mapLog(user,advert, LogType.CREATE);
+            List<Log> logList = new ArrayList<>();
+            logList.add(log);
+            logsService.save(log);
+            advert.setLogs(logList);
             advertRepository.save(advert);
             return advert;
         } else {
@@ -309,6 +318,20 @@ public class AdvertService {
 
         // Durumu "PENDING" olarak ayarla
         advert.setStatus(AdvertStatus.PENDING);
+        Log log = logMapper.mapLog(currentUser,advert,LogType.UPDATE);
+        logsService.save(log);
+        advert.getLogs().add(log);
+        for (CategoryPropertyValue categoryPropertyValue : advert.getCategoryPropertyValue()) {
+            categoryPropertyValueRepository.delete(categoryPropertyValue);
+        }
+        List<CategoryPropertyValue> categoryPropertyValues = new ArrayList<>();
+        for (int i = 0; i < advertUpdateRequest.getPropertyValues().size(); i++) {
+            CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
+                    .save(categoryPropertyValueMapper
+                            .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertUpdateRequest.getPropertyValues().get(i)));
+            categoryPropertyValues.add(categoryPropertyValue);
+        }
+        advert.setCategoryPropertyValue(categoryPropertyValues);
 
         Advert savedAdvert = advertRepository.save(advert);
 
@@ -320,9 +343,17 @@ public class AdvertService {
 
 
     public ResponseMessage deleteAdvertById(Long id) {
-        Advert advert = isAdvertExists(id);
-        advertRepository.deleteById(id);
 
+        Optional<Advert> advert = advertRepository.findById(id);
+
+         if(advert.isEmpty()){
+             throw new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION, id));
+         } else if (advert.get().getBuiltIn()) {
+             throw new ConflictException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+         }
+
+
+        advertRepository.deleteById(id);
         return ResponseMessage.builder()
                 .message(SuccessMessages.ADVERT_DELETE)
                 .httpStatus(HttpStatus.OK)
