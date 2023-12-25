@@ -18,6 +18,7 @@ public class DistrictController {
 
     private final DistrictService districtService;
 
+    //U03
     @GetMapping
     public ResponseEntity<List<District>> getDistrict(){
         return districtService.getDistrict();
