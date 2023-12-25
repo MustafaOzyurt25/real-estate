@@ -39,4 +39,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT role_name FROM roles WHERE id IN(SELECT role_id FROM user_roles WHERE user_roles.user_id = :id)" , nativeQuery = true)
     Set<String> getRolesById(Long id);
+
+      
+     @Query("SELECT COUNT(u) FROM User u JOIN u.role r WHERE r.roleName = 'CUSTOMER'")
+    long countCustomers(); 
+    
+    
+
 }
