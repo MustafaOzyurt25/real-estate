@@ -12,15 +12,11 @@ import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.mappers.CategoryPropertyValueMapper;
 import com.realestate.payload.request.AdvertRequest;
-
 import com.realestate.payload.request.AdvertUpdateRequest;
-
-
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.payload.response.AdvertCityResponse;
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
-
 import com.realestate.repository.AdvertRepository;
 import com.realestate.repository.CategoryPropertyValueRepository;
 import com.realestate.repository.TourRequestsRepository;
@@ -32,7 +28,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -53,12 +48,10 @@ public class AdvertService {
     //    private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
     private final UserRepository userRepository;
-    
-    private final CategoryPropertyKeyService categoryPropertyKeyServi
+    private final CategoryPropertyKeyService categoryPropertyKeyService;
     private final CategoryPropertyValueRepository categoryPropertyValueRepository;
     private final CategoryPropertyValueMapper categoryPropertyValueMapper;
-    
-    private  AdvertUpdateRequest advertUpdateRequest;
+    private final  AdvertUpdateRequest advertUpdateRequest;
 
 
 
