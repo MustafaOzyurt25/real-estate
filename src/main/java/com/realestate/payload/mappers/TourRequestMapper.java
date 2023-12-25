@@ -32,10 +32,10 @@ private final AdvertService advertService;   // DTO-->POJO
 
     public TourRequestResponse mapTourRequestToTourRequestResponse(TourRequest tourRequest){
         return TourRequestResponse.builder()
-                .tourRequestId(tourRequest.getId())
-                .tourDate(tourRequest.getTourDate())
-                .tourTime(tourRequest.getTourTime())
-                .status(tourRequest.getStatus())
+                .tourRequestId(tourRequest.getId())//+tourRequestUpdateResponse
+                .tourDate(tourRequest.getTourDate())//+
+                .tourTime(tourRequest.getTourTime())//+
+                .status(tourRequest.getStatus())//+
                 .createAt(tourRequest.getCreateAt())
                 .updateAt(tourRequest.getUpdateAt())
                 .advert(tourRequest.getAdvert())

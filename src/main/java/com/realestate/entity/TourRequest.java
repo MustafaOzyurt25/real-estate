@@ -22,18 +22,18 @@ public class TourRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
-    private LocalDate tourDate;
+    private LocalDate tourDate;//+ Lond -> advert_id
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm:ss")
-    private LocalTime tourTime;
+    private LocalTime tourTime;//+
 
     @Enumerated(EnumType.ORDINAL)
-    private TourRequestStatus status;
+    private TourRequestStatus status;//-
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createAt;
+    private LocalDateTime createAt;//- abstract???
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateAt;
+    private LocalDateTime updateAt;//+ abstract???
 
     @ManyToOne
     @JsonIgnore

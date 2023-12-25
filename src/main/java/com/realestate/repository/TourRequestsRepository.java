@@ -13,4 +13,12 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest,Long> 
 
     int countByAdvertId(Long advertId);
 
+
+    List<TourRequest> findByTourDateBetweenAndStatus(LocalDate startDate, LocalDate endDate, TourRequestStatus status);
+
+
+    boolean existsByGuestUserId(Long userId);
+
+    boolean existsByOwnerUserId(Long userId);
+
 }
