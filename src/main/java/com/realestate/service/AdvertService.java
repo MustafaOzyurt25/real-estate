@@ -45,7 +45,6 @@ public class AdvertService {
     private final DistrictService districtService;
     private final AdvertTypeService advertTypeService;
     private final PageableHelper pageableHelper;
-    //    private final CategoryService categoryService;
     private final TourRequestsRepository tourRequestsRepository;
     private final UserRepository userRepository;
     private final CategoryPropertyKeyService categoryPropertyKeyService;
@@ -54,13 +53,11 @@ public class AdvertService {
     private final  AdvertUpdateRequest advertUpdateRequest;
 
 
-
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
 
         User user = userRepository.findByEmailEquals(userEmail);
-
 
         if (!(user.getId() == null)) {
             Country country = countryService.getCountryById(advertRequest.getCountryId());
@@ -85,7 +82,7 @@ public class AdvertService {
             for (int i = 0; i < advertRequest.getPropertyValues().size(); i++) {
                 CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
                         .save(categoryPropertyValueMapper
-                                .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertRequest.getPropertyValues().get(i)));
+                        .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertRequest.getPropertyValues().get(i)));
                 categoryPropertyValues.add(categoryPropertyValue);
             }
             advert.setCategoryPropertyValue(categoryPropertyValues);
@@ -129,11 +126,6 @@ public class AdvertService {
 
         return advert;
     }
-    // public Advert getAdvertBySlug(String slug){
-    //     return advertRepository.findBySlug(slug).orElseThrow(()->
-    //             new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG,slug)));
-    // }
-
     public List<AdvertCityResponse> getAdvertAmountByCity() {
 
         return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
@@ -144,7 +136,6 @@ public class AdvertService {
     }
 
     //====================================popular================================================
-
 
     //view_count sayısını güncellemek için
     public Advert advertView(Long advertId) {
@@ -161,9 +152,7 @@ public class AdvertService {
         return tourRequestsRepository.countByAdvertId(advertId);
     }
 
-
     public List<AdvertResponse> getPopularAdvertsByAmount(Integer defaultAmount) {
-
 
         Integer amount = (defaultAmount == null) ? 10 : defaultAmount;
 
@@ -215,9 +204,7 @@ public class AdvertService {
             throw new ResourceNotFoundException(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION);
         }
 
-
     }
-
 
     // UserService için yazıldı, id si ile gelen kullanıcınının advert'ü var mı diye kontrol edicelek
     public boolean controlAdvertByUserId(Long userId) {
@@ -225,7 +212,6 @@ public class AdvertService {
     }
 
     //===========================ID kontrol============================================
-
 
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, Integer status, int page, int size, String sort, String type) {
         Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort.toLowerCase(), type.toLowerCase());
@@ -248,7 +234,6 @@ public class AdvertService {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-
     public Advert getAdvertById(Long advertId) {
         return isAdvertExists(advertId);
     }
@@ -257,7 +242,6 @@ public class AdvertService {
         return advertRepository.findById(advertId).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION, advertId)));
     }
-
 
     // A09
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(Long id) {
@@ -269,9 +253,7 @@ public class AdvertService {
                 .build();
     }
 
-
     //--------------- updateAuthenticatedCustomersAdvertById ---------------------------//
-
 
     public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(Long advertId,
                                                                                   AdvertUpdateRequest advertUpdateRequest,
@@ -294,9 +276,7 @@ public class AdvertService {
         // diger serviceler
         // CategoryPropertyValue ile ilgili service'den value'lar mesela.
 
-
         Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(advertUpdateRequest);
-
 
         advert.setBuiltIn(false);
         advert.setAdvertType(advertType);
@@ -305,7 +285,6 @@ public class AdvertService {
         advert.setCategory(category);
         advert.setUpdateAt(LocalDateTime.now());
         advert.setCountry(country);
-
 
         // diger setlemeler.....
         advert.setCategoryPropertyValue(existAdvert.getCategoryPropertyValue());
@@ -319,7 +298,6 @@ public class AdvertService {
         advert.setUser(existAdvert.getUser());
         advert.setViewCount(existAdvert.getViewCount());
 
-
         // "builtIn" özelliği kontrolü
         if (existAdvert.getBuiltIn()) {
             throw new ConflictException(ErrorMessages.ADVERT_BUILT_IN_CAN_NOT_BE_UPDATED);
@@ -330,10 +308,8 @@ public class AdvertService {
             throw new ConflictException(String.format(ErrorMessages.ADVERT_CAN_NOT_BE_UPDATED, advertId));
         }
 
-
         // Durumu "PENDING" olarak ayarla
         advert.setStatus(AdvertStatus.PENDING);
-
 
         Advert savedAdvert = advertRepository.save(advert);
 
@@ -342,9 +318,6 @@ public class AdvertService {
                 .message(SuccessMessages.ADVERT_UPDATE)
                 .httpStatus(HttpStatus.OK).build();
     }
-
-
-
 
     /*
     public ResponseMessage deleteAdvertById(Long id) {
@@ -358,9 +331,7 @@ public class AdvertService {
     }
      */
 
-
     // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
-
 
     //A05
     public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
@@ -374,10 +345,11 @@ public class AdvertService {
             throw new ResourceNotFoundException(ErrorMessages.NOT_FOUND_USER_MESSAGE);
         }
 
-
         return advertRepository.findByUserEmail(user.getEmail(), pageable)
                 .map(advertMapper::mapAdvertToAdvertResponse);
     }
+
+
 
     public ResponseMessage<AdvertResponse> updateAdminAdvertById(Long advertId, AdvertUpdateRequest updateRequest) {
         Advert existAdvert = getAdvertById(advertId);
@@ -426,23 +398,6 @@ public class AdvertService {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// deneme
 }
 
 

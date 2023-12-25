@@ -9,7 +9,6 @@ import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.mappers.FavoriteMapper;
-import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.FavoriteResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.AdvertRepository;
@@ -17,13 +16,15 @@ import com.realestate.repository.FavoritesRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 
 @Service
@@ -105,6 +106,16 @@ public class FavoritesService {
 
     }
 
+
+    public ResponseMessage deleteFavoritesIdByAdminOrManager(Long id) {
+
+        isFavoriteExistById(id);
+        favoritesRepository.deleteById(id);
+        return ResponseMessage.builder()
+                .message(SuccessMessages.FAVORITE_REMOVED)
+                .httpStatus(HttpStatus.OK)
+                .build();
+
     public ResponseEntity<List<FavoriteResponse>> getUsersFavorites(Long id) {
 
         return ResponseEntity.ok(favoritesRepository.findByUser(userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,id)))).stream().map(favoriteMapper::mapToFavoriteToFavoriteResponse).collect(Collectors.toList()));
@@ -128,4 +139,10 @@ public class FavoritesService {
       }
 
 
+
+    }
+    private Favorite isFavoriteExistById(Long id){
+        return favoritesRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.FAVORITE_NOT_FOUND, id)));
+    }
 }

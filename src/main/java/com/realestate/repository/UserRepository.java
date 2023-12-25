@@ -22,7 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmailEquals(String email);
 
-
     @Query(value = "SELECT (count(u) = 0) FROM User u")
     boolean isEmpty();
 

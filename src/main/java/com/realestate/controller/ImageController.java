@@ -3,14 +3,10 @@ package com.realestate.controller;
 
 import com.realestate.payload.response.ImageResponse;
 import com.realestate.payload.response.ResponseMessage;
-import com.realestate.entity.Image;
-import com.realestate.payload.response.ImageResponse;
 import com.realestate.service.AdvertImageService;
 import com.realestate.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +30,7 @@ public class ImageController {
         return advertImageService.addImageToAdvert(advertId, imageFiles);
 
     }
+
 
 
 
