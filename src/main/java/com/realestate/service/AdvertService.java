@@ -318,17 +318,30 @@ public class AdvertService {
                 .httpStatus(HttpStatus.OK).build();
     }
 
-    /*
-    public ResponseMessage deleteAdvertById(Long id) {
-        Advert advert = isAdvertExists(id);
-        advertRepository.deleteById(id);
 
+
+
+
+
+
+    public ResponseMessage deleteAdvertById(Long id) {
+
+        Optional<Advert> advert = advertRepository.findById(id);
+
+         if(advert.isEmpty()){
+             throw new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION, id));
+         } else if (advert.get().getBuiltIn()) {
+             throw new ConflictException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+         }
+
+
+        advertRepository.deleteById(id);
         return ResponseMessage.builder()
                 .message(SuccessMessages.ADVERT_DELETE)
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
-     */
+
 
     // public Page<AdvertResponse> getAuthenticatedUserAdverts(int page, int size, String sort, String type, HttpServletRequest httpServletRequest) {
 
