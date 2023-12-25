@@ -4,20 +4,19 @@ package com.realestate.service;
 import com.realestate.entity.Advert;
 import com.realestate.entity.Favorite;
 import com.realestate.entity.User;
+import com.realestate.exception.ResourceNotFoundException;
+import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.FavoriteMapper;
-import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.FavoriteResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.FavoritesRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 
 @Service
@@ -87,14 +86,18 @@ public class FavoritesService {
 
     }
 
+    public ResponseMessage deleteFavoritesIdByAdminOrManager(Long id) {
 
-    //K01
-    // public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest) {
-    //    String userEmail=(String) httpServletRequest.getAttribute("email");
-    //    User user=userRepository.findByEmailEquals(userEmail);
-    //    List<Favorite> favoriteList= favoritesRepository.findByUser(user);
+        isFavoriteExistById(id);
+        favoritesRepository.deleteById(id);
+        return ResponseMessage.builder()
+                .message(SuccessMessages.FAVORITE_REMOVED)
+                .httpStatus(HttpStatus.OK)
+                .build();
 
-    //  }
-
-
+    }
+    private Favorite isFavoriteExistById(Long id){
+        return favoritesRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.FAVORITE_NOT_FOUND, id)));
+    }
 }

@@ -1,8 +1,5 @@
 package com.realestate.controller;
 
-
-import com.realestate.entity.Favorite;
-import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.FavoriteResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.FavoritesService;
@@ -12,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 
 @RestController
@@ -31,7 +27,6 @@ public class FavoritesController {
        return favoritesService.addOrRemoveAdvertToFavorites(id,httpServletRequest);
   }
 
-
   //K04
 
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
@@ -41,10 +36,10 @@ public class FavoritesController {
        return favoritesService.deleteAuthenticatedCustomerAllFavorites(httpServletRequest);
     }
 
-    //K01
-  //  @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-  //  @GetMapping("/auth")
-  //  public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest){
-  //     return favoritesService.getAuthenticatedCustomerAllFavorites(httpServletRequest);
-  //  }
+    //K06
+    @DeleteMapping("/{id}/admin")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseMessage deleteFavoritesIdByAdminOrManager(@PathVariable("id")  Long id){
+       return favoritesService.deleteFavoritesIdByAdminOrManager (id);
+    }
 }
