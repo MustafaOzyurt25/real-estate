@@ -27,24 +27,25 @@ public class AuthenticationController {
     private final UserService userService;
     private final ForgotPasswordService forgotPasswordService;
 
+    //F01
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody @Valid LoginRequest loginRequest){
 
         return authenticationService.authenticateUser(loginRequest);
 
     }
-
+    //F02
     @PostMapping("/register")
     public ResponseMessage<UserResponse> registerUser (@RequestBody @Valid RegisterRequest registerRequest) {
         return userService.registerUser(registerRequest);
     }
-
+    //F03
     @PostMapping("/forgot-password")
     public ResponseEntity forgotPasswordUser(@RequestBody @Valid ForgotPasswordRequest forgotPasswordRequest){
             forgotPasswordService.forgotPasswordUser(forgotPasswordRequest);
         return ResponseEntity.ok("Password reset request has been initiated. Check your email for further instructions.");
     }
-
+    //F04
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestParam("token") String resetToken , @RequestBody @Valid ResetPasswordRequest resetPasswordRequest) {
         try {

@@ -42,9 +42,9 @@ public class FavoritesController {
     }
 
     //K01
-  //  @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-  //  @GetMapping("/auth")
-  //  public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest){
-  //     return favoritesService.getAuthenticatedCustomerAllFavorites(httpServletRequest);
-  //  }
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/auth")
+    public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest){
+       return favoritesService.getAuthenticatedCustomerAllFavorites(httpServletRequest);
+    }
 }

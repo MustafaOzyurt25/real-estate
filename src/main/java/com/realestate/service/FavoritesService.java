@@ -5,10 +5,12 @@ import com.realestate.entity.Advert;
 import com.realestate.entity.Favorite;
 import com.realestate.entity.User;
 import com.realestate.messages.SuccessMessages;
+import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.mappers.FavoriteMapper;
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.FavoriteResponse;
 import com.realestate.payload.response.ResponseMessage;
+import com.realestate.repository.AdvertRepository;
 import com.realestate.repository.FavoritesRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ public class FavoritesService {
     private final UserRepository userRepository;
     private final AdvertService advertService;
     private final FavoriteMapper favoriteMapper;
+    private final AdvertMapper advertMapper;
+    private final AdvertRepository advertRepository;
 
 
     // UserService'den çağırılıyor
@@ -89,12 +93,20 @@ public class FavoritesService {
 
 
     //K01
-    // public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest) {
-    //    String userEmail=(String) httpServletRequest.getAttribute("email");
-    //    User user=userRepository.findByEmailEquals(userEmail);
-    //    List<Favorite> favoriteList= favoritesRepository.findByUser(user);
+     public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest) {
+        String userEmail=(String) httpServletRequest.getAttribute("email");
+        User user=userRepository.findByEmailEquals(userEmail);
 
-    //  }
+       List<Favorite> favoriteList=  user.getFavorites();
+
+       List<Advert> favoriteAdverts= favoriteList.stream().map(Favorite::getAdvert).toList();
+
+        return ResponseMessage.<List<AdvertResponse>>builder()
+                .object(favoriteAdverts.stream().map(advertMapper::mapAdvertToAdvertResponse).toList())
+                .httpStatus(HttpStatus.OK)
+                .message(SuccessMessages.ALL_FAVORITES_FOUNDED).build();
+
+      }
 
 
 }
