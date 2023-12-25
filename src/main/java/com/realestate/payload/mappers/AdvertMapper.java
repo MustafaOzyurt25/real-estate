@@ -61,6 +61,7 @@ public class AdvertMapper {
                 .category(advert.getCategory())
                 .advertType(advert.getAdvertType())
                 .categoryPropertyValues(advert.getCategoryPropertyValue())
+                .logs(advert.getLogs())
                 .build();
     }
 
