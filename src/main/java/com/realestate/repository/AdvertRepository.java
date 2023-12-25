@@ -54,7 +54,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     boolean existsByUserId(Long userId);
 
-    ResponseMessage<List<AdvertResponse>> findTopNByOrderByTourRequestsDesc(Long amount);
+    List<Advert> findTopNByOrderByTourRequestsDesc(Long amount);
+
+
 
     /*
     * Aşağıdaki method çalışmadı. NEDEN?
