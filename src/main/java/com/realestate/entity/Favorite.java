@@ -33,6 +33,4 @@ public class Favorite {
     private User user;
 
 
-
-
 }

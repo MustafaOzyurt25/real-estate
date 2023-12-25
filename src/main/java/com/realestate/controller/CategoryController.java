@@ -23,8 +23,9 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/create")
 
+    //C04
+    @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public Category createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
 
@@ -32,7 +33,10 @@ public class CategoryController {
         return categoryService.createCategory(categoryRequest);
     }
 
+
+    //C06
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseMessage<CategoryResponse> deleteCategory(@PathVariable("id") Long categoryId) {
         return categoryService.deleteCategory(categoryId);
@@ -40,6 +44,7 @@ public class CategoryController {
 
 
 
+    //C01
     @GetMapping("/getAllCategoriesByPage")
     public ResponseEntity<Map<String, Object>> getAllCategoriesByPage (
             @RequestParam(value = "q", required = false) String q,
@@ -54,14 +59,16 @@ public class CategoryController {
 
 
 
+    //C03
     @GetMapping("/getById/{id}")
     public CategoryResponse getCategoryById(@PathVariable Long id) {
         return categoryService.getCategoryById(id);
     }
 
-
+  
+    //C02
     @GetMapping("/admin")
-    //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseEntity<List<Category>> getAllCategories(@RequestParam(value = "q", required = false) String q,
                                                            @RequestParam(value = "page", defaultValue = "0") int page,
                                                            @RequestParam(value = "size", defaultValue = "20") int size,
@@ -88,6 +95,7 @@ public class CategoryController {
         return ResponseEntity.ok(categories.subList(startIndex, endIndex));
     }
 
+    //C05
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @PutMapping("/{id}")
     public ResponseMessage<CategoryResponse> updateCategoryWithId(@PathVariable("id") Long id,@RequestBody @Valid CategoryRequest categoryRequest){
