@@ -220,7 +220,5 @@ public class TourRequestsService {
                     .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_CANCELED)
                     .httpStatus(HttpStatus.OK)
                     .build();
-
-
         }
     }

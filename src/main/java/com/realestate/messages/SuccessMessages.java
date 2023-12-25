@@ -42,6 +42,7 @@ public class SuccessMessages {
     public static final String FAVORITE_REMOVE = "Advert Removed From Favorites";
     public static final String FAVORITE_ADDED = "Advert Added To Favorites";
     public static final String ALL_FAVORITES_DELETED = "All Favorites Adverts are Deleted Successfully";
+    public static final String ALL_FAVORITES_FOUNDED = "All Favorites Adverts are Founded Successfully";
 
 
 

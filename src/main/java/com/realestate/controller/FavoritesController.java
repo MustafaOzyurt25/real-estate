@@ -7,10 +7,8 @@ import com.realestate.payload.response.FavoriteResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.FavoritesService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -48,10 +46,12 @@ public class FavoritesController {
         favoritesService.deleteByUserId(userId);
     }
 
-    //K01
-    //  @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    //  @GetMapping("/auth")
-    //  public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest){
-    //     return favoritesService.getAuthenticatedCustomerAllFavorites(httpServletRequest);
-    //  }
+  
+
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/auth")
+    public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest){
+       return favoritesService.getAuthenticatedCustomerAllFavorites(httpServletRequest);
+    }
+
 }
