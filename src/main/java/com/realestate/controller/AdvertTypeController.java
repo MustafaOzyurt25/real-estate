@@ -18,6 +18,7 @@ public class AdvertTypeController {
     private final AdvertTypeService advertTypeService;
 
 
+    //T03
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<AdvertTypeResponse> advertTypeCreated (@Valid @RequestBody AdvertTypeRequest advertTypeRequest) {
@@ -39,12 +40,15 @@ public class AdvertTypeController {
 
 
 
+    //T02
     @GetMapping("/{id}")
     public ResponseMessage<AdvertTypeResponse> getAdvertTypeById(@PathVariable("id") Long id){
         return advertTypeService.getAdvertTypeWithId(id);
 
     }
 
+
+    //T04
     @PutMapping("/{id}")
     //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseMessage<AdvertTypeResponse> updateAdvertType(@PathVariable("id") Long advertTypeId,

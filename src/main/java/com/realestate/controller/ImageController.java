@@ -3,14 +3,10 @@ package com.realestate.controller;
 
 import com.realestate.payload.response.ImageResponse;
 import com.realestate.payload.response.ResponseMessage;
-import com.realestate.entity.Image;
-import com.realestate.payload.response.ImageResponse;
 import com.realestate.service.AdvertImageService;
 import com.realestate.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +21,8 @@ public class ImageController {
     private final AdvertImageService advertImageService;
     private final ImageService imageService;
 
+    //I02
+    @PreAuthorize("hasAnyAuthority('CUSTOMER','ADMIN','MANAGER')")
     @PostMapping("/{advertId}")
     public ResponseEntity<Map<String, Object>> addImageToAdvert(@PathVariable("advertId") Long advertId,
                                                                 @ModelAttribute List<MultipartFile> imageFiles) {
@@ -34,6 +32,9 @@ public class ImageController {
     }
 
 
+
+
+    //I04
     @PutMapping("/{imageId}")
     //@PreAuthorize("hasAnyRole('CUSTOMER','MANAGER','ADMIN')")
     public ResponseMessage<ImageResponse> setFeaturedArea(@PathVariable Long imageId) {
@@ -41,6 +42,8 @@ public class ImageController {
     }
 
 
+
+    //I03
     @DeleteMapping("/delete/{id}")
     public ResponseMessage deleteImagesById(@PathVariable List<Long> ids){
         return imageService.deleteImagesById(ids);
@@ -48,6 +51,7 @@ public class ImageController {
     }
 
 
+    //I01
     @GetMapping("/{imageId}")
     public ImageResponse getImageAnAdvert(@PathVariable("imageId") Long imageId)
     {

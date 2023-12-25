@@ -21,7 +21,10 @@ public class CategoryPropertyKeyController {
     
 
     private final CategoryPropertyKeyService categoryPropertyKeyService;
-    
+
+
+
+    //C08
     @PostMapping("/{categoryId}/properties")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<CategoryPropertyKey> createCategoryPropertyKey(
@@ -32,18 +35,22 @@ public class CategoryPropertyKeyController {
 
     }
 
+
+    //C07
     @GetMapping("/{categoryId}/properties")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<List<CategoryPropertyKey>> getCategoryPropertyKeysByCategoryId(@PathVariable Long categoryId) {
         return categoryPropertyKeyService.getCategoryPropertyKeysByCategoryId(categoryId);
     }
-    
+
+    //C09
     @PutMapping("/properties/{propertyKeyId}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<CategoryPropertyKey> updateCategoryPropertyKeyById(@PathVariable Long propertyKeyId, @RequestBody @Valid CategoryPropertyKeyRequest request) {
         return categoryPropertyKeyService.updateCategoryPropertyKeyById(propertyKeyId, request);
     }
-    
+
+    //C10
     @DeleteMapping("/properties/{propertyKeyId}")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseMessage<CategoryPropertyKey> deleteCategoryPropertyKeyByKeyId(@PathVariable("propertyKeyId") Long id) {
