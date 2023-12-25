@@ -95,23 +95,25 @@ public class TourRequestsService {
 
     /*S06 --------------------------- kontrol edilecek ---------------------------------------------------------------*/
     public ResponseMessage<TourRequestResponse> updatedTourRequestAuthById(TourRequest tourRequest,
-
+/*
+butun repoyu gezip daha önce alınna tarihleri alma
+ */
                                                                            Long tourRequestId) {
         TourRequest tourRequestExist = isTourRequestExist(tourRequestId);
 
         //2-Only the tour requests whose status pending or rejected/DECLINED can be updated./  -Yalnızca beklemede/pending veya reddedilmiş/rejected/DECLINED durumu olan tur talepleri güncellenebilir.
         //--------------------------------------------------------------//pending veya rejected olup olmadigini kontrol et!!!
         if (tourRequestExist.getStatus() == TourRequestStatus.PENDING || tourRequestExist.getStatus() == TourRequestStatus.DECLINED) {
-            tourRequestExist.setTourDate(tourRequestExist.getTourDate());
-            tourRequestExist.setTourTime(tourRequestExist.getTourTime());
-            tourRequestExist.setId(tourRequestExist.getId());//id yi guncelle!!! advert_id mi tour_id mi?-----------guncellenecek------------------
+            tourRequestExist.setTourDate(tourRequest.getTourDate());
+            tourRequestExist.setTourTime(tourRequest.getTourTime());
+            tourRequestExist.setUpdateAt(LocalDateTime.now());//guncellenen tarih
 
 
             //3-If a request is updated, the status field should reset to “pending” / -Bir istek güncellenirse durum alanı "beklemede/pending" olarak sifirlamali
             tourRequestExist.setStatus(TourRequestStatus.PENDING);//gonderilen tourRequest guncellenirse pending olarak sifirla!!!
 
             //1--It will return the updated tour request object/    - Güncellenmis tur istegini nesnesini dondurecektir.
-            TourRequest updatedTourRequestAuthById = tourRequestsRepository.save(tourRequest);
+            TourRequest updatedTourRequestAuthById = tourRequestsRepository.save(tourRequestExist);
             return ResponseMessage.<TourRequestResponse>builder()
                     .message(SuccessMessages.TOUR_REQUEST_UPDATED)
                     .httpStatus(HttpStatus.OK)

@@ -19,7 +19,7 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest,Long> 
 
 
     List<TourRequest> findByTourDateBetweenAndStatus(LocalDate startDate, LocalDate endDate, TourRequestStatus status);
-    
+
 
     boolean existsByGuestUserId(Long userId);
 
@@ -29,5 +29,5 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest,Long> 
     @Query("SELECT COUNT(DISTINCT tr.guestUser) FROM TourRequest tr")
     long countCustomers();   getTourRequestsCount() / reportService icin yazildi ama gerek kalmadi!
 */
-    
+
 }

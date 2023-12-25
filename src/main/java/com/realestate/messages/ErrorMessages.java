@@ -4,6 +4,7 @@ package com.realestate.messages;
 public class ErrorMessages {
 
 
+
     private ErrorMessages() {
     }
 
