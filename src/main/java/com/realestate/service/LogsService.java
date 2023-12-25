@@ -13,6 +13,7 @@ public class LogsService
     private final LogsRepository logsRepository;
     public void deleteByUserId(Long userId)
     {
+
         logsRepository.deleteByUserId(userId);
     }
 
