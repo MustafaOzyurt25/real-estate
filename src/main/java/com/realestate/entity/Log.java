@@ -28,6 +28,7 @@ public class Log {
     private LocalDateTime createAt = LocalDateTime.now();
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @ManyToOne
