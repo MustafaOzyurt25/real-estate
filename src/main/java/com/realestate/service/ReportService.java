@@ -58,7 +58,7 @@ public class ReportService {
     public List<Advert> getMostPopularProperties(Long amount) {
         return advertRepository.findTopNByOrderByTourRequestsDesc(amount);
 
-
+    }
 
     //  It will get some statistics....   G01.................\\
     public ResponseMessage<StatisticsResponse> getStatistics() {
