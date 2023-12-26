@@ -115,19 +115,24 @@ public class UserService {
 
         if (user.getBuiltIn().equals(false)) {
 
-            uniquePropertyValidator.checkUniqueProperties(user, userRequest);
+            try{
+                uniquePropertyValidator.checkUniqueProperties(user, userRequest);
 
-            User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
+                User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
 
-            updatedUser.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+                updatedUser.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
 
-            User savedUser = userRepository.save(updatedUser);
+                User savedUser = userRepository.save(updatedUser);
 
-            return ResponseMessage.<UserResponse>builder()
-                    .object(userMapper.mapUserToUserResponse(savedUser))
-                    .message(SuccessMessages.USER_UPDATE)
-                    .httpStatus(HttpStatus.OK)
-                    .build();
+                return ResponseMessage.<UserResponse>builder()
+                        .object(userMapper.mapUserToUserResponse(savedUser))
+                        .message(SuccessMessages.USER_UPDATE)
+                        .httpStatus(HttpStatus.OK)
+                        .build();
+            }catch (RuntimeException e) {
+                throw new ConflictException(ErrorMessages.USER_CANNOT_BE_UPDATED);
+            }
+
 
         } else {
             throw new ConflictException("User can not be updated");
