@@ -51,8 +51,7 @@ public class ReportController {
         List<Advert> mostPopularProperties = reportService.getMostPopularProperties(amount);
         return new ResponseEntity<>(mostPopularProperties, HttpStatus.OK);
     }
-    
-    
+
     
     
     
