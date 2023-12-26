@@ -419,9 +419,21 @@ public class AdvertService {
         if (existAdvert.getBuiltIn()) {
             throw new ConflictException(ErrorMessages.ADVERT_BUILT_IN_CAN_NOT_BE_UPDATED);
         }
+        for (CategoryPropertyValue categoryPropertyValue : advert.getCategoryPropertyValue()) {
+            categoryPropertyValueRepository.delete(categoryPropertyValue);
+        }
+        List<CategoryPropertyValue> categoryPropertyValues = new ArrayList<>();
+        for (int i = 0; i < updateRequest.getPropertyValues().size(); i++) {
+            CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
+                    .save(categoryPropertyValueMapper
+                            .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), updateRequest.getPropertyValues().get(i)));
+            categoryPropertyValues.add(categoryPropertyValue);
+        }
+        advert.setCategoryPropertyValue(categoryPropertyValues);
+         Advert savedAdvert = advertRepository.save(advert);
        
         return ResponseMessage.<AdvertResponse>builder()
-               // .object(advertMapper.mapAdvertToAdvertResponse(savedAdvert))
+                .object(advertMapper.mapAdvertToAdvertResponse(savedAdvert))
                 .message(SuccessMessages.ADVERT_UPDATE)
                 .httpStatus(HttpStatus.OK).build();
 

@@ -25,15 +25,12 @@ public class AdvertUpdateRequest {
     private Double price;
     @NotNull
     private String location; // bu document  de yok.ama gorselde var.
-    
-    
     private Long advertTypeId;
     private Long countryId;
     private Long cityId;
     private Long districtId;
     private Long categoryId;
     private Boolean isActive;
-
     private List<String> propertyValues;
     
     
