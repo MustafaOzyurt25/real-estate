@@ -54,9 +54,10 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     boolean existsByUserId(Long userId);
 
-    @Query("SELECT a FROM Advert a ORDER BY a.tourRequests DESC")
-    List<Advert> findTopNByOrderByTourRequestsDesc(Long amount);
 
+
+    @Query("SELECT a FROM Advert a ORDER BY a.tourRequests DESC")
+    List<Advert> findTopNByTourRequestsOrderByTourRequestsDesc(int amount);
 
 
 
