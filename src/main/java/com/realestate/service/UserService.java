@@ -20,11 +20,13 @@ import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.RoleRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -248,7 +250,7 @@ public class UserService {
         }
 
         logsService.deleteByUserId(userId); // ÇALIŞIYOR
-        favoritesService.deleteByUserId(userId); // ÇALIŞIYOR
+        favoritesService.deleteByUserId(userId , user); // ÇALIŞIYOR
 
 
         userRepository.deleteById(userId);
@@ -277,4 +279,17 @@ public class UserService {
         userRepository.save(managerUser);
 
     }
+
+    /*
+    public ResponseEntity<UserResponse> updateUserById(Long id, HttpServletRequest request) {
+        User user = isUserExists(id);
+
+        if(user.getBuiltIn()){
+            throw new ConflictException(ErrorMessages.THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED);
+        }
+
+
+    }
+     */
+
 }

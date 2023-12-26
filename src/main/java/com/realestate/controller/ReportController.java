@@ -26,23 +26,37 @@ import java.util.List;
 @RequestMapping("/report")
 @RequiredArgsConstructor
 public class ReportController {
-    
-    
+
 
     private final ReportService reportService;
 
-    
+
+
         // it will get tour requests for ADMIN,MANAGER ----G05 //
     
+
+
+
+    //  It will get some statistics....   G01.................\\
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @GetMapping()
+    public ResponseMessage<StatisticsResponse> getStatistics() {
+        return reportService.getStatistics();
+    }
+
+
+    // it will get tour requests for ADMIN,MANAGER ----G05 //
+
     @PreAuthorize("hasAnyAuthority('ADMIN,MANAGER')")
     @GetMapping("/tour-requests")
     public ResponseMessage<List<TourRequestResponse>> getTourRequestsReport(
-            @RequestParam("date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,// yyyy-MM-dd
-            @RequestParam("date2") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date2,
-            @RequestParam("status") TourRequestStatus status
-    ){
-        return reportService.getTourRequestsReport(date1,date2,status);
+            @RequestParam(value = "date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
+            @RequestParam(value = "date2") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date2,
+            @RequestParam(value = "status", defaultValue = "PENDING") TourRequestStatus status
+    ) {
+        return reportService.getTourRequestsReport(date1, date2, status);
     }
+
 
 
     @GetMapping("/most-popular-properties")
@@ -51,6 +65,13 @@ public class ReportController {
         List<Advert> mostPopularProperties = reportService.getMostPopularProperties(amount);
         return new ResponseEntity<>(mostPopularProperties, HttpStatus.OK);
     }
+    
+
+
+    }
+
+
+
 
     
     
@@ -61,7 +82,5 @@ public class ReportController {
     
     
     
-    
-    
-    
-}
+
+

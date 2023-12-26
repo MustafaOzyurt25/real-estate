@@ -2,7 +2,6 @@ package com.realestate.messages;
 
 public class SuccessMessages {
 
-
     private SuccessMessages(){
 
     }
@@ -40,12 +39,13 @@ public class SuccessMessages {
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
     public static final String TOUR_REQUEST_SUCCESSFULLY_CANCELED="Tour Request Successfully Canceled";
     public static final String FAVORITE_REMOVE = "Advert Removed From Favorites";
+    public static final String FAVORITE_REMOVED = " %s id's Advert Removed From Favorites";
     public static final String FAVORITE_ADDED = "Advert Added To Favorites";
     public static final String ALL_FAVORITES_DELETED = "All Favorites Adverts are Deleted Successfully";
-
-
-
+    public static final String  REPORT_STATISTICS_FOUNDED= "Report Statistics Is Found Successfully";
+    public static final String ALL_FAVORITES_FOUNDED = "All Favorites Adverts are Founded Successfully";
     public static final String  REPORT_TOUR_REQUEST= "Tour Request is Found Successfully";
+    
 
 
 

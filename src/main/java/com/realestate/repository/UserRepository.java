@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     User findByEmailEquals(String email);
-
 
     @Query(value = "SELECT (count(u) = 0) FROM User u")
     boolean isEmpty();
@@ -39,4 +40,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT role_name FROM roles WHERE id IN(SELECT role_id FROM user_roles WHERE user_roles.user_id = :id)" , nativeQuery = true)
     Set<String> getRolesById(Long id);
+
+  
+    @Query("SELECT COUNT(u) FROM User u JOIN u.role r WHERE r.roleName = 'CUSTOMER'")
+    long countCustomers(); 
+    
+    
+    @Query("SELECT t FROM TourRequest t WHERE t.guestUser =:user")
+    Page<TourRequest> getTourRequestByAdmin(/*String q,*/ User user, Pageable pageable);
+
 }
