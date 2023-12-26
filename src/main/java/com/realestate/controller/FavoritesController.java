@@ -1,16 +1,13 @@
 package com.realestate.controller;
 
-
-import com.realestate.entity.Favorite;
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.FavoriteResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.FavoritesService;
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -34,6 +31,7 @@ public class FavoritesController {
 
     //K04
 
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @DeleteMapping("/auth")
 
@@ -48,10 +46,27 @@ public class FavoritesController {
         favoritesService.deleteByUserId(userId);
     }
 
-    //K01
-    //  @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    //  @GetMapping("/auth")
-    //  public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest){
-    //     return favoritesService.getAuthenticatedCustomerAllFavorites(httpServletRequest);
-    //  }
+  
+
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/auth")
+    public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest){
+       return favoritesService.getAuthenticatedCustomerAllFavorites(httpServletRequest);
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<List<FavoriteResponse>> getUsersFavorites(@PathVariable("id") Long id){
+       return favoritesService.getUsersFavorites(id);
+    }
+
+
+    //K06
+    @DeleteMapping("/{id}/admin")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseMessage deleteFavoritesIdByAdminOrManager(@PathVariable("id")  Long id){
+       return favoritesService.deleteFavoritesIdByAdminOrManager (id);
+    }
+
 }

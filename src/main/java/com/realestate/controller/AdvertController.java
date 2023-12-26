@@ -25,7 +25,7 @@ public class AdvertController {
 
     private final AdvertService advertService;
 
-
+    //A10
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PostMapping("/save")
     public Advert save(@ModelAttribute AdvertRequest advertRequest, HttpServletRequest httpServletRequest){
@@ -33,21 +33,22 @@ public class AdvertController {
         return advertService.save(advertRequest , httpServletRequest);
 
     }
-
+    //A07
     @GetMapping("/{slug}")
     public ResponseMessage<Advert> getAdvertWithSlug(@PathVariable String slug){
         return advertService.getAdvertWithSlug(slug);
     }
 
 
+    //A02
     @GetMapping("/cities")
     public List<AdvertCityResponse> getAdvertAmountByCity(){
         return advertService.getAdvertAmountByCity();
     }
 
+    //A03
     @GetMapping("/categories")
     public List<AdvertCategoriesResponse> getAdvertAmountByCategories(){return advertService.getAdvertAmountByCategories();}
-
 
     //A04
      @GetMapping(value = {"/popular","/popular/{amount}"})
@@ -56,6 +57,8 @@ public class AdvertController {
              return advertService.getPopularAdvertsByAmount(defaultAmount);
       }
 
+
+      //A01
     @GetMapping()
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(@RequestParam(value = "q", required = false) String q,
                                                                         @RequestParam(value = "category_id", required = false) Long categoryId,
@@ -70,9 +73,6 @@ public class AdvertController {
         return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
     }
 
-
-
- 
     //A08
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @GetMapping("/{id}/auth")
@@ -80,11 +80,7 @@ public class AdvertController {
         return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
     }
 
-
-
-
     //A05
-
  @PreAuthorize("hasAnyAuthority('CUSTOMER')")
  @GetMapping("/auth")
  public Page<AdvertResponse> getAuthenticatedUserAdverts(@RequestParam(value = "page",defaultValue = "0") int page,
@@ -96,20 +92,17 @@ public class AdvertController {
      return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
      
  }
-
-
-
- 
- // A09
-
-
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{id}/admin")
     public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(@PathVariable Long id){
         return advertService.getAdvertBySlugAdminManager(id);
     }
 
+
+
+    //A06
     @GetMapping("/admin")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Map<String, Object>> getSortedAdvertValuesByAdmin(@RequestParam(value = "q", required = false) String q,
                                                                         @RequestParam(value = "category_id", required = false) Long categoryId,
                                                                         @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
@@ -121,11 +114,10 @@ public class AdvertController {
                                                                         @RequestParam(value = "sort",defaultValue = "category") String sort,
                                                                         @RequestParam(value = "type",defaultValue = "asc") String type){
         return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
-
-
-
     }
 
+
+    //A11
 
     //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
    
@@ -136,21 +128,30 @@ public class AdvertController {
         return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
     }
 
+
+
+
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    @PutMapping("/admin/{advertId}")
+    public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest){
+
+        return advertService.updateAdminAdvertById(advertId,updateRequest);
+    }
+
    
     
 
-   
-    /*
-    @DeleteMapping("/delete/{id}")
-    //@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+
+
+    //A13 advert delete
+    @DeleteMapping("/admin/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage deleteAdvertById(@PathVariable Long id) {
         return advertService.deleteAdvertById(id);
     }
 
-     */
+
 
     
     
-
-
 }

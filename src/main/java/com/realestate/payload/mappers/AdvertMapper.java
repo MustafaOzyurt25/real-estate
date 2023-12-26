@@ -23,7 +23,7 @@ public class AdvertMapper {
                 .slug(slug)
                 .price(advertRequest.getPrice())
                 .location(advertRequest.getLocation())
-                .createAt(advertRequest.getCreateAt())
+                .createAt(advertRequest.getCreateAt())   
                 .country(country)
                 .city(city)
                 .district(district)
@@ -61,6 +61,7 @@ public class AdvertMapper {
                 .category(advert.getCategory())
                 .advertType(advert.getAdvertType())
                 .categoryPropertyValues(advert.getCategoryPropertyValue())
+                .logs(advert.getLogs())
                 .build();
     }
 
@@ -74,29 +75,20 @@ public class AdvertMapper {
                 .price(advertUpdateRequest.getPrice())
                 .location(advertUpdateRequest.getLocation())
                 .isActive(advertUpdateRequest.getIsActive())
-               
-//                .id()
-//                .logs()
-//                .categoryPropertyValue()
-//                .advertType()
-//                .builtIn()
-//                .category()
-//                .city()
-//                .country()
-//                .tourRequests()
-//                .user()
-//                .status()
-//                .updateAt()
-//                .favorites()
-//                .slug()
-//                .createAt()
-//                .images()
-//                .viewCount()
-//                .district(advertUpdateRequest.getDistrictId())
-//                .category(advertUpdateRequest.getCategoryId())
+
                 
                 .build();
     }
+    public Advert updateAdminAdvertById(AdvertUpdateRequest advertUpdateRequest) {
+
+        return Advert.builder()
+                .title(advertUpdateRequest.getTitle())
+                .description(advertUpdateRequest.getDescription())
+                .price(advertUpdateRequest.getPrice())
+                .location(advertUpdateRequest.getLocation())
+                .build();
 
 
 }
+
+ }

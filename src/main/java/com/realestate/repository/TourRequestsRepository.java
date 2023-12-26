@@ -25,4 +25,9 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest,Long> 
 
     boolean existsByOwnerUserId(Long userId);
 
+/*
+    @Query("SELECT COUNT(DISTINCT tr.guestUser) FROM TourRequest tr")
+    long countCustomers();   getTourRequestsCount() / reportService icin yazildi ama gerek kalmadi!
+*/
+    
 }

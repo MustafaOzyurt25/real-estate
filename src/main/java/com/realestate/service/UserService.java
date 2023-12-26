@@ -25,6 +25,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -277,4 +280,35 @@ public class UserService {
         userRepository.save(managerUser);
 
     }
+
+    /*
+
+    public ResponseEntity<UserResponse> updateUserById(Long id, HttpServletRequest request) {
+        User user = isUserExists(id);
+
+        if(user.getBuiltIn()){
+            throw new ConflictException(ErrorMessages.THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED);
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN") || r.getAuthority().equals("MANAGER")))) {
+            throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+        }
+
+        Set<String> roles = userRepository.getRolesById(user.getId());
+        if(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MANAGER"))){
+            if(!(roles.contains("CUSTOMER") && !roles.contains("MANAGER") && !roles.contains("ADMIN"))){
+                throw new BadRequestException(ErrorMessages.MANAGER_CAN_DELETE_ONLY_A_CUSTOMER);
+            }
+        }
+
+        ResponseEntity<UserResponse> updatedUser = updateUserById(id, request);
+        UserResponse userResponse = userMapper.mapUserRequestUpdatedUser(updatedUser);
+
+
+    }
+
+     */
+
+
 }

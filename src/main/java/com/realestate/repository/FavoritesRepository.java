@@ -22,4 +22,9 @@ public interface FavoritesRepository extends JpaRepository<Favorite,Long> {
     List<Favorite> findByUser(User user);
 
     boolean existsByUserId(Long userId);
+
+    List<Favorite> findByUserId(Long id);
+
+    List<Favorite> findAllByUserId(Long id);
+
 }
