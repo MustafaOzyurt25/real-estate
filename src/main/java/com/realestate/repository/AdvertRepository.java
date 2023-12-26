@@ -4,6 +4,8 @@ import com.realestate.entity.Advert;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.payload.response.AdvertCityResponse;
+import com.realestate.payload.response.AdvertResponse;
+import com.realestate.payload.response.ResponseMessage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -52,10 +54,14 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     boolean existsByUserId(Long userId);
 
+
     @Query("SELECT COUNT(a) FROM Advert a WHERE a.isActive = true")
     long countPublishedAdverts();
 
-    
+    //List<Advert> findTopByOrderByTourRequestsDesc(Integer amount);
+
+
+
     /*
     * Aşağıdaki method çalışmadı. NEDEN?
     *

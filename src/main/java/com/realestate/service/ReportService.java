@@ -1,4 +1,6 @@
 package com.realestate.service;
+
+import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.exception.ResourceNotFoundException;
@@ -13,6 +15,7 @@ import com.realestate.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +39,7 @@ public class ReportService {
 
         if (tourRequests.isEmpty()) {
             throw new ResourceNotFoundException(ErrorMessages.REPORT_TOUR_REQUEST_NOT_FOUND);
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.REPORT_TOUR_REQUEST_NOT_FOUND); alternatif
+        // throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.REPORT_TOUR_REQUEST_NOT_FOUND); alternatif
         }
 
         List<TourRequestResponse> tourRequestResponses = tourRequests
@@ -52,7 +55,7 @@ public class ReportService {
 
     }
 
-    
+
     //  It will get some statistics....   G01.................\\
     public ResponseMessage<StatisticsResponse> getStatistics() {
 
@@ -61,7 +64,7 @@ public class ReportService {
         long advertTypesCount = getAdvertTypesCount();
         long tourRequestsCount = getTourRequestsCount();
         long customersCount = getCustomersCount();
-        
+
         StatisticsResponse statisticsResponse = statisticsMapper.createStatisticsResponse(publishedCategoriesCount,
                 publishedAdvertsCount, advertTypesCount,
                 tourRequestsCount, customersCount);
@@ -74,15 +77,15 @@ public class ReportService {
 
 
     }
-    
+
     private long getPublishedCategoriesCount() {
         return categoryRepository.countPublishedCategories();
     }
-    
+
     private long getPublishedAdvertsCount() {
         return advertRepository.countPublishedAdverts();
     }
-    
+
     private long getAdvertTypesCount() {
         return advertTypeRepository.count();
     }
@@ -94,15 +97,11 @@ public class ReportService {
     private long getCustomersCount() {
         return userRepository.countCustomers();
     }
-    //..............................................................\\ 
-    
-    
-
-}// service
 
 
-   
 
-   
+   // public List<Advert> getMostPopularProperties(Integer amount) {
+    //    return advertRepository.findTopByOrderByTourRequestsDesc(amount);
 
-    
+   // }
+}
