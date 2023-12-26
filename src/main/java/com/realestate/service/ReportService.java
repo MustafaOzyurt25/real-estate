@@ -55,8 +55,9 @@ public class ReportService {
     }
 
 
-    public List<Advert> getMostPopularProperties(Long amount) {
-        return advertRepository.findTopNByOrderByTourRequestsDesc(amount);
+
+    public List<Advert> getMostPopularProperties(int amount) {
+        return advertRepository.findTopNByTourRequestsOrderByTourRequestsDesc(amount);
 
     }
 
@@ -105,5 +106,5 @@ public class ReportService {
 
 
 
- 
+
 }

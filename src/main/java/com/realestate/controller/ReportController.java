@@ -3,9 +3,10 @@ package com.realestate.controller;
 
 import com.realestate.entity.Advert;
 import com.realestate.entity.enums.TourRequestStatus;
+
+
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
-import com.realestate.payload.response.StatisticsResponse;
 import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.service.AdvertService;
 import com.realestate.service.ReportService;
@@ -15,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,7 +31,7 @@ public class ReportController {
     private final ReportService reportService;
 
 
-    
+
         // it will get tour requests for ADMIN,MANAGER ----G05 //
     
 
@@ -57,14 +61,18 @@ public class ReportController {
 
     @GetMapping("/most-popular-properties")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseEntity<List<Advert>> getMostPopularProperties(@RequestParam Long amount) {
+    public ResponseEntity<List<Advert>> getMostPopularProperties(@RequestParam("amount") int amount) {
         List<Advert> mostPopularProperties = reportService.getMostPopularProperties(amount);
         return new ResponseEntity<>(mostPopularProperties, HttpStatus.OK);
     }
     
 
 
-    } 
+    }
+
+
+
+
     
     
     
@@ -72,4 +80,7 @@ public class ReportController {
     
     
     
-  
+    
+    
+
+
