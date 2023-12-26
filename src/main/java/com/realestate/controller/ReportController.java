@@ -7,6 +7,7 @@ import com.realestate.entity.enums.TourRequestStatus;
 
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
+import com.realestate.payload.response.StatisticsResponse;
 import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.service.AdvertService;
 import com.realestate.service.ReportService;
