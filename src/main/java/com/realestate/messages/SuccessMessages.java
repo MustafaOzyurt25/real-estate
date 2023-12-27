@@ -45,7 +45,10 @@ public class SuccessMessages {
     public static final String  REPORT_STATISTICS_FOUNDED= "Report Statistics Is Found Successfully";
     public static final String ALL_FAVORITES_FOUNDED = "All Favorites Adverts are Founded Successfully";
     public static final String  REPORT_TOUR_REQUEST= "Tour Request is Found Successfully";
+    public static final String  REPORT_ADVERTS= "Report Adverts is Found Successfully";
+
     
+
 
 
 
