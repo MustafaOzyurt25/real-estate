@@ -42,8 +42,6 @@ public class ReportService {
     private final UserRepository userRepository;
     private final TourRequestMapper tourRequestMapper;
     private final AdvertMapper advertMapper;
-    private final CategoryRepository categoryRepository;
-    private final AdvertTypeRepository advertTypeRepository;
 
 
     private final StatisticsMapper statisticsMapper;

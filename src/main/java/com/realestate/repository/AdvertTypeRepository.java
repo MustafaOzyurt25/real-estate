@@ -23,5 +23,5 @@ public interface AdvertTypeRepository extends JpaRepository <AdvertType, Long > 
    long countAdvertTypes();  getAdvertTypesCount() / reportService icin yazildi ama count() metodu yeterli gibi. bir bakalim sonra! 
 */
 
-}
+
 
