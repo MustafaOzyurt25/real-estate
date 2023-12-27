@@ -286,9 +286,9 @@ public class UserService {
 
     }
 
-    /*
 
-    public ResponseEntity<UserResponse> updateUserById(Long id, HttpServletRequest request) {
+
+    public ResponseMessage<UserResponse> updateUserById(Long id, UserRequest userRequest) {
         User user = isUserExists(id);
 
         if(user.getBuiltIn()){
@@ -307,13 +307,29 @@ public class UserService {
             }
         }
 
-        ResponseEntity<UserResponse> updatedUser = updateUserById(id, request);
-        UserResponse userResponse = userMapper.mapUserRequestUpdatedUser(updatedUser);
+        uniquePropertyValidator.checkUniqueProperties(user, userRequest);
+
+        User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
+
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setLastName(user.getLastName());
+        updatedUser.setPhone(user.getPhone());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setRole(user.getRole());
+
+
+        User savedUser = userRepository.save(updatedUser);
+
+        return ResponseMessage.<UserResponse>builder()
+                .message(SuccessMessages.USER_UPDATE)
+                .httpStatus(HttpStatus.OK)
+                .object(userMapper.mapUserToUserResponse(savedUser))
+                .build();
 
 
     }
 
-     */
+
 
 
 }
