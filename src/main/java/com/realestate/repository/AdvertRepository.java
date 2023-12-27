@@ -56,7 +56,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
 
 
-    @Query("SELECT a FROM Advert a ORDER BY a.tourRequests DESC")
+
+
+    @Query("SELECT a FROM Advert a WHERE a.tourRequests IS NOT NULL ORDER BY a.tourRequests DESC")
     List<Advert> findTopNByTourRequestsOrderByTourRequestsDesc(int amount);
 
 
