@@ -3,6 +3,8 @@ package com.realestate.repository;
 import com.realestate.entity.Advert;
 import com.realestate.entity.Category;
 import com.realestate.entity.enums.AdvertStatus;
+import com.realestate.payload.response.ResponseMessage;
+import com.realestate.payload.response.StatisticsResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,5 +29,10 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
     @Query(value = "DELETE FROM Category c WHERE c.builtIn = false")
     void deleteCategories();
 
+
     Category getCategoryById(Long categoryId);
+
+    @Query("SELECT COUNT(DISTINCT c) FROM Category c WHERE c.isActive = true")
+    long countPublishedCategories();
+
 }

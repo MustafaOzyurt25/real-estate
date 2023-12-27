@@ -34,7 +34,6 @@ public class Advert {  // 23 tane field..vs
 
     private Double price;
 
-
     @Enumerated(EnumType.ORDINAL)
     private AdvertStatus status;
 
@@ -66,10 +65,13 @@ public class Advert {  // 23 tane field..vs
 
     @OneToMany(mappedBy = "advert",cascade = CascadeType.REMOVE)
     private List<Log> logs;
+
     @ManyToOne
     private AdvertType advertType;
+
     @ManyToOne
     private Country country;
+
     @ManyToOne
     private City city;
 
@@ -81,6 +83,5 @@ public class Advert {  // 23 tane field..vs
 
     @ManyToOne
     private Category category;
-
 
 }

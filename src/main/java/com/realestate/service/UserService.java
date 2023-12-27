@@ -25,6 +25,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -112,19 +115,24 @@ public class UserService {
 
         if (user.getBuiltIn().equals(false)) {
 
-            uniquePropertyValidator.checkUniqueProperties(user, userRequest);
+            try{
+                uniquePropertyValidator.checkUniqueProperties(user, userRequest);
 
-            User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
+                User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
 
-            updatedUser.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+                updatedUser.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
 
-            User savedUser = userRepository.save(updatedUser);
+                User savedUser = userRepository.save(updatedUser);
 
-            return ResponseMessage.<UserResponse>builder()
-                    .object(userMapper.mapUserToUserResponse(savedUser))
-                    .message(SuccessMessages.USER_UPDATE)
-                    .httpStatus(HttpStatus.OK)
-                    .build();
+                return ResponseMessage.<UserResponse>builder()
+                        .object(userMapper.mapUserToUserResponse(savedUser))
+                        .message(SuccessMessages.USER_UPDATE)
+                        .httpStatus(HttpStatus.OK)
+                        .build();
+            }catch (RuntimeException e) {
+                throw new ConflictException(ErrorMessages.USER_CANNOT_BE_UPDATED);
+            }
+
 
         } else {
             throw new ConflictException("User can not be updated");
@@ -248,7 +256,7 @@ public class UserService {
         }
 
         logsService.deleteByUserId(userId); // ÇALIŞIYOR
-        favoritesService.deleteByUserId(userId); // ÇALIŞIYOR
+        favoritesService.deleteByUserId(userId , user); // ÇALIŞIYOR
 
 
         userRepository.deleteById(userId);
@@ -277,4 +285,35 @@ public class UserService {
         userRepository.save(managerUser);
 
     }
+
+    /*
+
+    public ResponseEntity<UserResponse> updateUserById(Long id, HttpServletRequest request) {
+        User user = isUserExists(id);
+
+        if(user.getBuiltIn()){
+            throw new ConflictException(ErrorMessages.THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED);
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN") || r.getAuthority().equals("MANAGER")))) {
+            throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+        }
+
+        Set<String> roles = userRepository.getRolesById(user.getId());
+        if(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MANAGER"))){
+            if(!(roles.contains("CUSTOMER") && !roles.contains("MANAGER") && !roles.contains("ADMIN"))){
+                throw new BadRequestException(ErrorMessages.MANAGER_CAN_DELETE_ONLY_A_CUSTOMER);
+            }
+        }
+
+        ResponseEntity<UserResponse> updatedUser = updateUserById(id, request);
+        UserResponse userResponse = userMapper.mapUserRequestUpdatedUser(updatedUser);
+
+
+    }
+
+     */
+
+
 }

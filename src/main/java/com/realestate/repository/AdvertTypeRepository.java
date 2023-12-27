@@ -14,5 +14,14 @@ public interface AdvertTypeRepository extends JpaRepository <AdvertType, Long > 
 
     boolean existsByTitle(String title);
 
+
     AdvertType getAdvertTypeById(Long advertTypeId);
 }
+
+/*
+   @Query("SELECT COUNT(DISTINCT a.advertType) FROM Advert a WHERE a.isActive = true")
+   long countAdvertTypes();  getAdvertTypesCount() / reportService icin yazildi ama count() metodu yeterli gibi. bir bakalim sonra! 
+*/
+
+}
+

@@ -6,11 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -28,15 +25,13 @@ public class AdvertUpdateRequest {
     private Double price;
     @NotNull
     private String location; // bu document  de yok.ama gorselde var.
-    
-    
     private Long advertTypeId;
     private Long countryId;
     private Long cityId;
     private Long districtId;
     private Long categoryId;
     private Boolean isActive;
-    private List<CategoryPropertyKey> properties;
+    private List<String> propertyValues;
     
     
             
