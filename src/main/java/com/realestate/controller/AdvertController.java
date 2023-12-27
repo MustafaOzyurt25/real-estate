@@ -118,7 +118,6 @@ public class AdvertController {
 
 
     //A11
-
     //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
    
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")

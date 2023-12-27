@@ -52,6 +52,7 @@ public class ErrorMessages {
 
 
 
+
     // ---------------------- ERROR REGISTER -----------------------------------------------------------------------
     public static final String ALREADY_REGISTER_MESSAGE_PHONE = "Error: User with phone %s is already registered";
     public static final String ALREADY_REGISTER_MESSAGE_EMAIL = "Error: User with email %s is already registered";

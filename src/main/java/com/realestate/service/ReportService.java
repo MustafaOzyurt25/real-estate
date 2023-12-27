@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ReportService {
+    
     private final AdvertRepository advertRepository;
     private final CategoryRepository categoryRepository;
     private final TourRequestsRepository tourRequestRepository;

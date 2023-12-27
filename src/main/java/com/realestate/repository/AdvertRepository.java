@@ -7,8 +7,7 @@ import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.payload.response.AdvertCityResponse;
-import com.realestate.payload.response.AdvertResponse;
-import com.realestate.payload.response.ResponseMessage;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,7 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.DoubleStream;
+
 
 public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
