@@ -278,8 +278,8 @@ public class AdvertService {
         District district = districtService.getDistrictById(advertUpdateRequest.getDistrictId());
         AdvertType advertType = advertTypeService.getAdvertTypeById(advertUpdateRequest.getAdvertTypeId());
         Category category = categoryPropertyKeyService.isCategoryExist(advertUpdateRequest.getCategoryId());
-        List<CategoryPropertyKey> categoryPropertyKeys =
-                categoryPropertyKeyService.getCategoryPropertyKeys(advertUpdateRequest.getCategoryId());
+//        List<CategoryPropertyKey> categoryPropertyKeys =
+//                categoryPropertyKeyService.getCategoryPropertyKeys(advertUpdateRequest.getCategoryId());
 
         // diger serviceler
         // CategoryPropertyValue ile ilgili service'den value'lar mesela.
@@ -388,8 +388,6 @@ public class AdvertService {
         District district = districtService.getDistrictById(updateRequest.getDistrictId());
         AdvertType advertType = advertTypeService.getAdvertTypeById(updateRequest.getAdvertTypeId());
         Category category = categoryPropertyKeyService.isCategoryExist(updateRequest.getCategoryId());
-        List<CategoryPropertyKey> categoryPropertyKeys =
-                categoryPropertyKeyService.getCategoryPropertyKeys(updateRequest.getCategoryId());
         Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(updateRequest);
 
 
