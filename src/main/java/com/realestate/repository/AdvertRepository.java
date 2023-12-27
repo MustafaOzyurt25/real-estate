@@ -53,12 +53,13 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     boolean existsByUserId(Long userId);
 
 
+
+    @Query("SELECT a FROM Advert a ORDER BY a.tourRequests DESC")
+    List<Advert> findTopNByTourRequestsOrderByTourRequestsDesc(int amount);
+
+
     @Query("SELECT COUNT(a) FROM Advert a WHERE a.isActive = true")
     long countPublishedAdverts();
-
-    //List<Advert> findTopByOrderByTourRequestsDesc(Integer amount);
-
-
 
     /*
     * Aşağıdaki method çalışmadı. NEDEN?

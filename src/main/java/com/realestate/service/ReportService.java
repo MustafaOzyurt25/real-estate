@@ -56,6 +56,12 @@ public class ReportService {
     }
 
 
+
+    public List<Advert> getMostPopularProperties(int amount) {
+        return advertRepository.findTopNByTourRequestsOrderByTourRequestsDesc(amount);
+
+    }
+
     //  It will get some statistics....   G01.................\\
     public ResponseMessage<StatisticsResponse> getStatistics() {
 
@@ -80,6 +86,7 @@ public class ReportService {
 
     private long getPublishedCategoriesCount() {
         return categoryRepository.countPublishedCategories();
+
     }
 
     private long getPublishedAdvertsCount() {
@@ -100,8 +107,5 @@ public class ReportService {
 
 
 
-   // public List<Advert> getMostPopularProperties(Integer amount) {
-    //    return advertRepository.findTopByOrderByTourRequestsDesc(amount);
 
-   // }
 }
