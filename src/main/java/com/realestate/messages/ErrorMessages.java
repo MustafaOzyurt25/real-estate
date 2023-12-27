@@ -46,6 +46,7 @@ public class ErrorMessages {
     public static final String FAVORITE_NOT_FOUND = "Favorite is not found with id %s";
     public static final String COULD_NOT_FIND_FAVORITES_BY_USER_ID = "Not found favorites belong %s";
     public static final String COULD_NOT_FIND_FAVORITES_BELONG_USER = "Not found favorites belong user";
+    public static final String ADVERT_WAS_NOT_BE_CHANGED = "No changes were made to the Advert with id %s";
 
 
 

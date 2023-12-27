@@ -70,7 +70,7 @@ public class AdvertService {
             AdvertType advertType = advertTypeService.getAdvertTypeById(advertRequest.getAdvertTypeId());
 
             String slug = advertRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
-
+            
             List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
             Category category = categoryPropertyKeyService.isCategoryExist(advertRequest.getCategoryId());
             Advert advert = advertMapper.mapToAdvertRequestToAdvert(advertRequest, images, country, city, district, advertType, slug, user, category);
@@ -278,12 +278,7 @@ public class AdvertService {
         District district = districtService.getDistrictById(advertUpdateRequest.getDistrictId());
         AdvertType advertType = advertTypeService.getAdvertTypeById(advertUpdateRequest.getAdvertTypeId());
         Category category = categoryPropertyKeyService.isCategoryExist(advertUpdateRequest.getCategoryId());
-//        List<CategoryPropertyKey> categoryPropertyKeys =
-//                categoryPropertyKeyService.getCategoryPropertyKeys(advertUpdateRequest.getCategoryId());
-
-        // diger serviceler
-        // CategoryPropertyValue ile ilgili service'den value'lar mesela.
-
+        
         Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(advertUpdateRequest);
 
         advert.setBuiltIn(false);
@@ -310,7 +305,7 @@ public class AdvertService {
         if (existAdvert.getBuiltIn()) {
             throw new ConflictException(ErrorMessages.ADVERT_BUILT_IN_CAN_NOT_BE_UPDATED);
         }
-
+    
         // Kullanıcının kendi reklamını güncelleme yetkisi kontrolü
         if (!existAdvert.getUser().getId().equals(currentUser.getId())) {
             throw new ConflictException(String.format(ErrorMessages.ADVERT_CAN_NOT_BE_UPDATED, advertId));
@@ -318,6 +313,7 @@ public class AdvertService {
 
         // Durumu "PENDING" olarak ayarla
         advert.setStatus(AdvertStatus.PENDING);
+        
         Log log = logMapper.mapLog(currentUser,advert,LogType.UPDATE);
         logsService.save(log);
         advert.getLogs().add(log);
@@ -325,16 +321,22 @@ public class AdvertService {
             categoryPropertyValueRepository.delete(categoryPropertyValue);
         }
         List<CategoryPropertyValue> categoryPropertyValues = new ArrayList<>();
+        
+        // advertUpdateRequest den gelen value'lar db ye kaydediliyor:
         for (int i = 0; i < advertUpdateRequest.getPropertyValues().size(); i++) {
             CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
                     .save(categoryPropertyValueMapper
-                            .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertUpdateRequest.getPropertyValues().get(i)));
+                    .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertUpdateRequest.getPropertyValues().get(i)));
+            
+            //Bu value'lar listeye de ekleniyor...
             categoryPropertyValues.add(categoryPropertyValue);
         }
+        
+        // advert'in ilgili fieldi advertUpdateRequest'den gelen value ile setleniyor...
         advert.setCategoryPropertyValue(categoryPropertyValues);
-
+        
         Advert savedAdvert = advertRepository.save(advert);
-
+        
         return ResponseMessage.<AdvertResponse>builder()
                 .object(advertMapper.mapAdvertToAdvertResponse(savedAdvert))
                 .message(SuccessMessages.ADVERT_UPDATE)
@@ -388,6 +390,8 @@ public class AdvertService {
         District district = districtService.getDistrictById(updateRequest.getDistrictId());
         AdvertType advertType = advertTypeService.getAdvertTypeById(updateRequest.getAdvertTypeId());
         Category category = categoryPropertyKeyService.isCategoryExist(updateRequest.getCategoryId());
+        List<CategoryPropertyKey> categoryPropertyKeys =
+                categoryPropertyKeyService.getCategoryPropertyKeys(updateRequest.getCategoryId());
         Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(updateRequest);
 
 
