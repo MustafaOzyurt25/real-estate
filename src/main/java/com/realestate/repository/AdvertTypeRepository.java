@@ -13,4 +13,6 @@ public interface AdvertTypeRepository extends JpaRepository <AdvertType, Long > 
     boolean isEmpty();
 
     boolean existsByTitle(String title);
+
+    AdvertType getAdvertTypeById(Long advertTypeId);
 }

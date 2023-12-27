@@ -1,6 +1,8 @@
 package com.realestate.controller;
 
 
+import com.realestate.entity.AdvertType;
+import com.realestate.entity.Category;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.payload.request.AdvertUpdateRequest;
 import com.realestate.payload.response.AdvertResponse;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -37,7 +42,21 @@ public class ReportController {
     ){
         return reportService.getTourRequestsReport(date1,date2,status);
     }
-    
+
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @GetMapping("/adverts")
+    public ResponseMessage<List<AdvertResponse>> getReportAdverts (
+            @RequestParam("date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
+            @RequestParam("date2") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date2,
+            @RequestParam("categoryId")Long categoryId,
+            @RequestParam("advertTypeId")Long advertTypeId,
+            @RequestParam("statusId") int statusId
+            ){
+        return reportService.getReportAdverts(date1,date2,categoryId,advertTypeId,statusId);
+    }
+
+
     
     
     

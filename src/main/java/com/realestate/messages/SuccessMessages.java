@@ -46,6 +46,7 @@ public class SuccessMessages {
 
 
     public static final String  REPORT_TOUR_REQUEST= "Tour Request is Found Successfully";
+    public static final String  REPORT_ADVERTS= "Report Adverts is Found Successfully";
 
 
 
