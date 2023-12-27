@@ -1,6 +1,4 @@
 package com.realestate.service;
-
-import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.exception.ResourceNotFoundException;
@@ -77,6 +75,7 @@ public class ReportService {
 
     }
 
+
     private long getPublishedCategoriesCount() {
         return categoryRepository.countPublishedCategories();
     }
@@ -99,7 +98,8 @@ public class ReportService {
 
 
 
-   // public List<Advert> getMostPopularProperties(Integer amount) {
+
+    // public List<Advert> getMostPopularProperties(Integer amount) {
     //    return advertRepository.findTopByOrderByTourRequestsDesc(amount);
 
    // }

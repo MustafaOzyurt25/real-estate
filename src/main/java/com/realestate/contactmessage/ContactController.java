@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/contactMessages")
+@RequestMapping("/contact-messages")
 @RequiredArgsConstructor
 public class ContactController {
 

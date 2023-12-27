@@ -1,18 +1,9 @@
 package com.realestate.controller;
-
-
-import com.realestate.entity.Advert;
 import com.realestate.entity.enums.TourRequestStatus;
-import com.realestate.payload.response.AdvertResponse;
-import com.realestate.payload.response.ResponseMessage;
-import com.realestate.payload.response.StatisticsResponse;
-import com.realestate.payload.response.TourRequestResponse;
-import com.realestate.service.AdvertService;
+import com.realestate.payload.response.*;
 import com.realestate.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
@@ -47,7 +38,15 @@ public class ReportController {
         return reportService.getTourRequestsReport(date1, date2, status);
     }
 
-   
+   //G04 It will get users
+
+    /**
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @GetMapping("/users")
+    public ResponseMessage<List<UserResponse>> getUsers(
+
+    }
+     */
 
     /*
     @GetMapping("/most-popular-properties")

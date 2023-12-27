@@ -3,7 +3,9 @@ package com.realestate.payload.mappers;
 import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.payload.request.TourRequestRequest;
+import com.realestate.payload.request.UpdateTourRequestRequest;
 import com.realestate.payload.response.TourRequestResponse;
+import com.realestate.payload.response.UpdateTourRequestResponse;
 import com.realestate.service.AdvertService;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -43,4 +45,15 @@ private final AdvertService advertService;   // DTO-->POJO
                 .guestUser(tourRequest.getGuestUser())
                 .build();
     }
+
+    //POJO --> DTO : S06 icin ilgili id li TourRequest guncelleniyor
+    public UpdateTourRequestResponse tourRequestUpdateResponse(TourRequest tourRequest){
+
+        return UpdateTourRequestResponse.builder()
+                .tourRequestId(tourRequest.getId())
+                .tourDate(tourRequest.getTourDate())
+                .tourTime(tourRequest.getTourTime())
+                .updateAt(LocalDateTime.now()).build();//guncelleme gun ve saati
+    }
+
 }

@@ -11,8 +11,12 @@ import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.TourRequestMapper;
 import com.realestate.payload.request.TourRequestRequest;
+import com.realestate.payload.request.UpdateTourRequestRequest;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.TourRequestResponse;
+import com.realestate.payload.response.UpdateTourRequestResponse;
+import com.realestate.repository.AdvertRepository;
+import com.realestate.repository.AdvertTypeRepository;
 import com.realestate.repository.TourRequestsRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +43,8 @@ public class TourRequestsService {
     private final UserRepository userRepository;
     private final PageableHelper pageableHelper;
 
+    private final AdvertRepository advertRepository;
+    private final AdvertTypeRepository advertTypeRepository;
 
     //S05
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest, String userEmail) {
@@ -70,7 +76,6 @@ public class TourRequestsService {
                 .build();
 
 
-
     }
 
     public ResponseMessage<TourRequestResponse> delete(Long id) {
@@ -93,45 +98,66 @@ public class TourRequestsService {
                 .build();
     }
 
-    /*S06 --------------------------- kontrol edilecek ---------------------------------------------------------------*/
-    public ResponseMessage<TourRequestResponse> updatedTourRequestAuthById(TourRequest tourRequest,
-/*
-butun repoyu gezip daha önce alınna tarihleri alma
- */
-                                                                           Long tourRequestId) {
-        TourRequest tourRequestExist = isTourRequestExist(tourRequestId);
 
-        //2-Only the tour requests whose status pending or rejected/DECLINED can be updated./  -Yalnızca beklemede/pending veya reddedilmiş/rejected/DECLINED durumu olan tur talepleri güncellenebilir.
-        //--------------------------------------------------------------//pending veya rejected olup olmadigini kontrol et!!!
-        if (tourRequestExist.getStatus() == TourRequestStatus.PENDING || tourRequestExist.getStatus() == TourRequestStatus.DECLINED) {
-            tourRequestExist.setTourDate(tourRequest.getTourDate());
-            tourRequestExist.setTourTime(tourRequest.getTourTime());
-            tourRequestExist.setUpdateAt(LocalDateTime.now());//guncellenen tarih
+    //S06 --- updatedTourRequestAuthById -------------------------------------------------------------------------------
+
+    public ResponseMessage<UpdateTourRequestResponse> updatedTourRequest(UpdateTourRequestRequest updateTourRequestRequest, Long advertId) {
 
 
-            //3-If a request is updated, the status field should reset to “pending” / -Bir istek güncellenirse durum alanı "beklemede/pending" olarak sifirlamali
-            tourRequestExist.setStatus(TourRequestStatus.PENDING);//gonderilen tourRequest guncellenirse pending olarak sifirla!!!
+        //ilgili id li advert in tour request var mi? method ile kontrol ettim.
+        TourRequest tourRequestExist = isTourRequestExist(advertId);//var ise
 
-            //1--It will return the updated tour request object/    - Güncellenmis tur istegini nesnesini dondurecektir.
-            TourRequest updatedTourRequestAuthById = tourRequestsRepository.save(tourRequestExist);
-            return ResponseMessage.<TourRequestResponse>builder()
-                    .message(SuccessMessages.TOUR_REQUEST_UPDATED)
-                    .httpStatus(HttpStatus.OK)
-                    .object(tourRequestMapper.mapTourRequestToTourRequestResponse(updatedTourRequestAuthById))
-                    .build();
+        if (isValidTourTime(updateTourRequestRequest.getTourTime())) {
+            // Tur zamani gecerli
+            tourRequestExist.setTourDate(updateTourRequestRequest.getTourDate());
+            tourRequestExist.setTourTime(updateTourRequestRequest.getTourTime());
+            tourRequestExist.setUpdateAt(LocalDateTime.now());
+
         } else {
-            return ResponseMessage.<TourRequestResponse>builder()
+            // Tur zamani gecerli degil
+            return ResponseMessage.<UpdateTourRequestResponse>builder()
+                    .message(ErrorMessages.INVALID_TOUR_TIME)
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        //2-Only the tour requests whose status pending or rejected/DECLINED can be updated.
+        // Yalnızca beklemede/pending veya reddedilmiş/rejected/DECLINED durumu olan tur talepleri güncellenebilir.
+        ///pending veya rejected/declined olup olmadigini kontrol et!!!
+        if (tourRequestExist.getStatus() == TourRequestStatus.PENDING || tourRequestExist.getStatus() == TourRequestStatus.DECLINED) {
+            tourRequestExist.setTourDate(updateTourRequestRequest.getTourDate());
+            tourRequestExist.setTourTime(updateTourRequestRequest.getTourTime());
+            tourRequestExist.setUpdateAt(LocalDateTime.now());
+
+        } else {
+            return ResponseMessage.<UpdateTourRequestResponse>builder()
                     .message(ErrorMessages.TOUR_REQUEST_CANNOT_BE_UPDATED)
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build();
         }
 
+        //3-If a request is updated, the status field should reset to “pending” / -Bir istek güncellenirse durum alanı "beklemede/pending" olarak sifirlamali
+        tourRequestExist.setStatus(TourRequestStatus.PENDING);
+
+        //1--It will return the updated tour request object/    - Güncellenmis tur istegini nesnesini dondurecektir.
+        TourRequest updatedTourRequest = tourRequestsRepository.save(tourRequestExist);
+        return ResponseMessage.<UpdateTourRequestResponse>builder()
+                .message(SuccessMessages.TOUR_REQUEST_UPDATED)
+                .httpStatus(HttpStatus.OK)
+                .object(tourRequestMapper.tourRequestUpdateResponse(updatedTourRequest))
+                .build();
+
     }
 
-    //ilgili id li tourRequest var mi?
-    private TourRequest isTourRequestExist(Long tourRequestId) {
-        return tourRequestsRepository.findById(tourRequestId).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourRequestId)));
+    //ilgili id li advert in tourRequest i var mi
+    private TourRequest isTourRequestExist(Long advertId) {
+        return tourRequestsRepository.findById(advertId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, advertId)));//tourRequestRepository'de bu advert a ait tourRequest yok ise
+    }
+
+    //cakisan time kontrolu -> tam ve yarim saatlerde randevu alabilir.-------------------------------------------------
+    private boolean isValidTourTime(LocalTime tourTime) {
+        int minute = tourTime.getMinute();
+        return (minute == 00 || minute == 30);//tam ve yarim
     }
     /*S06 put end ----------------------------------------------------------------------------------------------------*/
 
@@ -153,6 +179,7 @@ butun repoyu gezip daha önce alınna tarihleri alma
 
 
     }
+
     public ResponseEntity<Map<String, Object>> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
@@ -171,6 +198,7 @@ butun repoyu gezip daha önce alınna tarihleri alma
         responseBody.put("tourRequest", tourRequestPage);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(Long tourRequestId) {
 
         TourRequest getAuthTourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(() ->
@@ -198,7 +226,8 @@ butun repoyu gezip daha önce alınna tarihleri alma
     }
 
     public ResponseMessage<TourRequestResponse> declineTourRequest(Long id) {
-        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
+        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
         tourRequest.setStatus(TourRequestStatus.DECLINED);
         tourRequest.setUpdateAt(LocalDateTime.now());
         return ResponseMessage.<TourRequestResponse>builder()
@@ -218,15 +247,19 @@ butun repoyu gezip daha önce alınna tarihleri alma
         return isExistsByGuestUserId || isExistsByOwnerUserId;
 
     }
-        public ResponseMessage<TourRequestResponse> cancelTourRequest (Long id){
-            TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
-            tourRequest.setStatus(TourRequestStatus.CANCELED);
-            tourRequest.setUpdateAt(LocalDateTime.now());
 
-            return ResponseMessage.<TourRequestResponse>builder()
-                    .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequestsRepository.save(tourRequest)))
-                    .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_CANCELED)
-                    .httpStatus(HttpStatus.OK)
-                    .build();
-        }
+    public ResponseMessage<TourRequestResponse> cancelTourRequest(Long id) {
+        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
+        tourRequest.setStatus(TourRequestStatus.CANCELED);
+        tourRequest.setUpdateAt(LocalDateTime.now());
+
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequestsRepository.save(tourRequest)))
+                .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_CANCELED)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+
 }
