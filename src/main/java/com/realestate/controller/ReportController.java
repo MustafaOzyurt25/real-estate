@@ -1,6 +1,9 @@
 package com.realestate.controller;
 
 
+
+import com.realestate.entity.AdvertType;
+import com.realestate.entity.Category;
 import com.realestate.entity.Advert;
 import com.realestate.entity.enums.TourRequestStatus;
 
@@ -21,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -66,6 +72,23 @@ public class ReportController {
         List<Advert> mostPopularProperties = reportService.getMostPopularProperties(amount);
         return new ResponseEntity<>(mostPopularProperties, HttpStatus.OK);
     }
+
+
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @GetMapping("/adverts")
+    public ResponseMessage<List<AdvertResponse>> getReportAdverts (
+            @RequestParam("date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
+            @RequestParam("date2") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date2,
+            @RequestParam("categoryId")Long categoryId,
+            @RequestParam("advertTypeId")Long advertTypeId,
+            @RequestParam("statusId") int statusId
+            ){
+        return reportService.getReportAdverts(date1,date2,categoryId,advertTypeId,statusId);
+    }
+
+
+
     
 
 
@@ -73,8 +96,7 @@ public class ReportController {
 
 
 
-
-    
+ 
     
     
     

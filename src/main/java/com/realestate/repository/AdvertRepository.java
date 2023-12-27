@@ -1,6 +1,9 @@
 package com.realestate.repository;
 
 import com.realestate.entity.Advert;
+import com.realestate.entity.AdvertType;
+import com.realestate.entity.Category;
+import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.payload.response.AdvertCityResponse;
@@ -11,8 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
+import org.springframework.data.repository.query.Param;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.DoubleStream;
@@ -55,6 +60,12 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     boolean existsByUserId(Long userId);
 
 
+    @Query("SELECT a FROM Advert a WHERE a.createAt >= :date1 " +
+            "AND a.createAt <= :date2 " +
+            "AND a.category.id = :categoryId " +
+            "AND a.advertType.id = :advertTypeId " +
+            "AND a.status = :status")
+    List<Advert> findAdvertsByParameters(LocalDateTime date1, LocalDateTime date2, Long categoryId, Long advertTypeId, AdvertStatus status);
 
 
 
@@ -64,6 +75,7 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     @Query("SELECT COUNT(a) FROM Advert a WHERE a.isActive = true")
     long countPublishedAdverts();
+
 
     /*
     * Aşağıdaki method çalışmadı. NEDEN?
