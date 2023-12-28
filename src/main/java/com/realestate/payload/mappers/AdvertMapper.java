@@ -15,9 +15,6 @@ public class AdvertMapper {
 
    
     public Advert mapToAdvertRequestToAdvert(AdvertRequest advertRequest , List<Image> imageList, Country country , City city, District district,AdvertType advertType, String slug ,User user,Category category){
-
-        Advert advert = new Advert();
-        advert.getCreateAt().toString();
         return Advert.builder()
                 .title(advertRequest.getTitle())
                 .description(advertRequest.getDescription())
@@ -31,10 +28,7 @@ public class AdvertMapper {
                 .advertType(advertType)
                 .images(imageList)
                 .category(category)
-
-
                 .user(user)
-
                 .build();
     }
 
