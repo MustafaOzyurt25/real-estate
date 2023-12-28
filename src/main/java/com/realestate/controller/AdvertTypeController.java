@@ -56,7 +56,7 @@ public class AdvertTypeController {
         return advertTypeService.updateAdvertType(advertTypeId, request);
     }
 
-    //T01 Get All AdvertType method---------------------------------------------------------------
+    //T01 Get All
     @GetMapping()
     public ResponseMessage<List<AdvertTypeResponse>> getAll() {
         return advertTypeService.getAll();

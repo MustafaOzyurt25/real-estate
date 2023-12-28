@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-//TODO BU CLASS A GEREK VAR MI? -------------------------------------
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

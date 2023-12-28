@@ -3,12 +3,12 @@ package com.realestate.controller;
 
 import com.realestate.entity.TourRequest;
 import com.realestate.payload.request.TourRequestRequest;
+import com.realestate.payload.request.UpdateTourRequestRequest;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.TourRequestResponse;
-import com.realestate.repository.UserRepository;
+import com.realestate.payload.response.UpdateTourRequestResponse;
 import com.realestate.service.TourRequestsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -40,7 +37,7 @@ public class TourRequestsController {
         return tourRequestsService.save(tourRequestRequest , userEmail);
 
     }
-    
+
 
     //S10
     @DeleteMapping("/{id}")
@@ -56,21 +53,14 @@ public class TourRequestsController {
         return tourRequestsService.getTourRequestById(tourRequestId);
     }
 
+    /*S06 put It will update a tour request ---------------------------------------------------------------------------*/
 
-
-    /**
-
-    //S06 put ----------------------------------------------------------------------------------------------------------
-    //It will update a tour request -> tur talebini guncelle
-    //@PutMapping("/{id}/auth")
-    //@PreAuthorize("hasAnyAuthority('CUSTOMER')") //http://localhost:8080/tour-requests//{id}/auth + PUT
-    public ResponseMessage<TourRequestResponse> updatedTourRequest(@RequestBody @Valid TourRequest tourRequest,
-     //@PathVariable Long tourRequestId){
-        return TourRequestsService.updatedTourRequest(tourRequest, tourRequestId);
-
+    @PutMapping("/{id}/auth")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER', 'ADMIN')") //http://localhost:8080/tour-requests/{id}/auth + PUT //manager ve admin ekledim
+    public ResponseMessage<UpdateTourRequestResponse> updatedTourRequest(@RequestBody @Valid UpdateTourRequestRequest updateTourRequestRequest,
+                                                                                 @PathVariable(name = "id") Long tourId){
+        return tourRequestsService.updatedTourRequest(updateTourRequestRequest, tourId );
     }
-     */
-
 
     //S03
     @GetMapping("/{id}/auth")

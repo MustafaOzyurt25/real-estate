@@ -14,6 +14,7 @@ import com.realestate.repository.AdvertTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -24,28 +25,29 @@ public class AdvertTypeService {
     private final AdvertTypeMapper advertTypeMapper;
     private final UniquePropertyValidator uniquePropertyValidator;
 
-  public ResponseMessage<AdvertTypeResponse> advertTypeCreate(AdvertTypeRequest advertTypeRequest) {
-      uniquePropertyValidator.checkDuplicateWithTitle(advertTypeRequest.getTitle());
+    public ResponseMessage<AdvertTypeResponse> advertTypeCreate(AdvertTypeRequest advertTypeRequest) {
+        uniquePropertyValidator.checkDuplicateWithTitle(advertTypeRequest.getTitle());
 
-      AdvertType advertType = advertTypeMapper.mapAdvertTypeRequestToAdvertType(advertTypeRequest);
-      AdvertType savedAdvertType = advertTypeRepository.save(advertType);
+        AdvertType advertType = advertTypeMapper.mapAdvertTypeRequestToAdvertType(advertTypeRequest);
+        AdvertType savedAdvertType = advertTypeRepository.save(advertType);
 
-      return ResponseMessage.<AdvertTypeResponse>builder()
-              .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(savedAdvertType))
-              .httpStatus(HttpStatus.CREATED)
-              .message(SuccessMessages.ADVERT_TYPE_CREATED)
-              .build();
-  }
-    private AdvertType isAdvertTypeExists(Long id){
+        return ResponseMessage.<AdvertTypeResponse>builder()
+                .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(savedAdvertType))
+                .httpStatus(HttpStatus.CREATED)
+                .message(SuccessMessages.ADVERT_TYPE_CREATED)
+                .build();
+    }
 
-        return advertTypeRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE,id)));
+    private AdvertType isAdvertTypeExists(Long id) {
+
+        return advertTypeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE, id)));
 
     }
+
     public AdvertType getAdvertTypeById(Long advertTypeId) {
         return isAdvertTypeExists(advertTypeId);
     }
-
 
     public ResponseMessage<AdvertTypeResponse> updateAdvertType(Long advertTypeId, AdvertTypeRequest request) {
 
@@ -54,7 +56,7 @@ public class AdvertTypeService {
 
 
         existingAdvertType.setTitle(request.getTitle());
-        AdvertType savedAdvertType =  advertTypeRepository.save(existingAdvertType);
+        AdvertType savedAdvertType = advertTypeRepository.save(existingAdvertType);
 
         return ResponseMessage.<AdvertTypeResponse>builder()
                 .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(savedAdvertType))
@@ -81,15 +83,16 @@ public class AdvertTypeService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+
     public ResponseMessage<AdvertTypeResponse> getAdvertTypeWithId(Long id) {
         return ResponseMessage.<AdvertTypeResponse>builder()
                 .object(advertTypeMapper.mapAdvertTypeToAdvertTypeResponse(advertTypeRepository.findById(id)
-                        .orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE,id)))))
+                        .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_TYPE_NOT_FOUND_MESSAGE, id)))))
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
-    //T01 Get All
 
+    //T01 Get All
     public ResponseMessage<List<AdvertTypeResponse>> getAll() {
         List<AdvertType> advertTypes = advertTypeRepository.findAll();
 
@@ -97,7 +100,7 @@ public class AdvertTypeService {
                 .object(advertTypes.stream()
                         .map(advertTypeMapper::mapAdvertTypeToAdvertTypeResponse)
                         .toList())
-                .message("Success")
+                .message(SuccessMessages.ADVERT_TYPES_FOUND)
                 .httpStatus(HttpStatus.OK)
                 .build();
     }

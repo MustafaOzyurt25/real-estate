@@ -30,10 +30,10 @@ public class TourRequest {
     private TourRequestStatus status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createAt;
+    private LocalDateTime createAt;//- abstract???
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateAt;
+    private LocalDateTime updateAt;//+ abstract???
 
     @ManyToOne
     @JsonIgnore
