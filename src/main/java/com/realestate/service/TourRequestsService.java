@@ -99,30 +99,32 @@ public class TourRequestsService {
     }
 
 
-    /**S06 --- updatedTourRequestAuthById -----------------------------------------------------------------------------*/
+    /*S06 --- updatedTourRequest -------------------------------------------------------------------------------------*/
 
-    public ResponseMessage<UpdateTourRequestResponse> updatedTourRequest(UpdateTourRequestRequest updateTourRequestRequest, Long advertId) {
+    public ResponseMessage<UpdateTourRequestResponse> updatedTourRequest(UpdateTourRequestRequest updateTourRequestRequest, Long tourId) {
 
+        TourRequest tourRequestExist = isTourRequestExist(tourId);//var ise
 
-        //ilgili id li advert in tour request var mi? method ile kontrol ettim.
-        TourRequest tourRequestExist = isTourRequestExist(advertId);//var ise
-
-        if (isValidTourTime(updateTourRequestRequest.getTourTime())) {//tam ve yarim saatlerde
-            // Tur zamani gecerli
-            tourRequestExist.setTourDate(updateTourRequestRequest.getTourDate());
-            tourRequestExist.setTourTime(updateTourRequestRequest.getTourTime());
-            tourRequestExist.setUpdateAt(LocalDateTime.now());
-
-        } else {
-            // Tur zamani gecerli degil
+        if (!isValidTourTime(updateTourRequestRequest.getTourTime())) {// Tur zamani gecerli degil/ yarim ve tam zamanli tur time belirleyebilir
             return ResponseMessage.<UpdateTourRequestResponse>builder()
                     .message(ErrorMessages.INVALID_TOUR_TIME)
                     .httpStatus(HttpStatus.BAD_REQUEST)
                     .build();
         }
-        //2-Only the tour requests whose status pending or rejected/DECLINED can be updated.
-        // Yalnızca beklemede/pending veya reddedilmiş/rejected/DECLINED durumu olan tur talepleri güncellenebilir.
-        ///pending veya rejected/declined olup olmadigini kontrol et!!!
+
+        boolean isExistTourRequest = tourRequestsRepository//id, time, date i ayni baska tourrequest var mi?
+                .existsByAdvertIdAndTourDateAndTourTime(updateTourRequestRequest.getAdvertId(),
+                updateTourRequestRequest.getTourDate(),
+                updateTourRequestRequest.getTourTime());
+
+        if (isExistTourRequest) {//cakisan tour talepleri
+            return ResponseMessage.<UpdateTourRequestResponse>builder()
+                    .message(ErrorMessages.TOUR_REQUEST_ALREADY_EXIST)
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        /*Only the tour requests whose status PENDING or DECLINED can be updated.*/
         if (tourRequestExist.getStatus() == TourRequestStatus.PENDING || tourRequestExist.getStatus() == TourRequestStatus.DECLINED) {
             tourRequestExist.setTourDate(updateTourRequestRequest.getTourDate());
             tourRequestExist.setTourTime(updateTourRequestRequest.getTourTime());
@@ -135,10 +137,10 @@ public class TourRequestsService {
                     .build();
         }
 
-        //3-If a request is updated, the status field should reset to “pending” / -Bir istek güncellenirse durum alanı "beklemede/pending" olarak sifirlamali
+        /*If a request is updated, the status field should reset to “pending” */
         tourRequestExist.setStatus(TourRequestStatus.PENDING);
 
-        //1--It will return the updated tour request object/    - Güncellenmis tur istegini nesnesini dondurecektir.
+        /*It will return the updated tour request object*/
         TourRequest updatedTourRequest = tourRequestsRepository.save(tourRequestExist);
         return ResponseMessage.<UpdateTourRequestResponse>builder()
                 .message(SuccessMessages.TOUR_REQUEST_UPDATED)
@@ -148,19 +150,16 @@ public class TourRequestsService {
 
     }
 
-    //ilgili id li advert in tourRequest i var mi
-    private TourRequest isTourRequestExist(Long advertId) {
-        return tourRequestsRepository.findById(advertId).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, advertId)));//tourRequestRepository'de bu advert a ait tourRequest yok ise
+    private TourRequest isTourRequestExist(Long tourId) {
+        return tourRequestsRepository.findById(tourId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourId)));//bu id ye ait tourrequest yok ise
     }
-
-    //cakisan time kontrolu -> tam ve yarim saatlerde randevu alabilir.-------------------------------------------------
     private boolean isValidTourTime(LocalTime tourTime) {
         int minute = tourTime.getMinute();
         return (minute == 00 || minute == 30);//tam ve yarim
     }
 
-    /**S06 put end ----------------------------------------------------------------------------------------------------*/
+    /* S06 end -------------------------------------------------------------------------------------------------------*/
 
 
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {

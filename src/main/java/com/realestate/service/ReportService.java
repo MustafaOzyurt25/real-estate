@@ -139,17 +139,5 @@ public class ReportService {
         return userRepository.countCustomers();
     }
 
-    /** G04 It will get users ---------------------------------------------------------------------------------------*/
-    public ResponseMessage<List<UserResponse>> getUsersByRole(String role) {
-        List<User> users = userRepository.getUsersByRole(role);
-        List<UserResponse> userResponses = users.stream()
-                .map(userMapper::mapUserToUserResponse)
-                .collect(Collectors.toList());
 
-        return ResponseMessage.<List<UserResponse>>builder()
-                .object(userResponses)
-                .httpStatus(HttpStatus.OK)
-                .message("Users with role " + role + " retrieved successfully")
-                .build();
-    }
 }

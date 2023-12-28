@@ -20,14 +20,10 @@ public class UpdateTourRequestRequest {
 
     //S06 Created for Tour Request update -----------
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
-    private LocalDate tourDate;//+ Lond -> advert_id
+    private LocalDate tourDate;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm:ss")
-    private LocalTime tourTime;//+
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateAt;//+ abstract???
-
+    private LocalTime tourTime;
     @NotNull(message = "Please enter advert id")
     private Long advertId;
 }

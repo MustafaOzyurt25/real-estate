@@ -53,7 +53,7 @@ private final AdvertService advertService;   // DTO-->POJO
                 .tourRequestId(tourRequest.getId())
                 .tourDate(tourRequest.getTourDate())
                 .tourTime(tourRequest.getTourTime())
-                .updateAt(LocalDateTime.now()).build();//guncelleme gun ve saati
+                .build();
     }
 
 }

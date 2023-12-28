@@ -54,16 +54,12 @@ public class ReportController {
         return reportService.getTourRequestsReport(date1, date2, status);
     }
 
-
-
     @GetMapping("/most-popular-properties")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseEntity<List<Advert>> getMostPopularProperties(@RequestParam("amount") int amount) {
         List<Advert> mostPopularProperties = reportService.getMostPopularProperties(amount);
         return new ResponseEntity<>(mostPopularProperties, HttpStatus.OK);
     }
-
-
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/adverts")
@@ -76,16 +72,6 @@ public class ReportController {
             ){
         return reportService.getReportAdverts(date1,date2,categoryId,advertTypeId,statusId);
     }
-
-
-
-    /** G04 It will get users ---------------------------------------------------------------------------------------*/
-    @GetMapping("/users")
-    public ResponseMessage<List<UserResponse>> getUsersByRole(@RequestParam("role") String role) {
-        return reportService.getUsersByRole(role);
-    }
-
-
 
     }
 

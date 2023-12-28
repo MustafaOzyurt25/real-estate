@@ -22,7 +22,6 @@ public class UserController {
 
     private final UserService userService;
 
-
     //F05
     @PreAuthorize("hasAnyAuthority('CUSTOMER','ADMIN','MANAGER')")
     @GetMapping("/auth")
@@ -64,7 +63,6 @@ public class UserController {
         return userService.getAllUsersByPage(page,size,sort,type);
     }
 
-
     //F10
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{userId}/admin")
@@ -80,8 +78,6 @@ public class UserController {
         return userService.deleteUserById(userId , request);
     }
 
-
-
     //F11 user update
     @PutMapping("{id}/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")
@@ -91,10 +87,5 @@ public class UserController {
     {
         return userService.updateUserById(id, request);
     }
-
-
-
-
-
 
 }

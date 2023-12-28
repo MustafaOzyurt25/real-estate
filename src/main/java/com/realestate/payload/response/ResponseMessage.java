@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 @Builder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL) // null olmayan fieldlar JSON dosyaya dahil edilecek
 public class ResponseMessage<E> {
-
     private E object;
 
     private String message;

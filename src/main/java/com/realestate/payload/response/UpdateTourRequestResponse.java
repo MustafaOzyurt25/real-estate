@@ -20,6 +20,4 @@ public class UpdateTourRequestResponse {
     private Long tourRequestId;
     private LocalDate tourDate;
     private LocalTime tourTime;
-    private LocalDateTime updateAt;
-
 }
