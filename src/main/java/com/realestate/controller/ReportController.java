@@ -40,13 +40,7 @@ public class ReportController {
 
    //G04 It will get users
 
-    /**
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    @GetMapping("/users")
-    public ResponseMessage<List<UserResponse>> getUsers(
 
-    }
-     */
 
     /*
     @GetMapping("/most-popular-properties")

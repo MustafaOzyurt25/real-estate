@@ -49,9 +49,6 @@ public class ErrorMessages {
     public static final String COULD_NOT_FIND_FAVORITES_BELONG_USER = "Not found favorites belong user";
 
 
-
-
-
     // ---------------------- ERROR REGISTER -----------------------------------------------------------------------
     public static final String ALREADY_REGISTER_MESSAGE_PHONE = "Error: User with phone %s is already registered";
     public static final String ALREADY_REGISTER_MESSAGE_EMAIL = "Error: User with email %s is already registered";
@@ -59,7 +56,6 @@ public class ErrorMessages {
 
     public static final String NOT_FOUND_TOUR_REQUEST = "Error: Tour Request not found with id %s";
     public static final String TOUR_REQUEST_CANNOT_BE_UPDATED = "Error: Tour Request can not be updated!";
-
     public static final String INVALID_TOUR_TIME = "Error: Please select different tour time!";
 
 }

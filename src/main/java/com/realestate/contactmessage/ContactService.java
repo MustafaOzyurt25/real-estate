@@ -4,6 +4,7 @@ import com.realestate.entity.Contact;
 import com.realestate.entity.TourRequest;
 import com.realestate.exception.ConflictException;
 import com.realestate.messages.ErrorMessages;
+import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.ContactMapper;
 import com.realestate.payload.request.ContactRequest;
 import com.realestate.payload.response.ContactResponse;
@@ -25,7 +26,7 @@ public class ContactService {
     private final ContactRepository contactRepository;
     private final ContactMapper contactMapper;
 
-    public ResponseMessage<ContactResponse> save(ContactRequest contactRequest) {
+    public ResponseMessage<ContactResponse> contactMessageCreated(ContactRequest contactRequest) {
         boolean isSameMessageWithSameEmailForToday =
                 contactRepository.existsByEmailEqualsAndCreateAtEquals(contactRequest.getEmail(), LocalDateTime.now());
 
@@ -38,7 +39,7 @@ public class ContactService {
         Contact savedData = contactRepository.save(contact);
 
         return ResponseMessage.<ContactResponse>builder()
-                .message("Contact Message Created Successfully")
+                .message(SuccessMessages.CONTACT_MESSAGE_CREATED)
                 .httpStatus(HttpStatus.CREATED)
                 .object(contactMapper.createResponse(savedData))
                 .build();

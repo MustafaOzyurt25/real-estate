@@ -97,7 +97,7 @@ public class AdvertTypeService {
                 .object(advertTypes.stream()
                         .map(advertTypeMapper::mapAdvertTypeToAdvertTypeResponse)
                         .toList())
-                .message("Success")
+                .message(SuccessMessages.ADVERT_TYPES_FOUND)
                 .httpStatus(HttpStatus.OK)
                 .build();
     }

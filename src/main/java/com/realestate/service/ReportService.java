@@ -1,5 +1,6 @@
 package com.realestate.service;
 import com.realestate.entity.TourRequest;
+import com.realestate.entity.User;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
@@ -9,6 +10,7 @@ import com.realestate.payload.mappers.TourRequestMapper;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.StatisticsResponse;
 import com.realestate.payload.response.TourRequestResponse;
+import com.realestate.payload.response.UserResponse;
 import com.realestate.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -96,6 +98,13 @@ public class ReportService {
         return userRepository.countCustomers();
     }
 
+    /*
+        public ResponseMessage<List<UserResponse>> getUsersReportWithUserRole(String query) {
+        List<UserResponse> userResponses =userRepository.findAll()
+                .stream()
+                .filter(UserRole->UserRole.get )
+    }
+     */
 
 
 

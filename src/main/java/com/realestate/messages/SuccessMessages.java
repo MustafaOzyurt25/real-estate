@@ -2,13 +2,11 @@ package com.realestate.messages;
 
 public class SuccessMessages {
 
-
-
     private SuccessMessages(){
 
     }
-    
-
+    public static final String ADVERT_TYPES_FOUND = "Advert Types found Successfully";
+    public static final String CONTACT_MESSAGE_CREATED = "Contact Message is created successfully";
     public static final String IMAGE_DELETE ="Image is Deleted Successfully";
     public static final String TOUR_REQUEST_CREATE = "Tour Request is Saved Successfully";
     public static final String TOUR_REQUEST_APPROVE = "Tour Request is Approved Successfully";
@@ -47,8 +45,7 @@ public class SuccessMessages {
     public static final String  REPORT_STATISTICS_FOUNDED= "Report Statistics Is Found Successfully";
     public static final String ALL_FAVORITES_FOUNDED = "All Favorites Adverts are Founded Successfully";
     public static final String  REPORT_TOUR_REQUEST= "Tour Request is Found Successfully";
-
-    public static final String REPORT_USER_ROLE = "";
+    public static final String REPORT_USER_ROLE = "User Roles reported Successfully";
 
 
 

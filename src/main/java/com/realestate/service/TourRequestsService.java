@@ -99,7 +99,7 @@ public class TourRequestsService {
     }
 
 
-    //S06 --- updatedTourRequestAuthById -------------------------------------------------------------------------------
+    /**S06 --- updatedTourRequestAuthById -----------------------------------------------------------------------------*/
 
     public ResponseMessage<UpdateTourRequestResponse> updatedTourRequest(UpdateTourRequestRequest updateTourRequestRequest, Long advertId) {
 
@@ -107,7 +107,7 @@ public class TourRequestsService {
         //ilgili id li advert in tour request var mi? method ile kontrol ettim.
         TourRequest tourRequestExist = isTourRequestExist(advertId);//var ise
 
-        if (isValidTourTime(updateTourRequestRequest.getTourTime())) {
+        if (isValidTourTime(updateTourRequestRequest.getTourTime())) {//tam ve yarim saatlerde
             // Tur zamani gecerli
             tourRequestExist.setTourDate(updateTourRequestRequest.getTourDate());
             tourRequestExist.setTourTime(updateTourRequestRequest.getTourTime());
@@ -159,7 +159,8 @@ public class TourRequestsService {
         int minute = tourTime.getMinute();
         return (minute == 00 || minute == 30);//tam ve yarim
     }
-    /*S06 put end ----------------------------------------------------------------------------------------------------*/
+
+    /**S06 put end ----------------------------------------------------------------------------------------------------*/
 
 
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
