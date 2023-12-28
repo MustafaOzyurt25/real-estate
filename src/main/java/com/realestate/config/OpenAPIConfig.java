@@ -9,5 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "RealEstate API", version = "1.0.0"),security = @SecurityRequirement(name = "Bearer"))
 @SecurityScheme(name = "Bearer",type = SecuritySchemeType.HTTP, scheme = "Bearer")
+
 public class OpenAPIConfig {
+    
 }

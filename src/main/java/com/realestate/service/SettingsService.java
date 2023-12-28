@@ -20,16 +20,6 @@ public class SettingsService
 
     public ResponseMessage dataBaseReset()
     {
-        if(!advertTypeRepository.isEmpty()) // true ise silinecek data vardır
-        {
-            advertTypeRepository.deleteAll();
-        }
-
-        if(!advertRepository.isEmpty())
-        {
-            advertRepository.deleteAdverts();
-        }
-
         if(!categoryRepository.isEmpty())
         {
             categoryRepository.deleteCategories();
@@ -48,6 +38,16 @@ public class SettingsService
         if(!tourRequestsRepository.isEmpty())
         {
             tourRequestsRepository.deleteAll();
+        }
+
+        if(!advertRepository.isEmpty())
+        {
+            advertRepository.deleteAdverts();
+        }
+
+        if(!advertTypeRepository.isEmpty()) // true ise silinecek data vardır
+        {
+            advertTypeRepository.deleteAll();
         }
 
         if(!userRepository.isEmpty())
