@@ -82,8 +82,7 @@ public class ReportController {
     /** G04 It will get users ---------------------------------------------------------------------------------------*/
     @GetMapping("/users")
     public ResponseMessage<List<UserResponse>> getUsersByRole(@RequestParam("role") String role) {
-        ResponseMessage<List<UserResponse>> userReports = reportService.getUsersByRole(role);
-        return userReports;
+        return reportService.getUsersByRole(role);
     }
 
 
