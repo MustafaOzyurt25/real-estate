@@ -8,10 +8,7 @@ import com.realestate.entity.Advert;
 import com.realestate.entity.enums.TourRequestStatus;
 
 
-import com.realestate.payload.response.AdvertResponse;
-import com.realestate.payload.response.ResponseMessage;
-import com.realestate.payload.response.StatisticsResponse;
-import com.realestate.payload.response.TourRequestResponse;
+import com.realestate.payload.response.*;
 import com.realestate.service.AdvertService;
 import com.realestate.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -36,13 +33,6 @@ public class ReportController {
 
 
     private final ReportService reportService;
-
-
-
-        // it will get tour requests for ADMIN,MANAGER ----G05 //
-
-
-
 
     //  It will get some statistics....   G01.................\\
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
@@ -89,6 +79,12 @@ public class ReportController {
 
 
 
+    /** G04 It will get users ---------------------------------------------------------------------------------------*/
+    @GetMapping("/users")
+    public ResponseMessage<List<UserResponse>> getUsersByRole(@RequestParam("role") String role) {
+        ResponseMessage<List<UserResponse>> userReports = reportService.getUsersByRole(role);
+        return userReports;
+    }
 
 
 
