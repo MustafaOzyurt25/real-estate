@@ -53,7 +53,7 @@ public class TourRequestsController {
         return tourRequestsService.getTourRequestById(tourRequestId);
     }
 
-    /*S06 putIt will update a tour request ---------------------------------------------------------------------------*/
+    /*S06 put It will update a tour request ---------------------------------------------------------------------------*/
 
     @PutMapping("/{id}/auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER', 'MANAGER', 'ADMIN')") //http://localhost:8080/tour-requests/{id}/auth + PUT //manager ve admin ekledim
