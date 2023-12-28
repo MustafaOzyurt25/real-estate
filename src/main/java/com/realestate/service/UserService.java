@@ -20,13 +20,14 @@ import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.RoleRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -114,19 +115,24 @@ public class UserService {
 
         if (user.getBuiltIn().equals(false)) {
 
-            uniquePropertyValidator.checkUniqueProperties(user, userRequest);
+            try{
+                uniquePropertyValidator.checkUniqueProperties(user, userRequest);
 
-            User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
+                User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
 
-            updatedUser.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+                updatedUser.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
 
-            User savedUser = userRepository.save(updatedUser);
+                User savedUser = userRepository.save(updatedUser);
 
-            return ResponseMessage.<UserResponse>builder()
-                    .object(userMapper.mapUserToUserResponse(savedUser))
-                    .message(SuccessMessages.USER_UPDATE)
-                    .httpStatus(HttpStatus.OK)
-                    .build();
+                return ResponseMessage.<UserResponse>builder()
+                        .object(userMapper.mapUserToUserResponse(savedUser))
+                        .message(SuccessMessages.USER_UPDATE)
+                        .httpStatus(HttpStatus.OK)
+                        .build();
+            }catch (RuntimeException e) {
+                throw new ConflictException(ErrorMessages.USER_CANNOT_BE_UPDATED);
+            }
+
 
         } else {
             throw new ConflictException("User can not be updated");
@@ -280,16 +286,50 @@ public class UserService {
 
     }
 
-    /*
-    public ResponseEntity<UserResponse> updateUserById(Long id, HttpServletRequest request) {
+
+
+    public ResponseMessage<UserResponse> updateUserById(Long id, UserRequest userRequest) {
         User user = isUserExists(id);
 
         if(user.getBuiltIn()){
             throw new ConflictException(ErrorMessages.THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED);
         }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN") || r.getAuthority().equals("MANAGER")))) {
+            throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+        }
+
+        Set<String> roles = userRepository.getRolesById(user.getId());
+        if(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MANAGER"))){
+            if(!(roles.contains("CUSTOMER") && !roles.contains("MANAGER") && !roles.contains("ADMIN"))){
+                throw new BadRequestException(ErrorMessages.MANAGER_CAN_DELETE_ONLY_A_CUSTOMER);
+            }
+        }
+
+        uniquePropertyValidator.checkUniqueProperties(user, userRequest);
+
+        User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
+
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setLastName(user.getLastName());
+        updatedUser.setPhone(user.getPhone());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setRole(user.getRole());
+
+
+        User savedUser = userRepository.save(updatedUser);
+
+        return ResponseMessage.<UserResponse>builder()
+                .message(SuccessMessages.USER_UPDATE)
+                .httpStatus(HttpStatus.OK)
+                .object(userMapper.mapUserToUserResponse(savedUser))
+                .build();
+
 
     }
-     */
+
+
+
 
 }

@@ -80,18 +80,21 @@ public class UserController {
         return userService.deleteUserById(userId , request);
     }
 
-    /*
+
+
     //F11 user update
     @PutMapping("{id}/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")
-    public ResponseEntity<UserResponse> updateUserById(
+    public ResponseMessage<UserResponse> updateUserById(
             @PathVariable("id") Long id,
-            HttpServletRequest request)
+            UserRequest request)
     {
         return userService.updateUserById(id, request);
     }
 
-     */
+
+
+
 
 
 }

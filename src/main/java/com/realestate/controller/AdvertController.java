@@ -118,7 +118,6 @@ public class AdvertController {
 
 
     //A11
-
     //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
    
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
@@ -132,7 +131,7 @@ public class AdvertController {
 
 
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
-    @PutMapping("/advert/{advertId}")
+    @PutMapping("/admin/{advertId}")
     public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest){
 
         return advertService.updateAdminAdvertById(advertId,updateRequest);
