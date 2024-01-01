@@ -48,6 +48,7 @@ public class ErrorMessages {
     public static final String COULD_NOT_FIND_FAVORITES_BY_USER_ID = "Not found favorites belong %s";
     public static final String COULD_NOT_FIND_FAVORITES_BELONG_USER = "Not found favorites belong user";
     public static final String USER_CANNOT_BE_UPDATED = "Please enter your phone number or email address correctly.";
+    public static final String USER_PASSWORD_CANNOT_BE_UPDATED = "Please enter your current password correctly";
 
 
 
