@@ -143,32 +143,39 @@ public class UserService {
 
     public ResponseMessage<UserResponse> authenticatedUserPasswordUpdated(HttpServletRequest request, PasswordUpdatedRequest passwordUpdatedRequest) {
 
-        String userEmail = (String) request.getAttribute("email");
+        try {
+            String userEmail = (String) request.getAttribute("email");
 
-        User user = userRepository.findByEmailEquals(userEmail);
+            User user = userRepository.findByEmailEquals(userEmail);
 
 
-        if (user.getBuiltIn().equals(false) &&
-                passwordEncoder.matches(passwordUpdatedRequest.getCurrentPassword(), user.getPasswordHash()) &&
-                passwordUpdatedRequest.getNewPassword().equals(passwordUpdatedRequest.getRetryNewPassword())) {
+            if (user.getBuiltIn().equals(false) &&
+                    passwordEncoder.matches(passwordUpdatedRequest.getCurrentPassword(), user.getPasswordHash()) &&
+                    passwordUpdatedRequest.getNewPassword().equals(passwordUpdatedRequest.getRetryNewPassword())) {
 
-            String newPassword = passwordUpdatedRequest.getNewPassword();
+                String newPassword = passwordUpdatedRequest.getNewPassword();
 
-            user.setPasswordHash(passwordEncoder.encode(newPassword));
-            user.setUpdateAt(LocalDateTime.now());
+                user.setPasswordHash(passwordEncoder.encode(newPassword));
+                user.setUpdateAt(LocalDateTime.now());
 
-            User savedUser = userRepository.save(user);
+                User savedUser = userRepository.save(user);
 
-            return ResponseMessage.<UserResponse>builder()
-                    .object(userMapper.mapUserToUserResponse(savedUser))
-                    .message(SuccessMessages.USER_PASSWORD_UPDATE)
-                    .httpStatus(HttpStatus.OK)
-                    .build();
-        } else {
-            throw new ConflictException("User can not be updated");
+                return ResponseMessage.<UserResponse>builder()
+                        .object(userMapper.mapUserToUserResponse(savedUser))
+                        .message(SuccessMessages.USER_PASSWORD_UPDATE)
+                        .httpStatus(HttpStatus.OK)
+                        .build();
+            }
+            else{
+                throw new ConflictException("User's password cannot be updated");
+            }
+        }catch(RuntimeException e){
+                throw new ConflictException(ErrorMessages.USER_PASSWORD_CANNOT_BE_UPDATED);
         }
 
     }
+
+
 
     public ResponseMessage authenticatedUserDeleted(HttpServletRequest request) {
 
