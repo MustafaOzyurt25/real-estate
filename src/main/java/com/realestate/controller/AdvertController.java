@@ -66,11 +66,14 @@ public class AdvertController {
                                                                         @RequestParam(value = "price_start", required = false) Double priceStart,
                                                                         @RequestParam(value = "price_end", required = false) Double priceEnd,
                                                                         @RequestParam(value = "status", required = false) Integer status,
+                                                                        @RequestParam(value = "country_id",required = false) Long countryId,
+                                                                        @RequestParam(value = "city_id",required = false) Long cityId,
+                                                                        @RequestParam(value = "district_id",required = false) Long districtId,
                                                                         @RequestParam(value = "page",defaultValue = "0") int page,
                                                                         @RequestParam(value = "size",defaultValue = "20") int size,
                                                                         @RequestParam(value = "sort",defaultValue = "category") String sort,
                                                                         @RequestParam(value = "type",defaultValue = "asc") String type){
-        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
+        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,countryId,cityId,districtId,page,size,sort,type);
     }
 
     //A08
@@ -109,11 +112,14 @@ public class AdvertController {
                                                                         @RequestParam(value = "price_start", required = false) Double priceStart,
                                                                         @RequestParam(value = "price_end", required = false) Double priceEnd,
                                                                         @RequestParam(value = "status", required = false) Integer status,
+                                                                        @RequestParam(value = "country_id",required = false) Long countryId,
+                                                                        @RequestParam(value = "city_id",required = false) Long cityId,
+                                                                        @RequestParam(value = "district_id",required = false) Long districtId,
                                                                         @RequestParam(value = "page",defaultValue = "0") int page,
                                                                         @RequestParam(value = "size",defaultValue = "20") int size,
                                                                         @RequestParam(value = "sort",defaultValue = "category") String sort,
                                                                         @RequestParam(value = "type",defaultValue = "asc") String type){
-        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,page,size,sort,type);
+        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,countryId,cityId,districtId,page,size,sort,type);
     }
 
 
