@@ -41,6 +41,7 @@ public class UserMapper {
 
     public UserResponse mapUserToUserResponse(User user) {
         return UserResponse.builder()
+                .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .phone(user.getPhone())

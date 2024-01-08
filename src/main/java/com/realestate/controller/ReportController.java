@@ -73,7 +73,14 @@ public class ReportController {
         return reportService.getReportAdverts(date1,date2,categoryId,advertTypeId,statusId);
     }
 
+    /** G04 It will get users ---------------------------------------------------------------------------------------*/
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @GetMapping("/users")
+    public ResponseMessage<List<UserResponse>> getUsersByRole(@RequestParam(name = "role") String role) {
+        return reportService.getUsersByRole(role);
     }
+
+}
 
 
 
