@@ -174,7 +174,7 @@ public class TourRequestsService {
         Page<TourRequest> tourRequest = userRepository.getAuthCustomerTourRequestsPageable(/*q,*/user, pageable);
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
-        responseBody.put("tourRequest", tourRequest);
+        responseBody.put("tourRequest", tourRequest.map(tourRequestMapper::mapTourRequestToTourRequestResponse));
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
 
 
@@ -191,7 +191,7 @@ public class TourRequestsService {
             q = q.trim().toLowerCase().replaceAll("-", " ");
         }
 
-        Page<TourRequest> tourRequestPage = userRepository.getTourRequestByAdmin(/*q,*/ user, pageable);
+        Page<TourRequest> tourRequestPage = userRepository.getTourRequestByAdmin( user, pageable);
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);

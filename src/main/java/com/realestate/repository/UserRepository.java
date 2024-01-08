@@ -47,7 +47,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     @Query("SELECT t FROM TourRequest t WHERE t.guestUser =:user")
-    Page<TourRequest> getTourRequestByAdmin(/*String q,*/ User user, Pageable pageable);
+    Page<TourRequest> getTourRequestByAdmin( User user, Pageable pageable);
 
 
     /**G04 It will get users ---------------------------------------------------------------------------------------*/
