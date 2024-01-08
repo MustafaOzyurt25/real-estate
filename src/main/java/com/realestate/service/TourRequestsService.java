@@ -99,7 +99,7 @@ public class TourRequestsService {
     }
 
 
-    /*S06 --- updatedTourRequest -------------------------------------------------------------------------------------*/
+    /**S06 --- updatedTourRequest ------------------------------------------------------------------------------------*/
 
     public ResponseMessage<UpdateTourRequestResponse> updatedTourRequest(UpdateTourRequestRequest updateTourRequestRequest, Long tourId) {
 
@@ -112,7 +112,7 @@ public class TourRequestsService {
                     .build();
         }
 
-        boolean isExistTourRequest = tourRequestsRepository//id, time, date i ayni baska tourrequest var mi?
+        boolean isExistTourRequest = tourRequestsRepository//advertId, time, date i ayni baska tourrequest var mi?
                 .existsByAdvertIdAndTourDateAndTourTime(updateTourRequestRequest.getAdvertId(),
                 updateTourRequestRequest.getTourDate(),
                 updateTourRequestRequest.getTourTime());
@@ -159,7 +159,7 @@ public class TourRequestsService {
         return (minute == 00 || minute == 30);//tam ve yarim
     }
 
-    /* S06 end -------------------------------------------------------------------------------------------------------*/
+    /** S06 end ------------------------------------------------------------------------------------------------------*/
 
 
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
