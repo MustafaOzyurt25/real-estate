@@ -35,4 +35,11 @@ public class DistrictService {
     }
 
 
+    public ResponseEntity<List<District>> getAllCitiesWithCountryId(Long id) {
+        List<District> districts = districtRepository.findAllByCityId(id);
+        if (districts.isEmpty()){
+            throw new ResourceNotFoundException(String.format(ErrorMessages.CITY_CANNOT_BE_FOUND_BY_COUNTRY_ID,id));
+        }
+        return ResponseEntity.ok(districts);
+    }
 }

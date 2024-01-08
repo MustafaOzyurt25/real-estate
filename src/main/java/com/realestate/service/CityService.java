@@ -31,6 +31,14 @@ public class CityService {
     public City getCityById(Long cityId) {
         return isCityExists(cityId);
     }
+
+    public ResponseEntity<List<City>> getAllCitiesWithCountryId(Long id) {
+        List<City> cities = cityRepository.findAllByCountryId(id);
+        if (cities.isEmpty()){
+            throw new ResourceNotFoundException(String.format(ErrorMessages.CITY_CANNOT_BE_FOUND_BY_COUNTRY_ID,id));
+        }
+        return ResponseEntity.ok(cities);
+    }
 }
 
 

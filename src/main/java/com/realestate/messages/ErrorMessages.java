@@ -50,6 +50,7 @@ public class ErrorMessages {
     public static final String COULD_NOT_FIND_FAVORITES_BELONG_USER = "Not found favorites belong user";
     public static final String USER_CANNOT_BE_UPDATED = "Please enter your phone number or email address correctly.";
     public static final String USER_PASSWORD_CANNOT_BE_UPDATED = "Please enter your current password correctly";
+    public static final String CITY_CANNOT_BE_FOUND_BY_COUNTRY_ID = "Cities of %s id countries could not be found";
     public static final String USER_UNAUTHORIZED= "You do not have the authority to perform this action.";
 
 
