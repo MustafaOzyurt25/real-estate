@@ -2,6 +2,7 @@ package com.realestate.service;
 
 import com.realestate.entity.Advert;
 import com.realestate.entity.Role;
+import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.RoleType;
 import com.realestate.exception.BadRequestException;
@@ -33,9 +34,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -143,32 +142,39 @@ public class UserService {
 
     public ResponseMessage<UserResponse> authenticatedUserPasswordUpdated(HttpServletRequest request, PasswordUpdatedRequest passwordUpdatedRequest) {
 
-        String userEmail = (String) request.getAttribute("email");
+        try {
+            String userEmail = (String) request.getAttribute("email");
 
-        User user = userRepository.findByEmailEquals(userEmail);
+            User user = userRepository.findByEmailEquals(userEmail);
 
 
-        if (user.getBuiltIn().equals(false) &&
-                passwordEncoder.matches(passwordUpdatedRequest.getCurrentPassword(), user.getPasswordHash()) &&
-                passwordUpdatedRequest.getNewPassword().equals(passwordUpdatedRequest.getRetryNewPassword())) {
+            if (user.getBuiltIn().equals(false) &&
+                    passwordEncoder.matches(passwordUpdatedRequest.getCurrentPassword(), user.getPasswordHash()) &&
+                    passwordUpdatedRequest.getNewPassword().equals(passwordUpdatedRequest.getRetryNewPassword())) {
 
-            String newPassword = passwordUpdatedRequest.getNewPassword();
+                String newPassword = passwordUpdatedRequest.getNewPassword();
 
-            user.setPasswordHash(passwordEncoder.encode(newPassword));
-            user.setUpdateAt(LocalDateTime.now());
+                user.setPasswordHash(passwordEncoder.encode(newPassword));
+                user.setUpdateAt(LocalDateTime.now());
 
-            User savedUser = userRepository.save(user);
+                User savedUser = userRepository.save(user);
 
-            return ResponseMessage.<UserResponse>builder()
-                    .object(userMapper.mapUserToUserResponse(savedUser))
-                    .message(SuccessMessages.USER_PASSWORD_UPDATE)
-                    .httpStatus(HttpStatus.OK)
-                    .build();
-        } else {
-            throw new ConflictException("User can not be updated");
+                return ResponseMessage.<UserResponse>builder()
+                        .object(userMapper.mapUserToUserResponse(savedUser))
+                        .message(SuccessMessages.USER_PASSWORD_UPDATE)
+                        .httpStatus(HttpStatus.OK)
+                        .build();
+            }
+            else{
+                throw new ConflictException("User's password cannot be updated");
+            }
+        }catch(RuntimeException e){
+                throw new ConflictException(ErrorMessages.USER_PASSWORD_CANNOT_BE_UPDATED);
         }
 
     }
+
+
 
     public ResponseMessage authenticatedUserDeleted(HttpServletRequest request) {
 
@@ -193,18 +199,34 @@ public class UserService {
 
     }
 
-    public Page<UserResponse> getAllUsersByPage(int page, int size, String sort, String type) {
+    public Page<UserResponse> getAllUsersByPage(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
-        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+        try{
+            String userEmail = (String) httpServletRequest.getAttribute("email");
+            User user = userRepository.findByEmailEquals(userEmail);
 
-        return userRepository.findAll(pageable).map(userMapper::mapUserToUserResponse);
+            Set<String> roles = userRepository.getRolesById(user.getId());
+
+            if(roles.contains("ADMIN") || roles.contains("MANAGER") ){
+
+                Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+
+                return userRepository.getUsersByAdmin(q,pageable).map(userMapper::mapUserToUserResponse);
+
+            }
+            else throw new ConflictException("You do not have the authority to perform this action.");
+
+        }catch(RuntimeException e){
+            throw new ConflictException(ErrorMessages.USER_UNAUTHORIZED);
+        }
+
+
     }
 
     public ResponseMessage<UserResponse> getUserByAdmin(Long userId) {
 
         User user = isUserExists(userId);
 
-        //F09 un fronted sayfasinda advert gozukmuyor eger lazim olursa tekrar kontrol edecegiz
         return ResponseMessage.<UserResponse>builder()
                 .object(userMapper.mapUserToUserResponse(user))
                 .message(SuccessMessages.USER_FOUNDED)

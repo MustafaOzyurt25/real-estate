@@ -56,7 +56,7 @@ public class ForgotPasswordService {
         message.setTo(userEmail);
         message.setSubject("Reset Password");
         message.setText("Click the link below to reset your password: "
-                + "http://localhost:8080/auth/reset-password?token=" + resetToken);
+                + "http://localhost:3000/reset-password?token=" + resetToken);
 
         javaMailSender.send(message);
     }
