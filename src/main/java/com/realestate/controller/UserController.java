@@ -86,6 +86,7 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")
     public ResponseMessage<UserResponse> updateUserById(
             @PathVariable("id") Long id,
+            @RequestBody @Valid
             UserRequest request)
     {
         return userService.updateUserById(id, request);
