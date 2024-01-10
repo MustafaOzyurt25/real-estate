@@ -69,7 +69,7 @@ public class AdvertService {
             District district = districtService.getDistrictById(advertRequest.getDistrictId());
             AdvertType advertType = advertTypeService.getAdvertTypeById(advertRequest.getAdvertTypeId());
 
-            String slug = advertRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
+            String slug = advertRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "") + "-" + user.getId();
             
             List<Image> images = imageService.saveAndGetImages(advertRequest.getImages());
             Category category = categoryPropertyKeyService.isCategoryExist(advertRequest.getCategoryId());

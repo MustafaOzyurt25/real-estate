@@ -24,7 +24,6 @@ public class Advert {  // 23 tane field..vs
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String title;
 
     private String description;

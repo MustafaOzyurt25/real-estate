@@ -323,22 +323,15 @@ public class UserService {
         }
 
         Set<String> roles = userRepository.getRolesById(user.getId());
-        if(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("MANAGER"))){
+        if(roles.contains("MANAGER")){
             if(!(roles.contains("CUSTOMER") && !roles.contains("MANAGER") && !roles.contains("ADMIN"))){
-                throw new BadRequestException(ErrorMessages.MANAGER_CAN_DELETE_ONLY_A_CUSTOMER);
+                throw new BadRequestException(ErrorMessages.MANAGER_CAN_UPDATE_ONLY_A_CUSTOMER);
             }
         }
 
         uniquePropertyValidator.checkUniqueProperties(user, userRequest);
 
         User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
-
-        updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setPhone(user.getPhone());
-        updatedUser.setEmail(user.getEmail());
-        updatedUser.setRole(user.getRole());
-
 
         User savedUser = userRepository.save(updatedUser);
 
