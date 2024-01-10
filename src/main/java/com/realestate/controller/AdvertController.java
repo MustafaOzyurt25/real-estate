@@ -63,18 +63,21 @@ public class AdvertController {
 
 
     //A01
-    @GetMapping()
+     @GetMapping()
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(@RequestParam(value = "q", required = false) String q,
                                                                         @RequestParam(value = "category_id", required = false) Long categoryId,
                                                                         @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
                                                                         @RequestParam(value = "price_start", required = false) Double priceStart,
                                                                         @RequestParam(value = "price_end", required = false) Double priceEnd,
                                                                         @RequestParam(value = "status", required = false) Integer status,
-                                                                        @RequestParam(value = "page", defaultValue = "0") int page,
-                                                                        @RequestParam(value = "size", defaultValue = "20") int size,
-                                                                        @RequestParam(value = "sort", defaultValue = "category") String sort,
-                                                                        @RequestParam(value = "type", defaultValue = "asc") String type) {
-        return advertService.getSortedAdvertsByValues(q, categoryId, advertTypeId, priceStart, priceEnd, status, page, size, sort, type);
+                                                                        @RequestParam(value = "country_id",required = false) Long countryId,
+                                                                        @RequestParam(value = "city_id",required = false) Long cityId,
+                                                                        @RequestParam(value = "district_id",required = false) Long districtId,
+                                                                        @RequestParam(value = "page",defaultValue = "0") int page,
+                                                                        @RequestParam(value = "size",defaultValue = "20") int size,
+                                                                        @RequestParam(value = "sort",defaultValue = "category") String sort,
+                                                                        @RequestParam(value = "type",defaultValue = "asc") String type){
+        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,countryId,cityId,districtId,page,size,sort,type);
     }
 
     //A08
@@ -104,19 +107,22 @@ public class AdvertController {
 
 
     //A06
-    @GetMapping("/admin")
-//    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+ @GetMapping("/admin")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Map<String, Object>> getSortedAdvertValuesByAdmin(@RequestParam(value = "q", required = false) String q,
-                                                                            @RequestParam(value = "category_id", required = false) Long categoryId,
-                                                                            @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
-                                                                            @RequestParam(value = "price_start", required = false) Double priceStart,
-                                                                            @RequestParam(value = "price_end", required = false) Double priceEnd,
-                                                                            @RequestParam(value = "status", required = false) Integer status,
-                                                                            @RequestParam(value = "page", defaultValue = "0") int page,
-                                                                            @RequestParam(value = "size", defaultValue = "20") int size,
-                                                                            @RequestParam(value = "sort", defaultValue = "category") String sort,
-                                                                            @RequestParam(value = "type", defaultValue = "asc") String type) {
-        return advertService.getSortedAdvertsByValues(q, categoryId, advertTypeId, priceStart, priceEnd, status, page, size, sort, type);
+                                                                        @RequestParam(value = "category_id", required = false) Long categoryId,
+                                                                        @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
+                                                                        @RequestParam(value = "price_start", required = false) Double priceStart,
+                                                                        @RequestParam(value = "price_end", required = false) Double priceEnd,
+                                                                        @RequestParam(value = "status", required = false) Integer status,
+                                                                        @RequestParam(value = "country_id",required = false) Long countryId,
+                                                                        @RequestParam(value = "city_id",required = false) Long cityId,
+                                                                        @RequestParam(value = "district_id",required = false) Long districtId,
+                                                                        @RequestParam(value = "page",defaultValue = "0") int page,
+                                                                        @RequestParam(value = "size",defaultValue = "20") int size,
+                                                                        @RequestParam(value = "sort",defaultValue = "category") String sort,
+                                                                        @RequestParam(value = "type",defaultValue = "asc") String type){
+        return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,countryId,cityId,districtId,page,size,sort,type);
     }
 
 

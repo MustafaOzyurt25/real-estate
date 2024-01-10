@@ -8,10 +8,7 @@ import com.realestate.entity.Advert;
 import com.realestate.entity.enums.TourRequestStatus;
 
 
-import com.realestate.payload.response.AdvertResponse;
-import com.realestate.payload.response.ResponseMessage;
-import com.realestate.payload.response.StatisticsResponse;
-import com.realestate.payload.response.TourRequestResponse;
+import com.realestate.payload.response.*;
 import com.realestate.service.AdvertService;
 import com.realestate.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +34,6 @@ public class ReportController {
 
     private final ReportService reportService;
 
-
-
-        // it will get tour requests for ADMIN,MANAGER ----G05 //
-    
-
-
-
     //  It will get some statistics....   G01.................\\
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping()
@@ -64,16 +54,12 @@ public class ReportController {
         return reportService.getTourRequestsReport(date1, date2, status);
     }
 
-
-
     @GetMapping("/most-popular-properties")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseEntity<List<Advert>> getMostPopularProperties(@RequestParam("amount") int amount) {
         List<Advert> mostPopularProperties = reportService.getMostPopularProperties(amount);
         return new ResponseEntity<>(mostPopularProperties, HttpStatus.OK);
     }
-
-
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/adverts")
@@ -87,16 +73,18 @@ public class ReportController {
         return reportService.getReportAdverts(date1,date2,categoryId,advertTypeId,statusId);
     }
 
-
-
-    
-
-
+    /** G04 It will get users ---------------------------------------------------------------------------------------*/
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @GetMapping("/users")
+    public ResponseMessage<List<UserResponse>> getUsersByRole(@RequestParam(name = "role") String role) {
+        return reportService.getUsersByRole(role);
     }
 
+}
 
 
- 
+
+
     
     
     

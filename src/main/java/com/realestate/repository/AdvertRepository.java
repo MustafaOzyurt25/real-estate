@@ -39,12 +39,16 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     @Query("SELECT a FROM Advert a WHERE (:q IS NULL OR Lower(a.title) LIKE %:q% OR Lower(a.description) LIKE %:q%) " +
             "AND (:categoryId IS NULL OR a.category.id = :categoryId) " +
             "AND (:advertTypeId IS NULL OR a.advertType.id = :advertTypeId) " +
+            "AND (:countryId IS NULL OR a.country.id = :countryId) " +
+            "AND (:cityId IS NULL OR a.city.id = :cityId) " +
+            "AND (:districtId IS NULL OR a.district.id = :districtId) " +
             "AND (:priceStart IS NULL AND :priceEnd IS NULL OR " +
             "   (a.price BETWEEN :priceStart AND :priceEnd) OR " +
             "   (:priceStart IS NOT NULL AND :priceEnd IS NULL AND a.price >= :priceStart) OR " +
             "   (:priceStart IS NULL AND :priceEnd IS NOT NULL AND a.price <= :priceEnd)) " +
             "AND (:status IS NULL OR a.status = :status)")
-    Page<Advert> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, AdvertStatus status, Pageable pageable);
+    Page<Advert> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, AdvertStatus status,
+                                          Long countryId,Long cityId,Long districtId,Pageable pageable);
 
 
     @Modifying

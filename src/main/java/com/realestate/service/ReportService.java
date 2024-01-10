@@ -1,9 +1,6 @@
 package com.realestate.service;
 
-import com.realestate.entity.Advert;
-import com.realestate.entity.AdvertType;
-import com.realestate.entity.Category;
-import com.realestate.entity.TourRequest;
+import com.realestate.entity.*;
 import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.exception.ResourceNotFoundException;
@@ -12,10 +9,8 @@ import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.mappers.StatisticsMapper;
 import com.realestate.payload.mappers.TourRequestMapper;
-import com.realestate.payload.response.AdvertResponse;
-import com.realestate.payload.response.ResponseMessage;
-import com.realestate.payload.response.StatisticsResponse;
-import com.realestate.payload.response.TourRequestResponse;
+import com.realestate.payload.mappers.UserMapper;
+import com.realestate.payload.response.*;
 import com.realestate.repository.AdvertRepository;
 import com.realestate.repository.AdvertTypeRepository;
 import com.realestate.repository.CategoryRepository;
@@ -34,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ReportService {
-    
+
     private final AdvertRepository advertRepository;
     private final CategoryRepository categoryRepository;
     private final TourRequestsRepository tourRequestRepository;
@@ -42,6 +37,7 @@ public class ReportService {
     private final UserRepository userRepository;
     private final TourRequestMapper tourRequestMapper;
     private final AdvertMapper advertMapper;
+    private final UserMapper userMapper;
 
 
     private final StatisticsMapper statisticsMapper;
@@ -89,15 +85,10 @@ public class ReportService {
                 .message(SuccessMessages.REPORT_ADVERTS)
                 .httpStatus(HttpStatus.OK)
                 .build();
-
     }
-
-
-
 
     public List<Advert> getMostPopularProperties(int amount) {
         return advertRepository.findTopNByTourRequestsOrderByTourRequestsDesc(amount);
-
     }
 
     //  It will get some statistics....   G01.................\\
@@ -118,13 +109,11 @@ public class ReportService {
                 .message(SuccessMessages.REPORT_STATISTICS_FOUNDED)
                 .httpStatus(HttpStatus.OK)
                 .build();
-
-
     }
+
 
     private long getPublishedCategoriesCount() {
         return categoryRepository.countPublishedCategories();
-
     }
 
     private long getPublishedAdvertsCount() {
@@ -144,7 +133,21 @@ public class ReportService {
     }
 
 
+    /** G04 It will get users ---------------------------------------------------------------------------------------*/
+    public ResponseMessage<List<UserResponse>> getUsersByRole(String role) {
+        List<User> users = userRepository.getUsersByRoleRoleName(role);
+        System.out.println(role);
+        System.out.println(users);
+        List<UserResponse> userResponses = users.stream()
+                .map(userMapper::mapUserToUserResponse)
+                .collect(Collectors.toList());
 
-
+        return ResponseMessage.<List<UserResponse>>builder()
+                .object(userResponses)
+                .httpStatus(HttpStatus.OK)
+                .message("Users with role " + role + " retrieved successfully")
+                .build();
+    }
 
 }
+

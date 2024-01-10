@@ -30,7 +30,7 @@ public class AdvertTypeController {
 
 
     //T05
-
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseMessage<AdvertTypeResponse> advertTypeDelete(@PathVariable Long id) {
 
@@ -41,6 +41,7 @@ public class AdvertTypeController {
 
 
     //T02
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     @GetMapping("/{id}")
     public ResponseMessage<AdvertTypeResponse> getAdvertTypeById(@PathVariable("id") Long id){
         return advertTypeService.getAdvertTypeWithId(id);
@@ -50,13 +51,13 @@ public class AdvertTypeController {
 
     //T04
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public ResponseMessage<AdvertTypeResponse> updateAdvertType(@PathVariable("id") Long advertTypeId,
                                                                 @RequestBody AdvertTypeRequest request) {
         return advertTypeService.updateAdvertType(advertTypeId, request);
     }
 
-    //T01 Get All AdvertType method---------------------------------------------------------------
+    //T01 Get All
     @GetMapping()
     public ResponseMessage<List<AdvertTypeResponse>> getAll() {
         return advertTypeService.getAll();

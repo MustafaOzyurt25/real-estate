@@ -38,15 +38,30 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<Object> findByResetPasswordCode(String resetToken);
 
 
-    @Query(value = "SELECT role_name FROM roles WHERE id IN(SELECT role_id FROM user_roles WHERE user_roles.user_id = :id)" , nativeQuery = true)
+    @Query(value = "SELECT role_name FROM roles WHERE id IN(SELECT role_id FROM user_roles WHERE user_roles.user_id = :id)", nativeQuery = true)
     Set<String> getRolesById(Long id);
 
-  
+
     @Query("SELECT COUNT(u) FROM User u JOIN u.role r WHERE r.roleName = 'CUSTOMER'")
-    long countCustomers(); 
-    
-    
+    long countCustomers();
+
+
     @Query("SELECT t FROM TourRequest t WHERE t.guestUser =:user")
-    Page<TourRequest> getTourRequestByAdmin(/*String q,*/ User user, Pageable pageable);
+    Page<TourRequest> getTourRequestByAdmin( User user, Pageable pageable);
+
+
+    /**G04 It will get users ---------------------------------------------------------------------------------------*/
+    @Query(value = "select * from users inner join user_roles ON users.id = user_roles.role_id inner join roles ON user_roles.user_id = roles.id where roles.role_name = :roleName", nativeQuery = true)
+    List<User> getUsersByRoleRoleName(@Param("roleName") String roleName);
+
+
+    @Query("SELECT u FROM User u WHERE (:q IS NULL OR LOWER(u.firstName) LIKE %:q% OR LOWER(u.lastName) LIKE %:q% OR LOWER(u.email) LIKE %:q% OR LOWER(u.phone) LIKE %:q%) ")
+    Page<User> getUsersByAdmin(@Param("q") String q, Pageable pageable);
+
+
+
+
+
 
 }
+

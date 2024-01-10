@@ -18,7 +18,7 @@ public class UserMapper {
     private final PasswordEncoder passwordEncoder;
 
 
-    public User mapUserRequestToUser(UserRequest userRequest){
+    public User mapUserRequestToUser(UserRequest userRequest) {
         return User.builder()
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
@@ -28,7 +28,7 @@ public class UserMapper {
                 .build();
     }
 
-    public User mapRegisterRequestToUser(RegisterRequest registerRequest){
+    public User mapRegisterRequestToUser(RegisterRequest registerRequest) {
         return User.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
@@ -39,8 +39,9 @@ public class UserMapper {
                 .build();
     }
 
-    public UserResponse mapUserToUserResponse(User user){
+    public UserResponse mapUserToUserResponse(User user) {
         return UserResponse.builder()
+                .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .phone(user.getPhone())
@@ -52,7 +53,7 @@ public class UserMapper {
                 .build();
     }
 
-    public User mapUserRequestUpdatedUser(User user,UserRequest userRequest){
+    public User mapUserRequestUpdatedUser(User user, UserRequest userRequest) {
         return User.builder()
                 .id(user.getId())
                 .createAt(user.getCreateAt())
@@ -65,4 +66,5 @@ public class UserMapper {
                 .build();
 
     }
+
 }

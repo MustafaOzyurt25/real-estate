@@ -5,8 +5,8 @@ public class SuccessMessages {
     private SuccessMessages(){
 
     }
-    
-
+    public static final String ADVERT_TYPES_FOUND = "Advert Types found Successfully";
+    public static final String CONTACT_MESSAGE_CREATED = "Contact Message is created successfully";
     public static final String IMAGE_DELETE ="Image is Deleted Successfully";
     public static final String TOUR_REQUEST_CREATE = "Tour Request is Saved Successfully";
     public static final String TOUR_REQUEST_APPROVE = "Tour Request is Approved Successfully";
@@ -47,7 +47,7 @@ public class SuccessMessages {
     public static final String  REPORT_TOUR_REQUEST= "Tour Request is Found Successfully";
     public static final String  REPORT_ADVERTS= "Report Adverts is Found Successfully";
 
-    
+
 
 
 

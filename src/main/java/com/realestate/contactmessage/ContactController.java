@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/contactMessages")
+@RequestMapping("/contact-messages")
 @RequiredArgsConstructor
 public class ContactController {
 
     private final ContactService contactService;
 
-    //save--------------------------------------------------------------------------------------------------------------
+    //J02 save----------------------------------------------------------------------------------------------------------
     @PostMapping("/save")
-    public ResponseMessage<ContactResponse> save(@RequestBody
+    public ResponseMessage<ContactResponse> contactMessageCreated(@RequestBody
                                                  @Valid ContactRequest contactRequest) {
-        return contactService.save(contactRequest);
+        return contactService.contactMessageCreated(contactRequest);
     }
 
     //J01 getAllContactMessageAsPage -----------------------------------------------------------------------------------

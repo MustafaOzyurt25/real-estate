@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -21,7 +22,6 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-
 
     //F05
     @PreAuthorize("hasAnyAuthority('CUSTOMER','ADMIN','MANAGER')")
@@ -56,14 +56,15 @@ public class UserController {
     //F09
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/admin")
-    public Page<UserResponse> getAllUsersByPage(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                @RequestParam(value = "size", defaultValue = "10") int size,
-                                                @RequestParam(value = "sort", defaultValue = "firstName") String sort,
-                                                @RequestParam(value = "type", defaultValue = "desc") String type)
+    public Page<UserResponse> getAllUsersByPage(HttpServletRequest httpServletRequest,
+                                                                 @RequestParam(value = "q", required = false) String q,
+                                                                 @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                 @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                 @RequestParam(value = "sort", defaultValue = "createAt") String sort,
+                                                                 @RequestParam(value = "type", defaultValue = "desc") String type)
     {
-        return userService.getAllUsersByPage(page,size,sort,type);
+        return userService.getAllUsersByPage(httpServletRequest,q,page,size,sort,type);
     }
-
 
     //F10
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
@@ -80,21 +81,15 @@ public class UserController {
         return userService.deleteUserById(userId , request);
     }
 
-
-
     //F11 user update
     @PutMapping("{id}/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")
     public ResponseMessage<UserResponse> updateUserById(
             @PathVariable("id") Long id,
+            @RequestBody @Valid
             UserRequest request)
     {
         return userService.updateUserById(id, request);
     }
-
-
-
-
-
 
 }

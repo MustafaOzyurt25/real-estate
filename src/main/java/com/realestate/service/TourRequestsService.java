@@ -5,17 +5,23 @@ import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.TourRequestStatus;
+import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.TourRequestMapper;
 import com.realestate.payload.request.TourRequestRequest;
+import com.realestate.payload.request.UpdateTourRequestRequest;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.TourRequestResponse;
+import com.realestate.payload.response.UpdateTourRequestResponse;
+import com.realestate.repository.AdvertRepository;
+import com.realestate.repository.AdvertTypeRepository;
 import com.realestate.repository.TourRequestsRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +29,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -39,6 +48,8 @@ public class TourRequestsService {
     private final UserRepository userRepository;
     private final PageableHelper pageableHelper;
 
+    private final AdvertRepository advertRepository;
+    private final AdvertTypeRepository advertTypeRepository;
 
     //S05
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest, String userEmail) {
@@ -93,59 +104,72 @@ public class TourRequestsService {
     }
 
 
-    /*
+    /**S06 --- updatedTourRequest ------------------------------------------------------------------------------------*/
 
-     */
+    public ResponseMessage<UpdateTourRequestResponse> updatedTourRequest(UpdateTourRequestRequest updateTourRequestRequest, Long tourId) {
 
-    /**
-     * //S06 put   //It will update a tour request -> tur talebini guncelle ----------------------------------------------
-     * <p>
-     * //1--It will return the updated tour request object/    - Güncellenmis tur istegini nesnesini dondurecektir.
-     * <p>
-     * //2-Only the tour requests whose status pending or rejected can be updated./  -Yalnızca beklemede/pending veya reddedilmiş/rejected/DECLINED durumu olan tur talepleri güncellenebilir.
-     * --------------------------------------------------------------//pending veya rejected olup olmadigini kontrol et!!!
-     * //3-If a request is updated, the status field should reset to “pending” / -Bir istek güncellenirse durum alanı "beklemede/pending" olarak sıfırlanmalıdır
-     * ---------------------------------------------------//gonderilen tourRequest guncellenirse pending olarak sifirla!!!
-     * <p>
-     * <p>
-     * public static ResponseMessage<TourRequestResponse> updatedTourRequest(TourRequest tourRequest, Long tourRequestId) {
-     * //!!! id kontrol ---> pending veya reddedilmis tur taleplerini guncelle. update edilecek tourrequest var mi?
-     * <p>
-     * TourRequest tourRequest1 = isTourRequestExist(tourRequestId);
-     * <p>
-     * //-----------------------------------------------------------------------------------------------------------------
-     * <p>
-     * public ResponseMessage<TourRequestResponse> updatedTourRequest(Long tourRequestId, TourRequestRequest TourRequestRequest) {
-     * TourRequest tourRequest = tourRequestsRepository.findById(tourRequestId)
-     * .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourRequestId)));
-     * <p>
-     * // Sadece "pending" veya "rejected/DECLINED" durumundaki istekleri güncelle -> REJECTED dokumantasyonda yazan, projede yazan DECLINED!!!
-     * if (tourRequest.getStatus() == TourRequestStatus.PENDING || tourRequest.getStatus() == TourRequestStatus.DECLINED) {
-     * tourRequest.setTourDate(TourRequestRequest.getTourDate());
-     * tourRequest.setTourTime(TourRequestRequest.getTourTime());
-     * // tourRequest.setTourId(TourRequestRequest.getTourId()); ---> TODO advert_id, tour_id ?????????????????????????
-     * <p>
-     * //gonderilen tourRequest guncellenirse pending olarak sifirla!!!
-     * tourRequest.setStatus(TourRequestStatus.PENDING);
-     * <p>
-     * <p>
-     * TourRequest updatedTourRequest = tourRequestsRepository.save(tourRequest);
-     * return ResponseMessage.<TourRequestResponse>builder()
-     * .message(SuccessMessages.TOUR_REQUEST_UPDATED)
-     * .httpStatus(HttpStatus.OK)
-     * .object(tourRequestMapper.mapTourRequestToTourRequestResponse(updatedTourRequest))
-     * .build();
-     * } else {
-     * return ResponseMessage.<TourRequestResponse>builder()
-     * .message(ErrorMessages.TOUR_REQUEST_CANNOT_BE_UPDATED)
-     * .httpStatus(HttpStatus.BAD_REQUEST)
-     * .build();
-     * }
-     * }
-     */
+        TourRequest tourRequestExist = isTourRequestExist(tourId);//var ise
+
+        if (!isValidTourTime(updateTourRequestRequest.getTourTime())) {// Tur zamani gecerli degil/ yarim ve tam zamanli tur time belirleyebilir
+            return ResponseMessage.<UpdateTourRequestResponse>builder()
+                    .message(ErrorMessages.INVALID_TOUR_TIME)
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        boolean isExistTourRequest = tourRequestsRepository//advertId, time, date i ayni baska tourrequest var mi?
+                .existsByAdvertIdAndTourDateAndTourTime(updateTourRequestRequest.getAdvertId(),
+                updateTourRequestRequest.getTourDate(),
+                updateTourRequestRequest.getTourTime());
+
+        if (isExistTourRequest) {//cakisan tour talepleri
+            return ResponseMessage.<UpdateTourRequestResponse>builder()
+                    .message(ErrorMessages.TOUR_REQUEST_ALREADY_EXIST)
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        /*Only the tour requests whose status PENDING or DECLINED can be updated.*/
+        if (tourRequestExist.getStatus() == TourRequestStatus.PENDING || tourRequestExist.getStatus() == TourRequestStatus.DECLINED) {
+            tourRequestExist.setTourDate(updateTourRequestRequest.getTourDate());
+            tourRequestExist.setTourTime(updateTourRequestRequest.getTourTime());
+            tourRequestExist.setUpdateAt(LocalDateTime.now());
+
+        } else {
+            return ResponseMessage.<UpdateTourRequestResponse>builder()
+                    .message(ErrorMessages.TOUR_REQUEST_CANNOT_BE_UPDATED)
+                    .httpStatus(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
+        /*If a request is updated, the status field should reset to “pending” */
+        tourRequestExist.setStatus(TourRequestStatus.PENDING);
+
+        /*It will return the updated tour request object*/
+        TourRequest updatedTourRequest = tourRequestsRepository.save(tourRequestExist);
+        return ResponseMessage.<UpdateTourRequestResponse>builder()
+                .message(SuccessMessages.TOUR_REQUEST_UPDATED)
+                .httpStatus(HttpStatus.OK)
+                .object(tourRequestMapper.tourRequestUpdateResponse(updatedTourRequest))
+                .build();
+
+    }
+
+    private TourRequest isTourRequestExist(Long tourId) {
+        return tourRequestsRepository.findById(tourId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, tourId)));//bu id ye ait tourrequest yok ise
+    }
+    private boolean isValidTourTime(LocalTime tourTime) {
+        int minute = tourTime.getMinute();
+        return (minute == 00 || minute == 30);//tam ve yarim
+    }
+
+    /** S06 end ------------------------------------------------------------------------------------------------------*/
 
 
-    public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
+
+    //S01
+  /*  public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
         User user = userRepository.findByEmailEquals(userEmail);
@@ -154,14 +178,59 @@ public class TourRequestsService {
             q = q.trim().toLowerCase().replaceAll("-", " ");
         }
 
-        Page<TourRequest> tourRequest = userRepository.getAuthCustomerTourRequestsPageable(/*q,*/user, pageable);
+        Page<TourRequest> tourRequest = userRepository.getAuthCustomerTourRequestsPageable(/*q user, pageable);
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
-        responseBody.put("tourRequest", tourRequest);
+        responseBody.put("tourRequest", tourRequest.map(tourRequestMapper::mapTourRequestToTourRequestResponse));
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
 
 
+    }*/
+
+
+    //S01
+    //======================================================
+    public Page<TourRequestResponse> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
+        try {
+            String userEmail = (String) httpServletRequest.getAttribute("email");
+            User user = userRepository.findByEmailEquals(userEmail);
+            Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+
+            Long guestUserId = user.getId();
+            List<TourRequest> userTourRequests = tourRequestsRepository.findByGuestUserId(guestUserId);
+
+            // Filtreleme işlemi "q" parametresiyle
+            List<TourRequest> filteredTourRequests = userTourRequests.stream()
+                    .filter(tourRequest -> tourRequestMatchesSearchQuery(tourRequest, q))
+                    .collect(Collectors.toList());
+
+            // Sayfalama işlemi
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), filteredTourRequests.size());
+            Page<TourRequest> paginatedTourRequests = new PageImpl<>(filteredTourRequests.subList(start, end), pageable, filteredTourRequests.size());
+
+            return paginatedTourRequests.map(tourRequestMapper::mapTourRequestToTourRequestResponse);
+        } catch (RuntimeException e) {
+            throw new ConflictException(ErrorMessages.USER_UNAUTHORIZED);
+        }
     }
+
+    private boolean tourRequestMatchesSearchQuery(TourRequest tourRequest, String q) {
+        if (q == null || q.trim().isEmpty()) {
+            return true; // Eğer arama sorgusu boşsa, herhangi bir filtre uygulanmamış kabul edilir.
+        }
+
+        String lowerCaseQuery = q.toLowerCase();
+
+        // Başlık alanlarında anahtar kelimeye göre eşleşme kontrolü
+        return tourRequest.getAdvert().getTitle().toLowerCase().contains(lowerCaseQuery);
+
+    }
+    //====================================================================================================
+
+
+
+
     public ResponseEntity<Map<String, Object>> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
@@ -173,13 +242,14 @@ public class TourRequestsService {
             q = q.trim().toLowerCase().replaceAll("-", " ");
         }
 
-        Page<TourRequest> tourRequestPage = userRepository.getTourRequestByAdmin(/*q,*/ user, pageable);
+        Page<TourRequest> tourRequestPage = userRepository.getTourRequestByAdmin( user, pageable);
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
         responseBody.put("tourRequest", tourRequestPage);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(Long tourRequestId) {
 
         TourRequest getAuthTourRequest = tourRequestsRepository.findById(tourRequestId).orElseThrow(() ->
@@ -207,7 +277,8 @@ public class TourRequestsService {
     }
 
     public ResponseMessage<TourRequestResponse> declineTourRequest(Long id) {
-        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
+        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
         tourRequest.setStatus(TourRequestStatus.DECLINED);
         tourRequest.setUpdateAt(LocalDateTime.now());
         return ResponseMessage.<TourRequestResponse>builder()
@@ -220,22 +291,27 @@ public class TourRequestsService {
 
 
     public boolean controlTourRequestByUserId(Long userId) {
-        
+
         boolean isExistsByGuestUserId = tourRequestsRepository.existsByGuestUserId(userId);
         boolean isExistsByOwnerUserId = tourRequestsRepository.existsByOwnerUserId(userId);
 
         return isExistsByGuestUserId || isExistsByOwnerUserId;
 
     }
-        public ResponseMessage<TourRequestResponse> cancelTourRequest (Long id){
-            TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
-            tourRequest.setStatus(TourRequestStatus.CANCELED);
-            tourRequest.setUpdateAt(LocalDateTime.now());
 
-            return ResponseMessage.<TourRequestResponse>builder()
-                    .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequestsRepository.save(tourRequest)))
-                    .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_CANCELED)
-                    .httpStatus(HttpStatus.OK)
-                    .build();
-        }
+    public ResponseMessage<TourRequestResponse> cancelTourRequest(Long id) {
+        TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
+        tourRequest.setStatus(TourRequestStatus.CANCELED);
+        tourRequest.setUpdateAt(LocalDateTime.now());
+
+        return ResponseMessage.<TourRequestResponse>builder()
+                .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequestsRepository.save(tourRequest)))
+                .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_CANCELED)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+
+
 }

@@ -23,7 +23,6 @@ public class FavoritesController {
     //K03
     @PostMapping("/{id}/auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-
     public ResponseMessage<FavoriteResponse> addOrRemoveAdvertToFavorites(@PathVariable Long id, HttpServletRequest httpServletRequest) {
         return favoritesService.addOrRemoveAdvertToFavorites(id, httpServletRequest);
     }
