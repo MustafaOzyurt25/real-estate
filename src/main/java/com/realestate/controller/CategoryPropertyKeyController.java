@@ -1,6 +1,5 @@
 package com.realestate.controller;
 
-
 import com.realestate.entity.CategoryPropertyKey;
 import com.realestate.payload.request.CategoryPropertyKeyRequest;
 import com.realestate.payload.response.ResponseMessage;
@@ -38,7 +37,7 @@ public class CategoryPropertyKeyController {
 
     //C07
     @GetMapping("/{categoryId}/properties")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','CUSTOMER')")
     public ResponseMessage<List<CategoryPropertyKey>> getCategoryPropertyKeysByCategoryId(@PathVariable Long categoryId) {
         return categoryPropertyKeyService.getCategoryPropertyKeysByCategoryId(categoryId);
     }

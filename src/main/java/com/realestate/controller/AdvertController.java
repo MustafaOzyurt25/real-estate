@@ -1,6 +1,7 @@
 package com.realestate.controller;
 
 import com.realestate.entity.Advert;
+import com.realestate.entity.enums.AdvertStatus;
 import com.realestate.payload.request.AdvertRequest;
 import com.realestate.payload.request.AdvertUpdateRequest;
 import com.realestate.payload.response.AdvertCategoriesResponse;
@@ -13,10 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/adverts")
@@ -28,38 +29,41 @@ public class AdvertController {
     //A10
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PostMapping("/save")
-    public Advert save(@ModelAttribute AdvertRequest advertRequest, HttpServletRequest httpServletRequest){
+    public Advert save(@ModelAttribute AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
 
-        return advertService.save(advertRequest , httpServletRequest);
+        return advertService.save(advertRequest, httpServletRequest);
 
     }
+
     //A07
     @GetMapping("/{slug}")
-    public ResponseMessage<Advert> getAdvertWithSlug(@PathVariable String slug){
+    public ResponseMessage<Advert> getAdvertWithSlug(@PathVariable String slug) {
         return advertService.getAdvertWithSlug(slug);
     }
 
 
     //A02
     @GetMapping("/cities")
-    public List<AdvertCityResponse> getAdvertAmountByCity(){
+    public List<AdvertCityResponse> getAdvertAmountByCity() {
         return advertService.getAdvertAmountByCity();
     }
 
     //A03
     @GetMapping("/categories")
-    public List<AdvertCategoriesResponse> getAdvertAmountByCategories(){return advertService.getAdvertAmountByCategories();}
+    public List<AdvertCategoriesResponse> getAdvertAmountByCategories() {
+        return advertService.getAdvertAmountByCategories();
+    }
 
     //A04
-     @GetMapping(value = {"/popular","/popular/{amount}"})
-     public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable(required = false) Integer amount){
-         Integer defaultAmount = (amount == null) ? 10 : amount;
-             return advertService.getPopularAdvertsByAmount(defaultAmount);
-      }
+    @GetMapping(value = {"/popular", "/popular/{amount}"})
+    public List<AdvertResponse> getPopularAdvertsByAmount(@PathVariable(required = false) Integer amount) {
+        Integer defaultAmount = (amount == null) ? 10 : amount;
+        return advertService.getPopularAdvertsByAmount(defaultAmount);
+    }
 
 
-      //A01
-    @GetMapping()
+    //A01
+     @GetMapping()
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(@RequestParam(value = "q", required = false) String q,
                                                                         @RequestParam(value = "category_id", required = false) Long categoryId,
                                                                         @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
@@ -79,32 +83,31 @@ public class AdvertController {
     //A08
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @GetMapping("/{id}/auth")
-    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest){
-        return advertService.getAuthenticatedCustomerAdvertById(id,httpServletRequest);
+    public ResponseMessage<AdvertResponse> getAuthenticatedCustomerAdvertById(@PathVariable Long id, HttpServletRequest httpServletRequest) {
+        return advertService.getAuthenticatedCustomerAdvertById(id, httpServletRequest);
     }
 
     //A05
- @PreAuthorize("hasAnyAuthority('CUSTOMER')")
- @GetMapping("/auth")
- public Page<AdvertResponse> getAuthenticatedUserAdverts(@RequestParam(value = "page",defaultValue = "0") int page,
-                                                         @RequestParam(value = "size",defaultValue = "20" ) int size,
-                                                         @RequestParam(value = "sort",defaultValue = "categoryId") String sort,
-                                                         @RequestParam(value = "type",defaultValue = "asc") String type,
-                                                         HttpServletRequest httpServletRequest   )
- {
-     return advertService.getAuthenticatedUserAdverts(page,size,sort,type,httpServletRequest);
-     
- }
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/auth")
+    public Page<AdvertResponse> getAuthenticatedUserAdverts(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                            @RequestParam(value = "size", defaultValue = "20") int size,
+                                                            @RequestParam(value = "sort", defaultValue = "categoryId") String sort,
+                                                            @RequestParam(value = "type", defaultValue = "asc") String type,
+                                                            HttpServletRequest httpServletRequest) {
+        return advertService.getAuthenticatedUserAdverts(page, size, sort, type, httpServletRequest);
+
+    }
+
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{id}/admin")
-    public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(@PathVariable Long id){
+    public ResponseMessage<AdvertResponse> getAdvertBySlugAdminManager(@PathVariable Long id) {
         return advertService.getAdvertBySlugAdminManager(id);
     }
 
 
-
     //A06
-    @GetMapping("/admin")
+ @GetMapping("/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Map<String, Object>> getSortedAdvertValuesByAdmin(@RequestParam(value = "q", required = false) String q,
                                                                         @RequestParam(value = "category_id", required = false) Long categoryId,
@@ -125,27 +128,21 @@ public class AdvertController {
 
     //A11
     //---------------updateAuthenticatedCustomersAdvertById ---------------------------//
-   
+
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @PutMapping("/auth/{advertId}")
     public ResponseMessage<AdvertResponse> updateAuthenticatedCustomersAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest,
-                                                                                  HttpServletRequest httpServletRequest){
-        return advertService.updateAuthenticatedCustomersAdvertById(advertId,updateRequest,httpServletRequest);
+                                                                                  HttpServletRequest httpServletRequest) {
+        return advertService.updateAuthenticatedCustomersAdvertById(advertId, updateRequest, httpServletRequest);
     }
-
-
 
 
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     @PutMapping("/admin/{advertId}")
-    public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest){
+    public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest) {
 
-        return advertService.updateAdminAdvertById(advertId,updateRequest);
+        return advertService.updateAdminAdvertById(advertId, updateRequest);
     }
-
-   
-    
-
 
 
     //A13 advert delete
@@ -156,7 +153,21 @@ public class AdvertController {
     }
 
 
+    // AdvertStatus enum larini frontend tarafinda,(backend doc. da yok) kullanici secebilsin diye yazildi(admin-adverts-page icin)
+//    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @GetMapping("/advert-status")
+    public ResponseEntity<List<Map<String, Object>>> getAdvertStatusList() {
+        List<AdvertStatus> advertStatusList = Arrays.asList(AdvertStatus.values());
 
-    
+        List<Map<String, Object>> responseList = new ArrayList<>();
+        for (AdvertStatus advertStatus : advertStatusList) {
+            Map<String, Object> statusMap = new HashMap<>();
+            statusMap.put("id", advertStatus.getId());
+            statusMap.put("name", advertStatus.name());
+            responseList.add(statusMap);
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
     
 }
