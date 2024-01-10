@@ -5,6 +5,7 @@ import com.realestate.entity.Advert;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.TourRequestStatus;
+import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
@@ -20,6 +21,7 @@ import com.realestate.repository.AdvertTypeRepository;
 import com.realestate.repository.TourRequestsRepository;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +32,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -162,7 +167,9 @@ public class TourRequestsService {
     /** S06 end ------------------------------------------------------------------------------------------------------*/
 
 
-    public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
+
+    //S01
+  /*  public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
         String userEmail = (String) httpServletRequest.getAttribute("email");
         User user = userRepository.findByEmailEquals(userEmail);
@@ -171,14 +178,58 @@ public class TourRequestsService {
             q = q.trim().toLowerCase().replaceAll("-", " ");
         }
 
-        Page<TourRequest> tourRequest = userRepository.getAuthCustomerTourRequestsPageable(/*q,*/user, pageable);
+        Page<TourRequest> tourRequest = userRepository.getAuthCustomerTourRequestsPageable(/*q user, pageable);
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
         responseBody.put("tourRequest", tourRequest.map(tourRequestMapper::mapTourRequestToTourRequestResponse));
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
 
 
+    }*/
+
+
+    //S01
+    //======================================================
+    public Page<TourRequestResponse> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
+        try {
+            String userEmail = (String) httpServletRequest.getAttribute("email");
+            User user = userRepository.findByEmailEquals(userEmail);
+            Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+
+            Long guestUserId = user.getId();
+            List<TourRequest> userTourRequests = tourRequestsRepository.findByGuestUserId(guestUserId);
+
+            // Filtreleme işlemi "q" parametresiyle
+            List<TourRequest> filteredTourRequests = userTourRequests.stream()
+                    .filter(tourRequest -> tourRequestMatchesSearchQuery(tourRequest, q))
+                    .collect(Collectors.toList());
+
+            // Sayfalama işlemi
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), filteredTourRequests.size());
+            Page<TourRequest> paginatedTourRequests = new PageImpl<>(filteredTourRequests.subList(start, end), pageable, filteredTourRequests.size());
+
+            return paginatedTourRequests.map(tourRequestMapper::mapTourRequestToTourRequestResponse);
+        } catch (RuntimeException e) {
+            throw new ConflictException(ErrorMessages.USER_UNAUTHORIZED);
+        }
     }
+
+    private boolean tourRequestMatchesSearchQuery(TourRequest tourRequest, String q) {
+        if (q == null || q.trim().isEmpty()) {
+            return true; // Eğer arama sorgusu boşsa, herhangi bir filtre uygulanmamış kabul edilir.
+        }
+
+        String lowerCaseQuery = q.toLowerCase();
+
+        // Başlık alanlarında anahtar kelimeye göre eşleşme kontrolü
+        return tourRequest.getAdvert().getTitle().toLowerCase().contains(lowerCaseQuery);
+
+    }
+    //====================================================================================================
+
+
+
 
     public ResponseEntity<Map<String, Object>> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
@@ -260,6 +311,7 @@ public class TourRequestsService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+
 
 
 }
