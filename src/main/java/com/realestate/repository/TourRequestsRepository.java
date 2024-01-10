@@ -2,6 +2,9 @@ package com.realestate.repository;
 
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.enums.TourRequestStatus;
+import net.bytebuddy.jar.asm.commons.Remapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,6 +39,9 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest, Long>
             @Param("tourDate") LocalDate tourDate,
             @Param("tourTime") LocalTime tourTime
     );
+
+
+    List<TourRequest> findByGuestUserId(Long guestUserId);
 
 /*
     @Query("SELECT COUNT(DISTINCT tr.guestUser) FROM TourRequest tr")

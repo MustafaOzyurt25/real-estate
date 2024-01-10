@@ -7,8 +7,10 @@ import com.realestate.payload.request.UpdateTourRequestRequest;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.payload.response.UpdateTourRequestResponse;
+import com.realestate.payload.response.UserResponse;
 import com.realestate.service.TourRequestsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -71,7 +73,7 @@ public class TourRequestsController {
 
 
     //S01
-    @GetMapping("/auth")
+   /* @GetMapping("/auth")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest,
                                                                                    @RequestParam(value = "q", required = false) String q,
@@ -81,7 +83,24 @@ public class TourRequestsController {
                                                                                    @RequestParam(value = "type", defaultValue = "desc") String type) {
         return tourRequestsService.getAuthCustomerTourRequestsPageable(httpServletRequest , q, page, size, sort, type);
 
+    }*/
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    @GetMapping("/auth")
+    public Page<TourRequestResponse> getAllUsersByPage(HttpServletRequest httpServletRequest,
+                                                @RequestParam(value = "q", required = false) String q,
+                                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                                @RequestParam(value = "size", defaultValue = "20") int size,
+                                                @RequestParam(value = "sort", defaultValue = "categoryId") String sort,
+                                                @RequestParam(value = "type", defaultValue = "asc") String type)
+    {
+        return tourRequestsService.getAuthCustomerTourRequestsPageable(httpServletRequest,q,page,size,sort,type);
     }
+
+
+
+    //S01
+
+
     @GetMapping("/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Map<String, Object>> getTourRequestByAdmin (HttpServletRequest httpServletRequest,
