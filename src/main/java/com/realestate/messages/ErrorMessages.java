@@ -42,7 +42,7 @@ public class ErrorMessages {
     public static final String REPORT_TOUR_REQUEST_NOT_FOUND = "Error: Tour Request  not found ";
     public static final String CAN_NOT_BE_DELETABLE_USER = "User, has tour request or advert, can not be deletable";
     public static final String CUSTOMER_CAN_NOT_DELETE_ANY_USER = "User, has just Customer Role, can not delete any user";
-    public static final String MANAGER_CAN_DELETE_ONLY_A_CUSTOMER = "A Manager can delete only Customers.";
+    public static final String MANAGER_CAN_DELETE_ONLY_A_CUSTOMER = "A Manager can not delete the user who has Admin role.";
     public static final String NOT_VALID_EMAIL = "You have logged in incorrectly. Please check your information and try again.";
     public static final String NOT_PERMITTED_METHOD_MESSAGE = "Error: You don't have any permission to do this operation";
     public static final String FAVORITE_NOT_FOUND = "Favorite is not found with id %s";

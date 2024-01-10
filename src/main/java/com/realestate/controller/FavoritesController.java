@@ -33,7 +33,6 @@ public class FavoritesController {
 
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @DeleteMapping("/auth")
-
     public ResponseMessage deleteAuthenticatedCustomerAllFavorites(HttpServletRequest httpServletRequest) {
         return favoritesService.deleteAuthenticatedCustomerAllFavorites(httpServletRequest);
     }
