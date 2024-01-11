@@ -57,7 +57,7 @@ public class TourRequestsService {
 
         // bu kullanıcı tourrequest oluşturan kullanıcıdır. guest_user_id field'ına kaydedilmesi gerekir.
         // Buradaki email'e sahip user'ı bulup guest_user atamamız gerekiyor.
-        System.out.println("User Email : " + userEmail);
+
         if (!userRepository.existsByEmail(userEmail)) {
             throw new ResourceNotFoundException(String.format(ErrorMessages.USER_NOT_FOUND_BY_EMAIL, userEmail));
         }
@@ -72,6 +72,21 @@ public class TourRequestsService {
 
         //default status atadık
         tourRequest.setStatus(TourRequestStatus.PENDING);
+
+        // tour request pending veya approved durumunda zaten varsa kontrolü
+        Long advertId= tourRequestRequest.getAdvertId();
+        if (tourRequestsRepository.existsByAdvertIdAndGuestUserIdAndStatus(advertId,guestUser.getId())){
+            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_ALREADY_EXIST);
+        }
+
+        // kendi ilanına tour request olusturamama durumu
+        Advert advert= advertService.getAdvertById(advertId);
+        Long userId= advert.getUser().getId(); // advert ı olusturan user i cektik
+        if(userId==guestUser.getId()){
+            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_CANNOT_CREATE_OWN_ADVERT);
+        }
+
+
         TourRequest savedTourRequest = tourRequestsRepository.save(tourRequest);
 
         return ResponseMessage.<TourRequestResponse>builder()
