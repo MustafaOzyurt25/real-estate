@@ -29,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -85,6 +86,19 @@ public class TourRequestsService {
         if(userId==guestUser.getId()){
             throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_CANNOT_CREATE_OWN_ADVERT);
         }
+
+        //geçmiş tarihe tour request olusturamama kontrolu
+        if (tourRequestRequest.getTourDate().isBefore(LocalDate.now())){
+            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_DATE_CANNOT_BE_PAST_DATE);
+        }
+
+        //geçmiş saate tour request olusturamama kontrolu
+        if (tourRequestRequest.getTourDate().isEqual(LocalDate.now())){
+            if (tourRequestRequest.getTourTime().isBefore(LocalTime.now())){
+                throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_TIME_CANNOT_BE_PAST_TIME);
+            }
+        }
+
 
 
         TourRequest savedTourRequest = tourRequestsRepository.save(tourRequest);
