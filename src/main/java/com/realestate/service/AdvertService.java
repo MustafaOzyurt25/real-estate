@@ -219,6 +219,10 @@ public class AdvertService {
         return advertRepository.existsByUserId(userId);
     }
 
+    public List<Advert> getAdvertsByUserId(Long userId){
+        return advertRepository.findAll();
+    }
+
     //===========================ID kontrol============================================
 
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, Integer status,Long countryId,Long cityId,Long districtId, int page, int size, String sort, String type) {

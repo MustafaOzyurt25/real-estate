@@ -67,12 +67,12 @@ public class UserController {
     }
 
     //F10
+
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/{userId}/admin")
     public ResponseMessage<UserResponse> getUserByAdmin(@PathVariable Long userId){
         return  userService.getUserByAdmin(userId);
     }
-
     //F12
     @DeleteMapping("/{userId}/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")

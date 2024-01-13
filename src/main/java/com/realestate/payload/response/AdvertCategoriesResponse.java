@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class AdvertCategoriesResponse {
 
     private String categories;
+    private String icon;
     private Long amount;
 }

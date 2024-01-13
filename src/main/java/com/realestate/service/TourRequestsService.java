@@ -328,6 +328,10 @@ public class TourRequestsService {
 
     }
 
+    public List<TourRequest> getTourRequestByUserId(Long userId){
+        return tourRequestsRepository.findAll();
+    }
+
     public ResponseMessage<TourRequestResponse> cancelTourRequest(Long id) {
         TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
