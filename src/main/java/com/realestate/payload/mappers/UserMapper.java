@@ -1,5 +1,7 @@
 package com.realestate.payload.mappers;
 
+import com.realestate.entity.Advert;
+import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @Data
@@ -47,6 +50,23 @@ public class UserMapper {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .favorites(user.getFavorites())
+                .roles(user.getRole())
+                .logs(user.getLogs())
+                .tourRequestGuests(user.getTourRequestGuest())
+                .tourRequestOwners(user.getTourRequestsOwner())
+                .build();
+    }
+
+    public UserResponse mapUserToUserResponseWithAdvert(User user, List<Advert> advertList, List<TourRequest> tourRequests) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .phone(user.getPhone())
+                .email(user.getEmail())
+                .favorites(user.getFavorites())
+                .adverts(advertList)
+                .tourRequests(tourRequests)
                 .roles(user.getRole())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())

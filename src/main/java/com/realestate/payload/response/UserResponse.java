@@ -1,10 +1,7 @@
 package com.realestate.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.realestate.entity.Favorite;
-import com.realestate.entity.Log;
-import com.realestate.entity.Role;
-import com.realestate.entity.TourRequest;
+import com.realestate.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,9 +28,9 @@ public class UserResponse
     private List<Favorite> favorites;
     private List<Log> logs;
     private Set<Role> roles;
+    private List<Advert> adverts;
+    private List<TourRequest> tourRequests;
     private List<TourRequest> tourRequestOwners;
     private List<TourRequest> tourRequestGuests;
-
-
 
 }

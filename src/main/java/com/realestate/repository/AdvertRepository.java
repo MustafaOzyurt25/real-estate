@@ -33,7 +33,7 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     boolean isEmpty();
 
 
-    @Query("SELECT new com.realestate.payload.response.AdvertCategoriesResponse(a.category.title, COUNT(a)) FROM Advert a GROUP BY a.category.title")
+    @Query("SELECT new com.realestate.payload.response.AdvertCategoriesResponse(a.category.title, a.category.icon, COUNT(a)) FROM Advert a GROUP BY a.category.title, a.category.icon")
     List<AdvertCategoriesResponse> getAdvertAmountByCategories();
 
     @Query("SELECT a FROM Advert a WHERE (:q IS NULL OR Lower(a.title) LIKE %:q% OR Lower(a.description) LIKE %:q%) " +
