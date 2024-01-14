@@ -79,6 +79,8 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     @Query("SELECT COUNT(a) FROM Advert a WHERE a.isActive = true")
     long countPublishedAdverts();
 
+    List<Advert> findByUser_Id(Long userId);
+
 
     /*
     * Aşağıdaki method çalışmadı. NEDEN?

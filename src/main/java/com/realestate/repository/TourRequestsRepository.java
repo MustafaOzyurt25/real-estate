@@ -43,6 +43,8 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest, Long>
 
     List<TourRequest> findByGuestUserId(Long guestUserId);
 
+    List<TourRequest> findByOwnerUser_Id(Long userId);
+
 /*
     @Query("SELECT COUNT(DISTINCT tr.guestUser) FROM TourRequest tr")
     long countCustomers();   getTourRequestsCount() / reportService icin yazildi ama gerek kalmadi!

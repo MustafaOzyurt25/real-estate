@@ -220,7 +220,7 @@ public class AdvertService {
     }
 
     public List<Advert> getAdvertsByUserId(Long userId){
-        return advertRepository.findAll();
+        return advertRepository.findByUser_Id(userId);
     }
 
     //===========================ID kontrol============================================
