@@ -154,7 +154,7 @@ public class AdvertController {
 
 
     // AdvertStatus enum larini frontend tarafinda,(backend doc. da yok) kullanici secebilsin diye yazildi(admin-adverts-page icin)
-//    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    // @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/advert-status")
     public ResponseEntity<List<Map<String, Object>>> getAdvertStatusList() {
         List<AdvertStatus> advertStatusList = Arrays.asList(AdvertStatus.values());

@@ -11,10 +11,13 @@ import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
+import com.realestate.payload.mappers.AdvertMapper;
+import com.realestate.payload.mappers.TourRequestMapper;
 import com.realestate.payload.mappers.UserMapper;
 import com.realestate.payload.request.PasswordUpdatedRequest;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
+import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.payload.response.UserResponse;
@@ -32,6 +35,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +50,9 @@ public class UserService {
     private final TourRequestsService tourRequestsService;
     private final FavoritesService favoritesService;
     private final LogsService logsService;
+
+    private final TourRequestMapper tourRequestMapper;
+    private final AdvertMapper advertMapper;
 
 
     public void saveDefaultAdmin(User defaultAdmin) {
@@ -227,8 +234,18 @@ public class UserService {
         List<Advert> adverts = advertService.getAdvertsByUserId(userId);
         List<TourRequest> tourRequests = tourRequestsService.getTourRequestByUserId(userId);
 
+        List<AdvertResponse> advertResponses = adverts.stream()
+                .map(advertMapper::mapAdvertToAdvertResponse)
+                .collect(Collectors.toList());
+
+
+        List<TourRequestResponse> tourRequestResponses = tourRequests.stream()
+                .map(tourRequestMapper::mapTourRequestToTourRequestResponse)
+                .collect(Collectors.toList());
+
+
         return ResponseMessage.<UserResponse>builder()
-                .object(userMapper.mapUserToUserResponseWithAdvert(user,adverts,tourRequests))
+                .object(userMapper.mapUserToUserResponseWithAdvert(user,advertResponses,tourRequestResponses))
                 .message(SuccessMessages.USER_FOUNDED)
                 .httpStatus(HttpStatus.OK)
                 .build();
@@ -325,13 +342,14 @@ public class UserService {
             throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
         }
 
+        /*
         Set<String> roles = userRepository.getRolesById(user.getId());
         if(roles.contains("MANAGER")){
             if(!(roles.contains("CUSTOMER") && !roles.contains("MANAGER") && !roles.contains("ADMIN"))){
                 throw new BadRequestException(ErrorMessages.MANAGER_CAN_UPDATE_ONLY_A_CUSTOMER);
             }
         }
-
+        */
         uniquePropertyValidator.checkUniqueProperties(user, userRequest);
 
         User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);

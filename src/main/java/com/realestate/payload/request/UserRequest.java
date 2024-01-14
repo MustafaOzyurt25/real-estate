@@ -1,5 +1,6 @@
 package com.realestate.payload.request;
 
+import com.realestate.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -28,6 +30,7 @@ public class UserRequest
     @Email(message = "Invalid email format")
     @NotNull
     private String email;
+    private Set<Role> role;
 
 
 

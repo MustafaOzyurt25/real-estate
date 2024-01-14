@@ -28,8 +28,8 @@ public class UserResponse
     private List<Favorite> favorites;
     private List<Log> logs;
     private Set<Role> roles;
-    private List<Advert> adverts;
-    private List<TourRequest> tourRequests;
+    private List<AdvertResponse> adverts;
+    private List<TourRequestResponse> tourRequests;
     private List<TourRequest> tourRequestOwners;
     private List<TourRequest> tourRequestGuests;
 

@@ -329,7 +329,7 @@ public class TourRequestsService {
     }
 
     public List<TourRequest> getTourRequestByUserId(Long userId){
-        return tourRequestsRepository.findAll();
+        return tourRequestsRepository.findByOwnerUser_Id(userId);
     }
 
     public ResponseMessage<TourRequestResponse> cancelTourRequest(Long id) {

@@ -43,9 +43,13 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest, Long>
 
     List<TourRequest> findByGuestUserId(Long guestUserId);
 
+
+    List<TourRequest> findByOwnerUser_Id(Long userId);
+
     @Query("SELECT CASE WHEN COUNT(tr) > 0 THEN true ELSE false END FROM TourRequest tr WHERE tr.advert.id = :advertId AND tr.guestUser.id = :id AND tr.status IN (1, 0)")
     boolean existsByAdvertIdAndGuestUserIdAndStatus(@Param("advertId") Long advertId, @Param("id") Long id);
 }
+
 
 /*
     @Query("SELECT COUNT(DISTINCT tr.guestUser) FROM TourRequest tr")

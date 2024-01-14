@@ -1,10 +1,14 @@
 package com.realestate.payload.mappers;
 
 import com.realestate.entity.Advert;
+import com.realestate.entity.Role;
 import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
+import com.realestate.entity.enums.RoleType;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
+import com.realestate.payload.response.AdvertResponse;
+import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.payload.response.UserResponse;
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,7 +61,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserResponse mapUserToUserResponseWithAdvert(User user, List<Advert> advertList, List<TourRequest> tourRequests) {
+    public UserResponse mapUserToUserResponseWithAdvert(User user, List<AdvertResponse> advertList, List<TourRequestResponse> tourRequests) {
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -81,6 +85,8 @@ public class UserMapper {
                 .updateAt(LocalDateTime.now())
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
+                .passwordHash(user.getPasswordHash())
+                .role(userRequest.getRole())
                 .phone(userRequest.getPhone())
                 .email(userRequest.getEmail())
                 .build();
