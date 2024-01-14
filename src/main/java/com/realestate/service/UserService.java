@@ -1,9 +1,6 @@
 package com.realestate.service;
 
-import com.realestate.entity.Advert;
-import com.realestate.entity.Role;
-import com.realestate.entity.TourRequest;
-import com.realestate.entity.User;
+import com.realestate.entity.*;
 import com.realestate.entity.enums.RoleType;
 import com.realestate.exception.BadRequestException;
 import com.realestate.exception.ConflictException;
@@ -12,21 +9,20 @@ import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.AdvertMapper;
+import com.realestate.payload.mappers.FavoriteMapper;
 import com.realestate.payload.mappers.TourRequestMapper;
 import com.realestate.payload.mappers.UserMapper;
 import com.realestate.payload.request.PasswordUpdatedRequest;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
-import com.realestate.payload.response.AdvertResponse;
-import com.realestate.payload.response.ResponseMessage;
-import com.realestate.payload.response.TourRequestResponse;
-import com.realestate.payload.response.UserResponse;
+import com.realestate.payload.response.*;
 import com.realestate.payload.validator.UniquePropertyValidator;
 import com.realestate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,6 +49,7 @@ public class UserService {
 
     private final TourRequestMapper tourRequestMapper;
     private final AdvertMapper advertMapper;
+    private final FavoriteMapper favoriteMapper;
 
 
     public void saveDefaultAdmin(User defaultAdmin) {
@@ -233,6 +230,12 @@ public class UserService {
 
         List<Advert> adverts = advertService.getAdvertsByUserId(userId);
         List<TourRequest> tourRequests = tourRequestsService.getTourRequestByUserId(userId);
+        List<Favorite> favorites = favoritesService.getFavoritesByUserId(userId);
+
+        List<FavoriteResponse> favoriteResponses = favorites.stream()
+                .map(favoriteMapper::mapToFavoriteToFavoriteResponse)
+                .collect(Collectors.toList());
+
 
         List<AdvertResponse> advertResponses = adverts.stream()
                 .map(advertMapper::mapAdvertToAdvertResponse)
@@ -245,7 +248,7 @@ public class UserService {
 
 
         return ResponseMessage.<UserResponse>builder()
-                .object(userMapper.mapUserToUserResponseWithAdvert(user,advertResponses,tourRequestResponses))
+                .object(userMapper.mapUserToUserResponseWithAdvert(user,advertResponses,tourRequestResponses,favoriteResponses))
                 .message(SuccessMessages.USER_FOUNDED)
                 .httpStatus(HttpStatus.OK)
                 .build();

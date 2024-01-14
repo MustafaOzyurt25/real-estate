@@ -117,6 +117,11 @@ public class FavoritesService {
         return ResponseEntity.ok(favoritesRepository.findByUser(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE, id)))).stream().map(favoriteMapper::mapToFavoriteToFavoriteResponse).collect(Collectors.toList()));
     }
 
+    //UserService icin yazildi
+    public List<Favorite> getFavoritesByUserId(Long userId){
+        return favoritesRepository.findByUser_Id(userId);
+    }
+
 
     //K01
     public ResponseMessage<List<AdvertResponse>> getAuthenticatedCustomerAllFavorites(HttpServletRequest

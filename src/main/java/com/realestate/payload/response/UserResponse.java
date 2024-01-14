@@ -25,7 +25,7 @@ public class UserResponse
     private String phone;
     private LocalDateTime updateAt;
     private LocalDateTime createAt;
-    private List<Favorite> favorites;
+    private List<FavoriteResponse> favoriteList;
     private List<Log> logs;
     private Set<Role> roles;
     private List<AdvertResponse> adverts;
