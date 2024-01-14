@@ -8,6 +8,9 @@ public class ErrorMessages {
     }
 
     public static final String TOUR_REQUEST_ALREADY_EXIST = "Tour Request already exist" ;
+    public static final String TOUR_REQUEST_DATE_CANNOT_BE_PAST_DATE = "Tour request date cannot be past date" ;
+    public static final String TOUR_REQUEST_TIME_CANNOT_BE_PAST_TIME = "Tour request time cannot be past time" ;
+    public static final String TOUR_REQUEST_CANNOT_CREATE_OWN_ADVERT = "You cannot create a tour request in your own advert" ;
     public static final String ADVERT_NOT_FOUND_EXCEPTION = "Advert with id %s Not Found";
     public static final String RESOURCE_NOT_FOUND_EXCEPTION = "%s could not find";
     public static final String RESOURCE_CONFLICT_EXCEPTION = "%s role already saved in Data Base";

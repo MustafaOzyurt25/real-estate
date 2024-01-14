@@ -29,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class TourRequestsService {
 
         // bu kullanıcı tourrequest oluşturan kullanıcıdır. guest_user_id field'ına kaydedilmesi gerekir.
         // Buradaki email'e sahip user'ı bulup guest_user atamamız gerekiyor.
-        System.out.println("User Email : " + userEmail);
+
         if (!userRepository.existsByEmail(userEmail)) {
             throw new ResourceNotFoundException(String.format(ErrorMessages.USER_NOT_FOUND_BY_EMAIL, userEmail));
         }
@@ -72,6 +73,34 @@ public class TourRequestsService {
 
         //default status atadık
         tourRequest.setStatus(TourRequestStatus.PENDING);
+
+        // tour request pending veya approved durumunda zaten varsa kontrolü
+        Long advertId= tourRequestRequest.getAdvertId();
+        if (tourRequestsRepository.existsByAdvertIdAndGuestUserIdAndStatus(advertId,guestUser.getId())){
+            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_ALREADY_EXIST);
+        }
+
+        // kendi ilanına tour request olusturamama durumu
+        Advert advert= advertService.getAdvertById(advertId);
+        Long userId= advert.getUser().getId(); // advert ı olusturan user i cektik
+        if(userId==guestUser.getId()){
+            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_CANNOT_CREATE_OWN_ADVERT);
+        }
+
+        //geçmiş tarihe tour request olusturamama kontrolu
+        if (tourRequestRequest.getTourDate().isBefore(LocalDate.now())){
+            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_DATE_CANNOT_BE_PAST_DATE);
+        }
+
+        //geçmiş saate tour request olusturamama kontrolu
+        if (tourRequestRequest.getTourDate().isEqual(LocalDate.now())){
+            if (tourRequestRequest.getTourTime().isBefore(LocalTime.now())){
+                throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_TIME_CANNOT_BE_PAST_TIME);
+            }
+        }
+
+
+
         TourRequest savedTourRequest = tourRequestsRepository.save(tourRequest);
 
         return ResponseMessage.<TourRequestResponse>builder()
