@@ -45,7 +45,7 @@ public class ImageController {
 
 
     //I03
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{ids}")
     public ResponseMessage deleteImagesById(@PathVariable List<Long> ids){
         return imageService.deleteImagesById(ids);
 

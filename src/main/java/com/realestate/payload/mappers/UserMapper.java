@@ -8,6 +8,7 @@ import com.realestate.entity.enums.RoleType;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
 import com.realestate.payload.response.AdvertResponse;
+import com.realestate.payload.response.FavoriteResponse;
 import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.payload.response.UserResponse;
 import lombok.Data;
@@ -53,7 +54,6 @@ public class UserMapper {
                 .lastName(user.getLastName())
                 .phone(user.getPhone())
                 .email(user.getEmail())
-                .favorites(user.getFavorites())
                 .roles(user.getRole())
                 .logs(user.getLogs())
                 .tourRequestGuests(user.getTourRequestGuest())
@@ -61,16 +61,17 @@ public class UserMapper {
                 .build();
     }
 
-    public UserResponse mapUserToUserResponseWithAdvert(User user, List<AdvertResponse> advertList, List<TourRequestResponse> tourRequests) {
+    public UserResponse mapUserToUserResponseWithAdvert(User user, List<AdvertResponse> advertList, List<TourRequestResponse> tourRequests, List<FavoriteResponse> favorites) {
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .phone(user.getPhone())
                 .email(user.getEmail())
-                .favorites(user.getFavorites())
+                .favoriteList(favorites)
                 .adverts(advertList)
                 .tourRequests(tourRequests)
+                .logs(user.getLogs())
                 .roles(user.getRole())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())
