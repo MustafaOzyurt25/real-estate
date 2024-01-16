@@ -71,6 +71,7 @@ public class UserMapper {
                 .favoriteList(favorites)
                 .adverts(advertList)
                 .tourRequests(tourRequests)
+                .logs(user.getLogs())
                 .roles(user.getRole())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())

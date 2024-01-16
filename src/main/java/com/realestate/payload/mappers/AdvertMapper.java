@@ -57,6 +57,8 @@ public class AdvertMapper {
                 .advertType(advert.getAdvertType())
                 .categoryPropertyValues(advert.getCategoryPropertyValue())
                 .logs(advert.getLogs())
+                .favorites(advert.getFavorites())
+                .tourRequests(advert.getTourRequests())
                 .build();
     }
 
