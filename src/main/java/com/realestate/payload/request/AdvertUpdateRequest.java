@@ -2,10 +2,14 @@ package com.realestate.payload.request;
 
 
 import com.realestate.entity.CategoryPropertyKey;
+import com.realestate.entity.enums.AdvertStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -25,6 +29,7 @@ public class AdvertUpdateRequest {
     private Double price;
     @NotNull
     private String location; // bu document  de yok.ama gorselde var.
+    private int statusId;
     private Long advertTypeId;
     private Long countryId;
     private Long cityId;

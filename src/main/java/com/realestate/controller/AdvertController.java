@@ -139,17 +139,18 @@ public class AdvertController {
 
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     @PutMapping("/admin/{advertId}")
-    public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest) {
+    public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest,
+                                                                 HttpServletRequest httpServletRequest) {
 
-        return advertService.updateAdminAdvertById(advertId, updateRequest);
+        return advertService.updateAdminAdvertById(advertId, updateRequest, httpServletRequest);
     }
 
 
     //A13 advert delete
     @DeleteMapping("/admin/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseMessage deleteAdvertById(@PathVariable Long id) {
-        return advertService.deleteAdvertById(id);
+    public ResponseMessage deleteAdvertById(@PathVariable Long id,HttpServletRequest httpServletRequest) {
+        return advertService.deleteAdvertById(id,httpServletRequest);
     }
 
 

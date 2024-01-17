@@ -3,6 +3,7 @@ package com.realestate.repository;
 import com.realestate.entity.Advert;
 import com.realestate.entity.AdvertType;
 import com.realestate.entity.Category;
+import com.realestate.entity.User;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.payload.response.AdvertCategoriesResponse;
 import com.realestate.entity.enums.AdvertStatus;
@@ -80,6 +81,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     long countPublishedAdverts();
 
     List<Advert> findByUser_Id(Long userId);
+
+    @Query("SELECT a.user FROM Advert a WHERE a.id = :id")
+    Optional<User> findByUserWithAdvertId(Long id);
 
 
     /*

@@ -1,10 +1,6 @@
 package com.realestate.payload.mappers;
 
-import com.realestate.entity.Advert;
-import com.realestate.entity.Role;
-import com.realestate.entity.TourRequest;
 import com.realestate.entity.User;
-import com.realestate.entity.enums.RoleType;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
 import com.realestate.payload.response.AdvertResponse;
@@ -15,15 +11,16 @@ import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Data
 public class UserMapper {
 
     private final PasswordEncoder passwordEncoder;
+    private final FavoriteMapper favoriteMapper;
 
 
     public User mapUserRequestToUser(UserRequest userRequest) {
@@ -55,7 +52,8 @@ public class UserMapper {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .roles(user.getRole())
-                .logs(user.getLogs())
+                .favoriteList(user.getFavorites().stream().map(favoriteMapper::mapToFavoriteToFavoriteResponse).collect(Collectors.toList()))
+                .logUser(user.getLogUser())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())
                 .build();
@@ -71,7 +69,7 @@ public class UserMapper {
                 .favoriteList(favorites)
                 .adverts(advertList)
                 .tourRequests(tourRequests)
-                .logs(user.getLogs())
+                .logAdverts(user.getLogAdverts())
                 .roles(user.getRole())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())

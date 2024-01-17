@@ -34,7 +34,7 @@ public class AdvertResponse {
     private Category category;
     private AdvertType advertType;
     private List<CategoryPropertyValue> categoryPropertyValues;
-    private List<Log> logs;
+    private List<LogAdvert> logAdverts;
     private List<Favorite> favorites;
     private List<TourRequest> tourRequests;
 

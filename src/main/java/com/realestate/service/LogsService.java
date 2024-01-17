@@ -1,7 +1,7 @@
 package com.realestate.service;
 
-import com.realestate.entity.Log;
-import com.realestate.repository.LogsRepository;
+import com.realestate.entity.LogAdvert;
+import com.realestate.repository.LogsAdvertRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 public class LogsService
 {
 
-    private final LogsRepository logsRepository;
+    private final LogsAdvertRepository logsAdvertRepository;
     public void deleteByUserId(Long userId)
     {
 
-        logsRepository.deleteByUserId(userId);
+        logsAdvertRepository.deleteByUserId(userId);
     }
 
-    public void save(Log log) {
-        logsRepository.save(log);
+    public void save(LogAdvert logAdvert) {
+        logsAdvertRepository.save(logAdvert);
     }
 }
