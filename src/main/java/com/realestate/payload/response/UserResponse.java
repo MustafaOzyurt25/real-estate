@@ -26,7 +26,8 @@ public class UserResponse
     private LocalDateTime updateAt;
     private LocalDateTime createAt;
     private List<FavoriteResponse> favoriteList;
-    private List<Log> logs;
+    private List<LogAdvert> logAdverts;
+    private List<LogUser> logUser;
     private Set<Role> roles;
     private List<AdvertResponse> adverts;
     private List<TourRequestResponse> tourRequests;

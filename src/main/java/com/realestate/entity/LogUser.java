@@ -8,15 +8,14 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "logs")
+@Table(name = "logsUser")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class Log {
+public class LogUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +30,4 @@ public class Log {
     @JsonIgnore
     private User user;
 
-    @ManyToOne
-    @JsonIgnore
-    private Advert advert;
 }
