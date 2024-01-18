@@ -303,24 +303,53 @@ public class TourRequestsService {
 
 
 
-    public ResponseEntity<Map<String, Object>> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
+  // public ResponseEntity<Map<String, Object>> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
-        String userEmail = (String) httpServletRequest.getAttribute("email");
-        User user = userRepository.findByEmailEquals(userEmail);
+  //     String userEmail = (String) httpServletRequest.getAttribute("email");
+  //     User user = userRepository.findByEmailEquals(userEmail);
 
-        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+  //     Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
 
-        if (q != null) {
-            q = q.trim().toLowerCase().replaceAll("-", " ");
+  //     if (q != null) {
+  //         q = q.trim().toLowerCase().replaceAll("-", " ");
+  //     }
+
+  //     Page<TourRequest> tourRequestPage = userRepository.getTourRequestByAdmin( user, pageable);
+
+  //     Map<String, Object> responseBody = new HashMap<>();
+  //     responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
+  //     responseBody.put("tourRequest", tourRequestPage);
+  //     return new ResponseEntity<>(responseBody, HttpStatus.OK);
+  // }
+
+    public Page<TourRequestResponse> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
+        try {
+            String userEmail = (String) httpServletRequest.getAttribute("email");
+            User user = userRepository.findByEmailEquals(userEmail);
+            Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+
+            Long guestUserId = user.getId();
+            List<TourRequest> userTourRequests = tourRequestsRepository.findByGuestUserId(guestUserId);
+
+            // Filtreleme işlemi "q" parametresiyle
+            List<TourRequest> filteredTourRequests = userTourRequests.stream()
+                    .filter(tourRequest -> tourRequestMatchesSearchQuery(tourRequest, q))
+                    .collect(Collectors.toList());
+
+            // Sayfalama işlemi
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), filteredTourRequests.size());
+            Page<TourRequest> paginatedTourRequests = new PageImpl<>(filteredTourRequests.subList(start, end), pageable, filteredTourRequests.size());
+
+            return paginatedTourRequests.map(tourRequestMapper::mapTourRequestToTourRequestResponse);
+        } catch (RuntimeException e) {
+            throw new ConflictException(ErrorMessages.USER_UNAUTHORIZED);
         }
-
-        Page<TourRequest> tourRequestPage = userRepository.getTourRequestByAdmin( user, pageable);
-
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
-        responseBody.put("tourRequest", tourRequestPage);
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
+
+
+
 
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(Long tourRequestId) {
 

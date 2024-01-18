@@ -103,7 +103,7 @@ public class TourRequestsController {
 
     @GetMapping("/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<Map<String, Object>> getTourRequestByAdmin (HttpServletRequest httpServletRequest,
+    public Page<TourRequestResponse> getTourRequestByAdmin (HttpServletRequest httpServletRequest,
                                                                       @RequestParam(value = "q", required = false) String q,
                                                                       @RequestParam(value = "page", defaultValue = "0") int page,
                                                                       @RequestParam(value = "size", defaultValue = "20") int size,
