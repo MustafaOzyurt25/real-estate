@@ -44,8 +44,8 @@ public class TourRequestsController {
     //S10
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseMessage<TourRequestResponse> delete(@PathVariable("id") Long id) {
-        return tourRequestsService.delete(id);
+    public ResponseMessage<TourRequestResponse> delete(@PathVariable("id") Long id, HttpServletRequest httpServletRequest) {
+        return tourRequestsService.delete(id,httpServletRequest);
     }
 
     //S04
