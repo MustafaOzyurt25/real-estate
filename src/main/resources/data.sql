@@ -64,7 +64,7 @@ INSERT INTO cities (id, name, country_id) VALUES
 (4, 'AGRI',39),
 (5, 'AMASYA',39),
 (6, 'ANKARA',39),
-(7 , 'Antalya' , 39),
+(7 , 'ANTALYA' ,39),
 (34, 'ISTANBUL',39)
 ON CONFLICT (id) DO NOTHING;
 
