@@ -1,5 +1,6 @@
 package com.realestate.payload.mappers;
 
+import com.realestate.entity.Favorite;
 import com.realestate.entity.User;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +47,10 @@ public class UserMapper {
     }
 
     public UserResponse mapUserToUserResponse(User user) {
+        List<FavoriteResponse> favoriteResponses = new ArrayList<>();
+        if (user.getFavorites() != null && !user.getFavorites().isEmpty()){
+            favoriteResponses = user.getFavorites().stream().map(favoriteMapper::mapToFavoriteToFavoriteResponse).toList();
+        }
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -52,7 +58,7 @@ public class UserMapper {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .roles(user.getRole())
-                .favoriteList(user.getFavorites().stream().map(favoriteMapper::mapToFavoriteToFavoriteResponse).collect(Collectors.toList()))
+                .favoriteList(favoriteResponses)
                 .logUser(user.getLogUser())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())
