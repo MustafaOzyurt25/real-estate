@@ -76,6 +76,7 @@ public class UserMapper {
                 .adverts(advertList)
                 .tourRequests(tourRequests)
                 .logAdverts(user.getLogAdverts())
+                .logUser(user.getLogUser())
                 .roles(user.getRole())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())
