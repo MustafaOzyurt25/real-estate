@@ -33,7 +33,7 @@ public class ErrorMessages {
     public static final String ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG = "Error: Advert not found with slug %s";
     public static final String CATEGORY_NOT_FOUND = "%s category not found" ;
     public static final String TOUR_REQUEST_NOT_FOUND = "Tour request with id %s was not found";
-    public static final String CRITERIA_ADVERT_NOT_FOUND = "No advert was found according to ysour search criteria";
+    public static final String CRITERIA_ADVERT_NOT_FOUND = "No advert was found according to your search criteria";
     public static final String NOT_FOUND_USER_MESSAGE = "Error: User with id %s was not found";
     public static final String ADVERT_CAN_NOT_BE_UPDATED = "You do not have permission to update this Advert with id %s";
     public static final String ADVERT_BUILT_IN_CAN_NOT_BE_UPDATED = "Advert whose builtIn property is true can not be updated.";

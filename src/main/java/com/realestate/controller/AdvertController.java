@@ -65,8 +65,8 @@ public class AdvertController {
     //A01
      @GetMapping()
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(@RequestParam(value = "q", required = false) String q,
-                                                                        @RequestParam(value = "category_id", required = false) Long categoryId,
-                                                                        @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
+                                                                        @RequestParam(value = "category_id", required = false) Set<Long> categoryId,
+                                                                        @RequestParam(value = "advert_type_id", required = false) Set<Long> advertTypeId,
                                                                         @RequestParam(value = "price_start", required = false) Double priceStart,
                                                                         @RequestParam(value = "price_end", required = false) Double priceEnd,
                                                                         @RequestParam(value = "status", required = false) Integer status,
@@ -110,8 +110,8 @@ public class AdvertController {
  @GetMapping("/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Map<String, Object>> getSortedAdvertValuesByAdmin(@RequestParam(value = "q", required = false) String q,
-                                                                        @RequestParam(value = "category_id", required = false) Long categoryId,
-                                                                        @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
+                                                                        @RequestParam(value = "category_id", required = false) Set<Long> categoryId,
+                                                                        @RequestParam(value = "advert_type_id", required = false) Set<Long> advertTypeId,
                                                                         @RequestParam(value = "price_start", required = false) Double priceStart,
                                                                         @RequestParam(value = "price_end", required = false) Double priceEnd,
                                                                         @RequestParam(value = "status", required = false) Integer status,

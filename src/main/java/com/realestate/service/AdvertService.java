@@ -230,7 +230,7 @@ public class AdvertService {
 
     //===========================ID kontrol============================================
 
-    public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, Integer status,Long countryId,Long cityId,Long districtId, int page, int size, String sort, String type) {
+    public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, Set<Long> categoryId, Set<Long> advertTypeId, Double priceStart, Double priceEnd, Integer status,Long countryId,Long cityId,Long districtId, int page, int size, String sort, String type) {
         Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort.toLowerCase(), type.toLowerCase());
         AdvertStatus aStatus = null;
         if (districtId != null){
