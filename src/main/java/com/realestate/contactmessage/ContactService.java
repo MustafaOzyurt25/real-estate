@@ -2,7 +2,9 @@ package com.realestate.contactmessage;
 
 import com.realestate.entity.Contact;
 import com.realestate.entity.TourRequest;
+import com.realestate.entity.enums.ContactStatus;
 import com.realestate.exception.ConflictException;
+import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.mappers.ContactMapper;
@@ -36,6 +38,7 @@ public class ContactService {
         }
         //DTO > POJO
         Contact contact = contactMapper.createContact(contactRequest);
+        contact.setStatus(ContactStatus.NOTOPENED);
         Contact savedData = contactRepository.save(contact);
 
         return ResponseMessage.<ContactResponse>builder()
@@ -66,5 +69,35 @@ public class ContactService {
 
         return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
     }
+
+    //J03
+    public ResponseMessage<ContactResponse> getContactMessageById(Long id) {
+        Contact contact=getContactById(id);
+        contact.setStatus(ContactStatus.OPENED);
+        return ResponseMessage.<ContactResponse>builder()
+                .httpStatus(HttpStatus.OK)
+                .object(contactMapper.createResponse(contact))
+                .message(SuccessMessages.CONTACT_MESSAGE_FOUNDED).build();
+    }
+
+    //J04
+    public ResponseMessage deleteContactMessageById(Long id) {
+        //id kontrol
+        isContactMessageExists(id);
+        contactRepository.deleteById(id);
+        return ResponseMessage.builder()
+                .message(SuccessMessages.CONTACT_MESSAGE_DELETED)
+                .httpStatus(HttpStatus.OK).build();
+    }
+
+    private Contact getContactById(Long id) {
+       return isContactMessageExists(id);
+    }
+
+    private Contact isContactMessageExists(Long id) {
+        return contactRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessages.CONTACT_MESSAGE_NOT_FOUND_EXCEPTION,id)));
+    }
+
 
 }
