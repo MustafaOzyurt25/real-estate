@@ -30,6 +30,7 @@ public class ContactMapper {
                 .message(contact.getMessage())
                 .email(contact.getEmail())
                 .createAt(contact.getCreateAt())
+                .contactStatus(contact.getStatus())
                 .build();
     }
 }

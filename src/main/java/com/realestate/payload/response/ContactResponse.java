@@ -1,5 +1,6 @@
 package com.realestate.payload.response;
 
+import com.realestate.entity.enums.ContactStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,8 @@ public class ContactResponse implements Serializable {
     private String email;
     private String message;
     private LocalDateTime createAt;
+    private ContactStatus contactStatus;
+
 
 
 }
