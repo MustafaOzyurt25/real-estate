@@ -5,6 +5,7 @@ import com.realestate.entity.LogAdvert;
 import com.realestate.entity.LogUser;
 import com.realestate.entity.User;
 import com.realestate.entity.enums.LogType;
+import com.realestate.payload.response.LogUserResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -20,4 +21,11 @@ public class LogUserMapper {
                 .build();
     }
 
+    public LogUserResponse mapLogUserToLogUserResponse(LogUser logUser){
+        return LogUserResponse.builder()
+                .id(logUser.getId())
+                .log(logUser.getLog().toString().replace("_"," "))
+                .createAt(logUser.getCreateAt())
+                .build();
+    }
 }
