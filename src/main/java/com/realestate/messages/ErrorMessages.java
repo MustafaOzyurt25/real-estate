@@ -56,6 +56,7 @@ public class ErrorMessages {
     public static final String CITY_CANNOT_BE_FOUND_BY_COUNTRY_ID = "Cities of %s id countries could not be found";
     public static final String USER_UNAUTHORIZED= "You do not have the authority to perform this action.";
     public static final String MANAGER_CAN_UPDATE_ONLY_A_CUSTOMER= "A Manager can delete only Customers.";
+    public static final String SLUG_IS_NOT_IN_THE_DESIRED_FORMAT= "Slug is not in the desired format.";
 
 
 

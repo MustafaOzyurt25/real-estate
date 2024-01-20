@@ -93,7 +93,6 @@ public class CategoryPropertyKeyService {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND_MESSAGE, categoryId)));
     }
-    
     public ResponseMessage<CategoryPropertyKey> deleteCategoryPropertyKeyByKeyId(Long id) {
         CategoryPropertyKey categoryPropertyKey = isCategoryPropertyKeyExistById(id);
 
