@@ -56,8 +56,8 @@ public class ReportController {
 
     @GetMapping("/most-popular-properties")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseEntity<List<Advert>> getMostPopularProperties(@RequestParam("amount") int amount) {
-        List<Advert> mostPopularProperties = reportService.getMostPopularProperties(amount);
+    public ResponseEntity<List<AdvertResponse>> getMostPopularProperties(@RequestParam("amount") int amount) {
+        List<AdvertResponse> mostPopularProperties = reportService.getMostPopularProperties(amount);
         return new ResponseEntity<>(mostPopularProperties, HttpStatus.OK);
     }
 
