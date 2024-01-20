@@ -49,7 +49,7 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
             "   (:priceStart IS NOT NULL AND :priceEnd IS NULL AND a.price >= :priceStart) OR " +
             "   (:priceStart IS NULL AND :priceEnd IS NOT NULL AND a.price <= :priceEnd)) " +
             "AND (:status IS NULL OR a.status = :status)")
-    Page<Advert> getSortedAdvertsByValues(String q, Set<Long> categoryId, Set<Long> advertTypeId, Double priceStart, Double priceEnd, AdvertStatus status,
+    Page<Advert> getSortedAdvertsByValues(String q, List<Long> categoryId, List<Long> advertTypeId, Double priceStart, Double priceEnd, AdvertStatus status,
                                           Long countryId, Long cityId, Long districtId, Pageable pageable);
 
 
