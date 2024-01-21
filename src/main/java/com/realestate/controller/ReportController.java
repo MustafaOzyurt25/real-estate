@@ -44,7 +44,7 @@ public class ReportController {
 
     // it will get tour requests for ADMIN,MANAGER ----G05 //
 
-    @PreAuthorize("hasAnyAuthority('ADMIN,MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/tour-requests")
     public ResponseMessage<List<TourRequestResponse>> getTourRequestsReport(
             @RequestParam(value = "date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
