@@ -69,6 +69,10 @@ public class UserMapper {
     }
 
     public UserResponse mapUserToUserResponseWithAdvert(User user, List<AdvertResponse> advertList, List<TourRequestResponse> tourRequests, List<FavoriteResponse> favorites) {
+        List<LogUserResponse> logUserResponses = new ArrayList<>();
+        if (user.getLogUser() != null && !user.getLogUser().isEmpty()){
+            logUserResponses = user.getLogUser().stream().map(logUserMapper::mapLogUserToLogUserResponse).collect(Collectors.toList());
+        }
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -79,7 +83,7 @@ public class UserMapper {
                 .adverts(advertList)
                 .tourRequests(tourRequests)
                 .logAdverts(user.getLogAdverts())
-                .logUser(user.getLogUser())
+                .logUser(logUserResponses)
                 .roles(user.getRole())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())
