@@ -71,12 +71,6 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
             "AND a.status = :status")
     List<Advert> findAdvertsByParameters(LocalDateTime date1, LocalDateTime date2, Long categoryId, Long advertTypeId, AdvertStatus status);
 
-
-
-    @Query("SELECT a FROM Advert a WHERE a.tourRequests IS NOT NULL ORDER BY a.tourRequests DESC")
-    List<Advert> findTopNByTourRequestsOrderByTourRequestsDesc(int amount);
-
-
     @Query("SELECT COUNT(a) FROM Advert a WHERE a.isActive = true")
     long countPublishedAdverts();
 
@@ -84,6 +78,9 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     @Query("SELECT a.user FROM Advert a WHERE a.id = :id")
     Optional<User> findByUserWithAdvertId(Long id);
+
+    @Query(value = "SELECT * FROM adverts a ORDER BY (SELECT COUNT(*) FROM tour_requests WHERE a.id = tour_requests.advert_id)  DESC LIMIT :amount" , nativeQuery = true)
+    List<Advert> getAdvertsByAmount(int amount);
 
 
     /*

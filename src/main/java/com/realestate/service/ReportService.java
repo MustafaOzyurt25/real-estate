@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,9 +88,16 @@ public class ReportService {
                 .build();
     }
 
-    public List<Advert> getMostPopularProperties(int amount) {
-        return advertRepository.findTopNByTourRequestsOrderByTourRequestsDesc(amount);
+    public List<AdvertResponse> getMostPopularProperties(int amount) {
+
+        List<Advert> adverts = advertRepository.getAdvertsByAmount(amount);
+        List<AdvertResponse> advertResponseList = adverts.stream().map(advertMapper::mapAdvertToAdvertResponse).collect(Collectors.toList());
+
+
+        return advertResponseList;
+
     }
+
 
     //  It will get some statistics....   G01.................\\
     public ResponseMessage<StatisticsResponse> getStatistics() {

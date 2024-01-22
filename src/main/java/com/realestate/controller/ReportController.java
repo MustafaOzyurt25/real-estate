@@ -44,7 +44,7 @@ public class ReportController {
 
     // it will get tour requests for ADMIN,MANAGER ----G05 //
 
-    @PreAuthorize("hasAnyAuthority('ADMIN,MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     @GetMapping("/tour-requests")
     public ResponseMessage<List<TourRequestResponse>> getTourRequestsReport(
             @RequestParam(value = "date1") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date1,
@@ -56,8 +56,8 @@ public class ReportController {
 
     @GetMapping("/most-popular-properties")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseEntity<List<Advert>> getMostPopularProperties(@RequestParam("amount") int amount) {
-        List<Advert> mostPopularProperties = reportService.getMostPopularProperties(amount);
+    public ResponseEntity<List<AdvertResponse>> getMostPopularProperties(@RequestParam("amount") int amount) {
+        List<AdvertResponse> mostPopularProperties = reportService.getMostPopularProperties(amount);
         return new ResponseEntity<>(mostPopularProperties, HttpStatus.OK);
     }
 
