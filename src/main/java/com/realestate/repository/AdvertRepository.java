@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 public interface AdvertRepository extends JpaRepository<Advert, Long> {
@@ -38,8 +39,8 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     List<AdvertCategoriesResponse> getAdvertAmountByCategories();
 
     @Query("SELECT a FROM Advert a WHERE (:q IS NULL OR Lower(a.title) LIKE %:q% OR Lower(a.description) LIKE %:q%) " +
-            "AND (:categoryId IS NULL OR a.category.id = :categoryId) " +
-            "AND (:advertTypeId IS NULL OR a.advertType.id = :advertTypeId) " +
+            "AND ((:categoryId) IS NULL OR a.category.id IN (:categoryId)) " +
+            "AND ((:advertTypeId) IS NULL OR a.advertType.id IN (:advertTypeId)) " +
             "AND (:countryId IS NULL OR a.country.id = :countryId) " +
             "AND (:cityId IS NULL OR a.city.id = :cityId) " +
             "AND (:districtId IS NULL OR a.district.id = :districtId) " +
@@ -48,8 +49,8 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
             "   (:priceStart IS NOT NULL AND :priceEnd IS NULL AND a.price >= :priceStart) OR " +
             "   (:priceStart IS NULL AND :priceEnd IS NOT NULL AND a.price <= :priceEnd)) " +
             "AND (:status IS NULL OR a.status = :status)")
-    Page<Advert> getSortedAdvertsByValues(String q, Long categoryId, Long advertTypeId, Double priceStart, Double priceEnd, AdvertStatus status,
-                                          Long countryId,Long cityId,Long districtId,Pageable pageable);
+    Page<Advert> getSortedAdvertsByValues(String q, List<Long> categoryId, List<Long> advertTypeId, Double priceStart, Double priceEnd, AdvertStatus status,
+                                          Long countryId, Long cityId, Long districtId, Pageable pageable);
 
 
     @Modifying
