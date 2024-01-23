@@ -2,6 +2,7 @@ package com.realestate.service;
 
 import com.realestate.entity.Category;
 import com.realestate.entity.CategoryPropertyKey;
+import com.realestate.exception.BadRequestException;
 import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
@@ -39,19 +40,28 @@ public class CategoryService {
 
     public ResponseMessage<CategoryResponse> deleteCategory(Long categoryId) {
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND, categoryId)));
-        if (category.getBuiltIn()) {
-            throw new RuntimeException("Built-in categories cannot be deleted.");
-        }
-        if (categoryRepository.existsByIdAndAdvertsIsNotEmpty(categoryId)) {
+        try {
+            Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
+                    new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND, categoryId)));
+            if (category.getBuiltIn()) {
+                throw new BadRequestException("Built-in categories cannot be deleted.");
+            }
+            if (categoryRepository.existsByIdAndAdvertsIsNotEmpty(categoryId)) {
+                throw new RuntimeException("The category cannot be deleted because there are associated records.");
+            }
+            categoryRepository.delete(category);
+            return ResponseMessage.<CategoryResponse>builder().
+                    httpStatus(HttpStatus.OK).
+                    message(SuccessMessages.DELETE_CATEGORY).
+                    build();
+
+        } catch (BadRequestException e) {
+            throw new BadRequestException("Built-in categories cannot be deleted.");
+        } catch (RuntimeException e) {
             throw new RuntimeException("The category cannot be deleted because there are associated records.");
         }
-        categoryRepository.delete(category);
-        return ResponseMessage.<CategoryResponse>builder().
-                httpStatus(HttpStatus.OK).
-                message(SuccessMessages.DELETE_CATEGORY).
-                build();
+
+
     }
 
     public Category createCategory(CategoryRequest categoryRequest) {
@@ -61,7 +71,7 @@ public class CategoryService {
         String slugFromTitle = categoryRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
         String slug = categoryRequest.getSlug();
 
-        if(slugFromTitle.equals(slug)){
+        if (slugFromTitle.equals(slug)) {
             Category category = categoryMapper.mapCategoryRequestToCategory(categoryRequest, categoryPropertyKeys);
 
             category.setBuiltIn(false);
@@ -70,38 +80,33 @@ public class CategoryService {
 
             return category;
 
-        }else{
+        } else {
             throw new ConflictException(ErrorMessages.SLUG_IS_NOT_IN_THE_DESIRED_FORMAT);
         }
 
     }
 
 
-
-
     public ResponseEntity<Map<String, Object>> getAllCategoriesByPage(String q, int page, int size, String sort, String type) {
 
-        Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort.toLowerCase(),type.toLowerCase());
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort.toLowerCase(), type.toLowerCase());
 
-        if(q!=null){
-            q=q.trim().toLowerCase().replaceAll("-"," ");
+        if (q != null) {
+            q = q.trim().toLowerCase().replaceAll("-", " ");
         }
 
-        Page<CategoryResponse> categories = categoryRepository.getAllCategoriesByPage(q,pageable)
+        Page<CategoryResponse> categories = categoryRepository.getAllCategoriesByPage(q, pageable)
                 .map(categoryMapper::mapCategoryToCategoryResponse);
         Map<String, Object> responseBody = new HashMap<>();
 
-        if (categories.isEmpty()){
+        if (categories.isEmpty()) {
             responseBody.put("message", ErrorMessages.CRITERIA_CATEGORY_NOT_FOUND_MESSAGE);
-            return new ResponseEntity<>(responseBody,HttpStatus.OK);
+            return new ResponseEntity<>(responseBody, HttpStatus.OK);
         }
-        responseBody.put("Message",SuccessMessages.CRITERIA_CATEGORY_FOUND);
-        responseBody.put("Categories",categories);
-        return new ResponseEntity<>(responseBody,HttpStatus.OK);
+        responseBody.put("Message", SuccessMessages.CRITERIA_CATEGORY_FOUND);
+        responseBody.put("Categories", categories);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
-
-
-
 
 
     public CategoryResponse getCategoryById(Long id) {
@@ -114,34 +119,33 @@ public class CategoryService {
 
 
     public List<Category> getAllCategories(String q, int page, int size, String sort, String type) {
-      return categoryRepository.findAll();
+        return categoryRepository.findAll();
     }
 
-    public ResponseMessage<CategoryResponse> updateCategoryWithId(Long id,CategoryRequest categoryRequest) {
+    public ResponseMessage<CategoryResponse> updateCategoryWithId(Long id, CategoryRequest categoryRequest) {
 
-        Category oldCategory = categoryRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND,id)));
+        Category oldCategory = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.CATEGORY_NOT_FOUND, id)));
 
-        if (oldCategory.getBuiltIn()){
+        if (oldCategory.getBuiltIn()) {
             throw new ConflictException(ErrorMessages.BUILTIN_CATEGORY_CANT_BE_UPDATED);
         }
 
         String slugFromTitle = categoryRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
         String slug = categoryRequest.getSlug();
 
-        if(slugFromTitle.equals(slug)){
+        if (slugFromTitle.equals(slug)) {
 
             List<CategoryPropertyKey> categoryPropertyKeys = categoryPropertyKeyService.getCategoryPropertyKeyByCategoryPropertyKeyIdList(categoryRequest.getCategoryPropertiesKeyId());
-            Category category = categoryMapper.mapCategoryRequestToUpdatedCategory(id,categoryRequest,categoryPropertyKeys);
+            Category category = categoryMapper.mapCategoryRequestToUpdatedCategory(id, categoryRequest, categoryPropertyKeys);
             category.setCreateAt(oldCategory.getCreateAt());
             return ResponseMessage.<CategoryResponse>builder()
                     .object(categoryMapper.mapCategoryToCategoryResponse(categoryRepository.save(category)))
                     .httpStatus(HttpStatus.OK)
                     .message(SuccessMessages.CATEGORY_SUCCESSFULLY_UPDATED)
                     .build();
-        }else{
+        } else {
             throw new ConflictException(ErrorMessages.SLUG_IS_NOT_IN_THE_DESIRED_FORMAT);
         }
-
 
 
     }
