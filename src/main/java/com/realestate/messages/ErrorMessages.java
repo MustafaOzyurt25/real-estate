@@ -8,6 +8,7 @@ public class ErrorMessages {
     }
 
     public static final String TOUR_REQUEST_ALREADY_EXIST = "Tour Request already exist" ;
+    public static final String TOUR_REQUEST_ALREADY_EXIST_FOR_SAME_DAY = "Tour Request already exist for same day" ;
     public static final String TOUR_REQUEST_DATE_CANNOT_BE_PAST_DATE = "Tour request date cannot be past date" ;
     public static final String TOUR_REQUEST_TIME_CANNOT_BE_PAST_TIME = "Tour request time cannot be past time" ;
     public static final String TOUR_REQUEST_CANNOT_CREATE_OWN_ADVERT = "You cannot create a tour request in your own advert" ;
