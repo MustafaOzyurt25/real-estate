@@ -74,10 +74,10 @@ public class TourRequestsService {
         //default status atadık
         tourRequest.setStatus(TourRequestStatus.PENDING);
 
-        // tour request pending veya approved durumunda zaten varsa kontrolü
+        // tour request, aynı günde  pending veya approved durumunda zaten varsa kontrolü
         Long advertId= tourRequestRequest.getAdvertId();
-        if (tourRequestsRepository.existsByAdvertIdAndGuestUserIdAndStatus(advertId,guestUser.getId())){
-            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_ALREADY_EXIST);
+        if (tourRequestsRepository.existsByAdvertIdAndGuestUserIdAndStatus(advertId,guestUser.getId(),tourRequestRequest.getTourDate())){
+            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_ALREADY_EXIST_FOR_SAME_DAY);
         }
 
         // kendi ilanına tour request olusturamama durumu

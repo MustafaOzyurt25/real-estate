@@ -46,8 +46,14 @@ public interface TourRequestsRepository extends JpaRepository<TourRequest, Long>
 
     List<TourRequest> findByOwnerUser_Id(Long userId);
 
-    @Query("SELECT CASE WHEN COUNT(tr) > 0 THEN true ELSE false END FROM TourRequest tr WHERE tr.advert.id = :advertId AND tr.guestUser.id = :id AND tr.status IN (1, 0)")
-    boolean existsByAdvertIdAndGuestUserIdAndStatus(@Param("advertId") Long advertId, @Param("id") Long id);
+   // @Query("SELECT CASE WHEN COUNT(tr) > 0 THEN true ELSE false END FROM TourRequest tr WHERE tr.advert.id = :advertId AND tr.guestUser.id = :id AND tr.status IN (1, 0)")
+  // @Query("SELECT CASE WHEN COUNT(tr) > 0 AND tr.tourDate = CURRENT_DATE AND tr.tourTime = CURRENT_TIME THEN true ELSE false END FROM TourRequest tr WHERE tr.advert.id = :advertId AND tr.guestUser.id = :id AND tr.status IN (1, 0)")
+
+    //@Query("SELECT CASE WHEN COUNT(tr) > 0 AND tr.tourDate = CURRENT_DATE AND tr.tourTime = CURRENT_TIME THEN true ELSE false END FROM TourRequest tr WHERE tr.advert.id = :advertId AND tr.guestUser.id = :id AND tr.status IN (1, 0) GROUP BY tr.tourDate, tr.tourTime")
+
+    @Query("SELECT CASE WHEN COUNT(tr) > 0 THEN true ELSE false END FROM TourRequest tr WHERE tr.advert.id = :advertId AND tr.guestUser.id = :id AND tr.status IN (1, 0) AND tr.tourDate = :tourDate")
+
+    boolean existsByAdvertIdAndGuestUserIdAndStatus(@Param("advertId") Long advertId, @Param("id") Long id , @Param("tourDate") LocalDate tourDate);
 }
 
 
