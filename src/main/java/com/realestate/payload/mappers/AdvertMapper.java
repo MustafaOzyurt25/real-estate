@@ -59,6 +59,7 @@ public class AdvertMapper {
                 .logAdverts(advert.getLogAdverts())
                 .favorites(advert.getFavorites())
                 .tourRequests(advert.getTourRequests())
+                .built_in(advert.getBuiltIn())
                 .build();
     }
 
