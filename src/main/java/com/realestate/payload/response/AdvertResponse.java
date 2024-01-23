@@ -17,6 +17,8 @@ import java.util.List;
 public class AdvertResponse {
 
     private Long advertId;
+    private User user;
+    private Boolean built_in;
     private String title;
     private String description;
     private String slug;
