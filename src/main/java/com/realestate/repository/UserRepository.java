@@ -51,7 +51,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     /**G04 It will get users ---------------------------------------------------------------------------------------*/
-    @Query(value = "select * from users inner join user_roles ON users.id = user_roles.role_id inner join roles ON user_roles.user_id = roles.id where roles.role_name = :roleName", nativeQuery = true)
+    @Query(value = "select * from users inner join user_roles ON users.id = user_roles.user_id inner join roles ON user_roles.role_id = roles.id where roles.role_name = :roleName", nativeQuery = true)
     List<User> getUsersByRoleRoleName(@Param("roleName") String roleName);
 
 
