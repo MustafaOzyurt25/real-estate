@@ -1,29 +1,26 @@
 package com.realestate.payload.mappers;
 
-import com.realestate.entity.Advert;
-import com.realestate.entity.Role;
-import com.realestate.entity.TourRequest;
+import com.realestate.entity.Favorite;
 import com.realestate.entity.User;
-import com.realestate.entity.enums.RoleType;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
-import com.realestate.payload.response.AdvertResponse;
-import com.realestate.payload.response.FavoriteResponse;
-import com.realestate.payload.response.TourRequestResponse;
-import com.realestate.payload.response.UserResponse;
+import com.realestate.payload.response.*;
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Data
 public class UserMapper {
 
     private final PasswordEncoder passwordEncoder;
+    private final FavoriteMapper favoriteMapper;
+    private final LogUserMapper logUserMapper;
 
 
     public User mapUserRequestToUser(UserRequest userRequest) {
@@ -48,6 +45,15 @@ public class UserMapper {
     }
 
     public UserResponse mapUserToUserResponse(User user) {
+        List<FavoriteResponse> favoriteResponses = new ArrayList<>();
+        List<LogUserResponse> logUserResponses = new ArrayList<>();
+        if (user.getFavorites() != null && !user.getFavorites().isEmpty()){
+            favoriteResponses = user.getFavorites().stream().map(favoriteMapper::mapToFavoriteToFavoriteResponse).toList();
+        }
+        if (user.getLogUser() != null && !user.getLogUser().isEmpty()){
+            logUserResponses = user.getLogUser().stream().map(logUserMapper::mapLogUserToLogUserResponse).collect(Collectors.toList());
+        }
+
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -55,13 +61,18 @@ public class UserMapper {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .roles(user.getRole())
-                .logs(user.getLogs())
+                .favoriteList(favoriteResponses)
+                .logUser(logUserResponses)
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())
                 .build();
     }
 
     public UserResponse mapUserToUserResponseWithAdvert(User user, List<AdvertResponse> advertList, List<TourRequestResponse> tourRequests, List<FavoriteResponse> favorites) {
+        List<LogUserResponse> logUserResponses = new ArrayList<>();
+        if (user.getLogUser() != null && !user.getLogUser().isEmpty()){
+            logUserResponses = user.getLogUser().stream().map(logUserMapper::mapLogUserToLogUserResponse).collect(Collectors.toList());
+        }
         return UserResponse.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -71,7 +82,8 @@ public class UserMapper {
                 .favoriteList(favorites)
                 .adverts(advertList)
                 .tourRequests(tourRequests)
-                .logs(user.getLogs())
+                .logAdverts(user.getLogAdverts())
+                .logUser(logUserResponses)
                 .roles(user.getRole())
                 .tourRequestGuests(user.getTourRequestGuest())
                 .tourRequestOwners(user.getTourRequestsOwner())

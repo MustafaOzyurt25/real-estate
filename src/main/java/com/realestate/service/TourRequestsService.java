@@ -1,25 +1,24 @@
 package com.realestate.service;
 
 
-import com.realestate.entity.Advert;
-import com.realestate.entity.TourRequest;
-import com.realestate.entity.User;
+import com.realestate.entity.*;
+import com.realestate.entity.enums.LogType;
+import com.realestate.entity.enums.RoleType;
 import com.realestate.entity.enums.TourRequestStatus;
 import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
 import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
+import com.realestate.payload.mappers.LogMapper;
+import com.realestate.payload.mappers.LogUserMapper;
 import com.realestate.payload.mappers.TourRequestMapper;
 import com.realestate.payload.request.TourRequestRequest;
 import com.realestate.payload.request.UpdateTourRequestRequest;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.TourRequestResponse;
 import com.realestate.payload.response.UpdateTourRequestResponse;
-import com.realestate.repository.AdvertRepository;
-import com.realestate.repository.AdvertTypeRepository;
-import com.realestate.repository.TourRequestsRepository;
-import com.realestate.repository.UserRepository;
+import com.realestate.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
@@ -32,10 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -48,6 +44,10 @@ public class TourRequestsService {
     private final AdvertService advertService;
     private final UserRepository userRepository;
     private final PageableHelper pageableHelper;
+    private final LogUserMapper logUserMapper;
+    private final LogUserRepository logUserRepository;
+    private final LogMapper logMapper;
+    private final LogsService logsService;
 
     private final AdvertRepository advertRepository;
     private final AdvertTypeRepository advertTypeRepository;
@@ -74,10 +74,10 @@ public class TourRequestsService {
         //default status atadık
         tourRequest.setStatus(TourRequestStatus.PENDING);
 
-        // tour request pending veya approved durumunda zaten varsa kontrolü
+        // tour request, aynı günde  pending veya approved durumunda zaten varsa kontrolü
         Long advertId= tourRequestRequest.getAdvertId();
-        if (tourRequestsRepository.existsByAdvertIdAndGuestUserIdAndStatus(advertId,guestUser.getId())){
-            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_ALREADY_EXIST);
+        if (tourRequestsRepository.existsByAdvertIdAndGuestUserIdAndStatus(advertId,guestUser.getId(),tourRequestRequest.getTourDate())){
+            throw new ResourceNotFoundException(ErrorMessages.TOUR_REQUEST_ALREADY_EXIST_FOR_SAME_DAY);
         }
 
         // kendi ilanına tour request olusturamama durumu
@@ -99,7 +99,10 @@ public class TourRequestsService {
             }
         }
 
-
+        LogAdvert logAdvert = logMapper.mapLog(guestUser,advert,LogType.TOUR_REQUEST_CREATED);
+        LogUser logUser = logUserMapper.mapLog(guestUser,LogType.TOUR_REQUEST_CREATED);
+        logsService.save(logAdvert);
+        logUserRepository.save(logUser);
 
         TourRequest savedTourRequest = tourRequestsRepository.save(tourRequest);
 
@@ -112,8 +115,43 @@ public class TourRequestsService {
 
     }
 
-    public ResponseMessage<TourRequestResponse> delete(Long id) {
+    public ResponseMessage<TourRequestResponse> delete(Long id,HttpServletRequest httpServletRequest) {
         TourRequest tourRequest = tourRequestsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND, id)));
+        String userEmail = (String) httpServletRequest.getAttribute("email");
+        User loginUser = userRepository.findByEmailEquals(userEmail);
+        int deger = 0;
+        for (Role role:loginUser.getRole()) {
+            if (role.getRoleName().equals(RoleType.ADMIN)){
+                deger++;
+            }
+        }
+        if (Objects.equals(tourRequest.getOwnerUser().getId(), loginUser.getId())){
+            if (deger>0) {
+                logUserRepository.save(logUserMapper.mapLog(tourRequest.getGuestUser(), LogType.TOUR_REQUEST_DELETED_BY_ADMIN));
+            }else{
+                logUserRepository.save(logUserMapper.mapLog(tourRequest.getGuestUser(),LogType.TOUR_REQUEST_DELETED_BY_MANAGER));
+            }
+            logUserRepository.save(logUserMapper.mapLog(loginUser, LogType.TOUR_REQUEST_DELETED));
+        } else if (Objects.equals(tourRequest.getGuestUser().getId(),loginUser.getId())) {
+            if (deger>0) {
+                logUserRepository.save(logUserMapper.mapLog(tourRequest.getOwnerUser(), LogType.TOUR_REQUEST_DELETED_BY_ADMIN));
+            }else{
+                logUserRepository.save(logUserMapper.mapLog(tourRequest.getOwnerUser(),LogType.TOUR_REQUEST_DELETED_BY_MANAGER));
+            }
+            logUserRepository.save(logUserMapper.mapLog(loginUser, LogType.TOUR_REQUEST_DELETED));
+        } else {
+            if (deger>0){
+                logUserRepository.save(logUserMapper.mapLog(tourRequest.getGuestUser(),LogType.TOUR_REQUEST_DELETED_BY_ADMIN));
+                logUserRepository.save(logUserMapper.mapLog(tourRequest.getOwnerUser(),LogType.TOUR_REQUEST_DELETED_BY_ADMIN));
+            }else {
+                logUserRepository.save(logUserMapper.mapLog(tourRequest.getGuestUser(),LogType.TOUR_REQUEST_DELETED_BY_MANAGER));
+                logUserRepository.save(logUserMapper.mapLog(tourRequest.getOwnerUser(),LogType.TOUR_REQUEST_DELETED_BY_MANAGER));
+            }
+            logUserRepository.save(logUserMapper.mapLog(loginUser,LogType.TOUR_REQUEST_DELETED));
+        }
+        LogAdvert logAdvert = logMapper.mapLog(tourRequest.getOwnerUser(), tourRequest.getAdvert() ,LogType.TOUR_REQUEST_DELETED);
+        logsService.save(logAdvert);
+
         tourRequestsRepository.deleteById(id);
         return ResponseMessage.<TourRequestResponse>builder()
                 .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequest))
@@ -174,6 +212,11 @@ public class TourRequestsService {
         /*If a request is updated, the status field should reset to “pending” */
         tourRequestExist.setStatus(TourRequestStatus.PENDING);
 
+            LogAdvert logAdvert = logMapper.mapLog(tourRequestExist.getOwnerUser(), tourRequestExist.getAdvert() ,LogType.TOUR_REQUEST_UPDATED);
+            logsService.save(logAdvert);
+            logUserRepository.save(logUserMapper.mapLog(tourRequestExist.getGuestUser(),LogType.TOUR_REQUEST_UPDATED));
+
+
         /*It will return the updated tour request object*/
         TourRequest updatedTourRequest = tourRequestsRepository.save(tourRequestExist);
         return ResponseMessage.<UpdateTourRequestResponse>builder()
@@ -195,26 +238,6 @@ public class TourRequestsService {
 
     /** S06 end ------------------------------------------------------------------------------------------------------*/
 
-
-
-    //S01
-  /*  public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
-
-        String userEmail = (String) httpServletRequest.getAttribute("email");
-        User user = userRepository.findByEmailEquals(userEmail);
-        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
-        if (q != null) {
-            q = q.trim().toLowerCase().replaceAll("-", " ");
-        }
-
-        Page<TourRequest> tourRequest = userRepository.getAuthCustomerTourRequestsPageable(/*q user, pageable);
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
-        responseBody.put("tourRequest", tourRequest.map(tourRequestMapper::mapTourRequestToTourRequestResponse));
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
-
-
-    }*/
 
 
     //S01
@@ -259,25 +282,34 @@ public class TourRequestsService {
 
 
 
+    public Page<TourRequestResponse> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
+        try {
+            String userEmail = (String) httpServletRequest.getAttribute("email");
+            User user = userRepository.findByEmailEquals(userEmail);
+            Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
 
-    public ResponseEntity<Map<String, Object>> getTourRequestByAdmin(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
+            Long guestUserId = user.getId();
+            List<TourRequest> userTourRequests = tourRequestsRepository.findByGuestUserId(guestUserId);
 
-        String userEmail = (String) httpServletRequest.getAttribute("email");
-        User user = userRepository.findByEmailEquals(userEmail);
+            // Filtreleme işlemi "q" parametresiyle
+            List<TourRequest> filteredTourRequests = userTourRequests.stream()
+                    .filter(tourRequest -> tourRequestMatchesSearchQuery(tourRequest, q))
+                    .collect(Collectors.toList());
 
-        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
+            // Sayfalama işlemi
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), filteredTourRequests.size());
+            Page<TourRequest> paginatedTourRequests = new PageImpl<>(filteredTourRequests.subList(start, end), pageable, filteredTourRequests.size());
 
-        if (q != null) {
-            q = q.trim().toLowerCase().replaceAll("-", " ");
+            return paginatedTourRequests.map(tourRequestMapper::mapTourRequestToTourRequestResponse);
+        } catch (RuntimeException e) {
+            throw new ConflictException(ErrorMessages.USER_UNAUTHORIZED);
         }
-
-        Page<TourRequest> tourRequestPage = userRepository.getTourRequestByAdmin( user, pageable);
-
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("Message", SuccessMessages.CRITERIA_ADVERT_FOUND);
-        responseBody.put("tourRequest", tourRequestPage);
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
+
+
+
 
     public ResponseMessage<TourRequestResponse> getAuthTourRequestById(Long tourRequestId) {
 
@@ -297,6 +329,10 @@ public class TourRequestsService {
         tourRequest.setStatus(TourRequestStatus.APPROVED);
         tourRequest.setUpdateAt(LocalDateTime.now());
         tourRequestsRepository.save(tourRequest);
+        LogAdvert logAdvert = logMapper.mapLog(tourRequest.getOwnerUser(), tourRequest.getAdvert() ,LogType.TOUR_REQUEST_ACCEPTED);
+        logsService.save(logAdvert);
+        logUserRepository.save(logUserMapper.mapLog(tourRequest.getOwnerUser(),LogType.TOUR_REQUEST_ACCEPTED));
+        logUserRepository.save(logUserMapper.mapLog(tourRequest.getGuestUser(),LogType.TOUR_REQUEST_ACCEPTED_BY_OWNER));
 
         return ResponseMessage.<TourRequestResponse>builder()
                 .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequest))
@@ -310,6 +346,11 @@ public class TourRequestsService {
                 new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
         tourRequest.setStatus(TourRequestStatus.DECLINED);
         tourRequest.setUpdateAt(LocalDateTime.now());
+        LogAdvert logAdvert = logMapper.mapLog(tourRequest.getOwnerUser(), tourRequest.getAdvert() ,LogType.TOUR_REQUEST_DECLINED);
+        logsService.save(logAdvert);
+        logUserRepository.save(logUserMapper.mapLog(tourRequest.getOwnerUser(),LogType.TOUR_REQUEST_DECLINED));
+        logUserRepository.save(logUserMapper.mapLog(tourRequest.getGuestUser(),LogType.TOUR_REQUEST_DECLINED_BY_OWNER));
+
         return ResponseMessage.<TourRequestResponse>builder()
                 .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequestsRepository.save(tourRequest)))
                 .message(SuccessMessages.TOUR_REQUEST_SUCCESSFULLY_DECLINED)
@@ -337,6 +378,10 @@ public class TourRequestsService {
                 new ResourceNotFoundException(String.format(ErrorMessages.TOUR_REQUEST_NOT_FOUND)));
         tourRequest.setStatus(TourRequestStatus.CANCELED);
         tourRequest.setUpdateAt(LocalDateTime.now());
+        LogAdvert logAdvert = logMapper.mapLog(tourRequest.getOwnerUser(), tourRequest.getAdvert() ,LogType.TOUR_REQUEST_CANCELED);
+        logsService.save(logAdvert);
+        logUserRepository.save(logUserMapper.mapLog(tourRequest.getOwnerUser(),LogType.TOUR_REQUEST_CANCELED_BY_QUEST));
+        logUserRepository.save(logUserMapper.mapLog(tourRequest.getGuestUser(),LogType.TOUR_REQUEST_CANCELED));
 
         return ResponseMessage.<TourRequestResponse>builder()
                 .object(tourRequestMapper.mapTourRequestToTourRequestResponse(tourRequestsRepository.save(tourRequest)))

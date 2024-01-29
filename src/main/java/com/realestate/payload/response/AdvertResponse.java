@@ -17,6 +17,8 @@ import java.util.List;
 public class AdvertResponse {
 
     private Long advertId;
+    private User user;
+    private Boolean built_in;
     private String title;
     private String description;
     private String slug;
@@ -34,7 +36,7 @@ public class AdvertResponse {
     private Category category;
     private AdvertType advertType;
     private List<CategoryPropertyValue> categoryPropertyValues;
-    private List<Log> logs;
+    private List<LogAdvert> logAdverts;
     private List<Favorite> favorites;
     private List<TourRequest> tourRequests;
 

@@ -44,8 +44,8 @@ public class TourRequestsController {
     //S10
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseMessage<TourRequestResponse> delete(@PathVariable("id") Long id) {
-        return tourRequestsService.delete(id);
+    public ResponseMessage<TourRequestResponse> delete(@PathVariable("id") Long id, HttpServletRequest httpServletRequest) {
+        return tourRequestsService.delete(id,httpServletRequest);
     }
 
     //S04
@@ -71,22 +71,9 @@ public class TourRequestsController {
         return tourRequestsService.getAuthTourRequestById(tourRequestId);
     }
 
-
-    //S01
-   /* @GetMapping("/auth")
-    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    public ResponseEntity<Map<String, Object>> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest,
-                                                                                   @RequestParam(value = "q", required = false) String q,
-                                                                                   @RequestParam(value = "page", defaultValue = "0") int page,
-                                                                                   @RequestParam(value = "size", defaultValue = "10") int size,
-                                                                                   @RequestParam(value = "sort", defaultValue = "id") String sort,
-                                                                                   @RequestParam(value = "type", defaultValue = "desc") String type) {
-        return tourRequestsService.getAuthCustomerTourRequestsPageable(httpServletRequest , q, page, size, sort, type);
-
-    }*/
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
     @GetMapping("/auth")
-    public Page<TourRequestResponse> getAllUsersByPage(HttpServletRequest httpServletRequest,
+    public Page<TourRequestResponse> getAuthCustomerTourRequestsPageable(HttpServletRequest httpServletRequest,
                                                 @RequestParam(value = "q", required = false) String q,
                                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                                 @RequestParam(value = "size", defaultValue = "20") int size,
@@ -103,7 +90,7 @@ public class TourRequestsController {
 
     @GetMapping("/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<Map<String, Object>> getTourRequestByAdmin (HttpServletRequest httpServletRequest,
+    public Page<TourRequestResponse> getTourRequestByAdmin (HttpServletRequest httpServletRequest,
                                                                       @RequestParam(value = "q", required = false) String q,
                                                                       @RequestParam(value = "page", defaultValue = "0") int page,
                                                                       @RequestParam(value = "size", defaultValue = "20") int size,

@@ -36,4 +36,21 @@ public class ContactController {
     ) {
         return contactService.getAllContactMessageAsPage(page, size, sort, type, query);
     }
+
+    //J03
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @GetMapping("/{id}")
+
+    public ResponseMessage<ContactResponse> getContactMessageById(@PathVariable Long id){
+        return contactService.getContactMessageById(id);
+    }
+
+    //J04
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseMessage deleteContactMessageById (@PathVariable Long id){
+        return contactService.deleteContactMessageById(id);
+    }
+
 }

@@ -51,7 +51,10 @@ public class User {
     private List<Favorite> favorites;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
-    private List<Log> logs;
+    private List<LogAdvert> logAdverts;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private List<LogUser> logUser;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore

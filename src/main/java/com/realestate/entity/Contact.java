@@ -1,6 +1,7 @@
 package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.realestate.entity.enums.ContactStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,9 @@ public class Contact {
     @Column(unique = true)
     private String email;
     private String message;
+
+    @Enumerated(EnumType.ORDINAL)
+    private ContactStatus status;
 
     @Column(name = "create_at")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

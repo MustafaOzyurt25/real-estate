@@ -8,10 +8,12 @@ public class ErrorMessages {
     }
 
     public static final String TOUR_REQUEST_ALREADY_EXIST = "Tour Request already exist" ;
+    public static final String TOUR_REQUEST_ALREADY_EXIST_FOR_SAME_DAY = "Tour Request already exist for same day" ;
     public static final String TOUR_REQUEST_DATE_CANNOT_BE_PAST_DATE = "Tour request date cannot be past date" ;
     public static final String TOUR_REQUEST_TIME_CANNOT_BE_PAST_TIME = "Tour request time cannot be past time" ;
     public static final String TOUR_REQUEST_CANNOT_CREATE_OWN_ADVERT = "You cannot create a tour request in your own advert" ;
     public static final String ADVERT_NOT_FOUND_EXCEPTION = "Advert with id %s Not Found";
+    public static final String CONTACT_MESSAGE_NOT_FOUND_EXCEPTION = "Contact Message with id %s Not Found";
     public static final String RESOURCE_NOT_FOUND_EXCEPTION = "%s could not find";
     public static final String RESOURCE_CONFLICT_EXCEPTION = "%s role already saved in Data Base";
     public static final String NOT_FOUND_CATEGORY_PROPERTY_KEY_MESSAGE = "Category Property Key with id %s Not Found";
@@ -32,7 +34,7 @@ public class ErrorMessages {
     public static final String ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG = "Error: Advert not found with slug %s";
     public static final String CATEGORY_NOT_FOUND = "%s category not found" ;
     public static final String TOUR_REQUEST_NOT_FOUND = "Tour request with id %s was not found";
-    public static final String CRITERIA_ADVERT_NOT_FOUND = "No advert was found according to ysour search criteria";
+    public static final String CRITERIA_ADVERT_NOT_FOUND = "No advert was found according to your search criteria";
     public static final String NOT_FOUND_USER_MESSAGE = "Error: User with id %s was not found";
     public static final String ADVERT_CAN_NOT_BE_UPDATED = "You do not have permission to update this Advert with id %s";
     public static final String ADVERT_BUILT_IN_CAN_NOT_BE_UPDATED = "Advert whose builtIn property is true can not be updated.";
@@ -56,6 +58,7 @@ public class ErrorMessages {
     public static final String CITY_CANNOT_BE_FOUND_BY_COUNTRY_ID = "Cities of %s id countries could not be found";
     public static final String USER_UNAUTHORIZED= "You do not have the authority to perform this action.";
     public static final String MANAGER_CAN_UPDATE_ONLY_A_CUSTOMER= "A Manager can delete only Customers.";
+    public static final String SLUG_IS_NOT_IN_THE_DESIRED_FORMAT= "Slug is not in the desired format.";
 
 
 

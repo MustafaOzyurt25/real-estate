@@ -65,8 +65,8 @@ public class AdvertController {
     //A01
      @GetMapping()
     public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(@RequestParam(value = "q", required = false) String q,
-                                                                        @RequestParam(value = "category_id", required = false) Long categoryId,
-                                                                        @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
+                                                                        @RequestParam(value = "category_id", required = false) List<Long> categoryId,
+                                                                        @RequestParam(value = "advert_type_id", required = false) List<Long> advertTypeId,
                                                                         @RequestParam(value = "price_start", required = false) Double priceStart,
                                                                         @RequestParam(value = "price_end", required = false) Double priceEnd,
                                                                         @RequestParam(value = "status", required = false) Integer status,
@@ -110,8 +110,8 @@ public class AdvertController {
  @GetMapping("/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<Map<String, Object>> getSortedAdvertValuesByAdmin(@RequestParam(value = "q", required = false) String q,
-                                                                        @RequestParam(value = "category_id", required = false) Long categoryId,
-                                                                        @RequestParam(value = "advert_type_id", required = false) Long advertTypeId,
+                                                                        @RequestParam(value = "category_id", required = false) List<Long> categoryId,
+                                                                        @RequestParam(value = "advert_type_id", required = false) List<Long> advertTypeId,
                                                                         @RequestParam(value = "price_start", required = false) Double priceStart,
                                                                         @RequestParam(value = "price_end", required = false) Double priceEnd,
                                                                         @RequestParam(value = "status", required = false) Integer status,
@@ -139,17 +139,18 @@ public class AdvertController {
 
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     @PutMapping("/admin/{advertId}")
-    public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest) {
+    public ResponseMessage<AdvertResponse> updateAdminAdvertById(@PathVariable Long advertId, @RequestBody @Valid AdvertUpdateRequest updateRequest,
+                                                                 HttpServletRequest httpServletRequest) {
 
-        return advertService.updateAdminAdvertById(advertId, updateRequest);
+        return advertService.updateAdminAdvertById(advertId, updateRequest, httpServletRequest);
     }
 
 
     //A13 advert delete
     @DeleteMapping("/admin/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseMessage deleteAdvertById(@PathVariable Long id) {
-        return advertService.deleteAdvertById(id);
+    public ResponseMessage deleteAdvertById(@PathVariable Long id,HttpServletRequest httpServletRequest) {
+        return advertService.deleteAdvertById(id,httpServletRequest);
     }
 
 

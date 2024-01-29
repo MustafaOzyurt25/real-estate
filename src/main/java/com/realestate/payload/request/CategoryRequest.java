@@ -1,5 +1,6 @@
 package com.realestate.payload.request;
 
+import com.realestate.entity.CategoryPropertyKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,8 +35,9 @@ public class CategoryRequest {
     private Boolean isActive;
 
     
-//  @NotNull 
+//  @NotNull
     private List<Long> categoryPropertiesKeyId;
+    private List<CategoryPropertyKeyRequest> categoryPropertyKeyList;
 
     private LocalDateTime createAt = LocalDateTime.now();
 }

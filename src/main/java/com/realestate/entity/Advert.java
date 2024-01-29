@@ -1,7 +1,6 @@
 package com.realestate.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.realestate.entity.enums.AdvertStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,7 +62,7 @@ public class Advert {  // 23 tane field..vs
     private List<Image> images;
 
     @OneToMany(mappedBy = "advert",cascade = CascadeType.REMOVE)
-    private List<Log> logs;
+    private List<LogAdvert> logAdverts;
 
     @ManyToOne
     private AdvertType advertType;
