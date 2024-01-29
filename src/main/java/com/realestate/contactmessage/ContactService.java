@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -26,9 +27,10 @@ public class ContactService {
     private final ContactRepository contactRepository;
     private final ContactMapper contactMapper;
 
+    //J02
     public ResponseMessage<ContactResponse> contactMessageCreated(ContactRequest contactRequest) {
         boolean isSameMessageWithSameEmailForToday =
-                contactRepository.existsByEmailEqualsAndCreateAtEquals(contactRequest.getEmail(), LocalDateTime.now());
+                contactRepository.existsByEmailEqualsAndCreateAtEquals(contactRequest.getEmail(), LocalDate.now());
 
         if (isSameMessageWithSameEmailForToday) {
             throw new ConflictException(ErrorMessages.ALREADY_SEND_A_MESSAGE_TODAY);

@@ -54,6 +54,7 @@ public class CategoryService {
                 build();
     }
 
+    //C04
     public Category createCategory(CategoryRequest categoryRequest) {
 
         List<CategoryPropertyKey> categoryPropertyKeys = categoryPropertyKeyService.getCategoryPropertyKeyByCategoryPropertyKeyIdList(categoryRequest.getCategoryPropertiesKeyId());
