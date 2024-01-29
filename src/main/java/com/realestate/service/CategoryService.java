@@ -9,10 +9,13 @@ import com.realestate.messages.ErrorMessages;
 import com.realestate.messages.SuccessMessages;
 import com.realestate.payload.helper.PageableHelper;
 import com.realestate.payload.mappers.CategoryMapper;
+import com.realestate.payload.mappers.CategoryPropertyKeyMapper;
+import com.realestate.payload.request.CategoryPropertyKeyRequest;
 import com.realestate.payload.request.CategoryRequest;
 import com.realestate.payload.response.AdvertResponse;
 import com.realestate.payload.response.CategoryResponse;
 import com.realestate.payload.response.ResponseMessage;
+import com.realestate.repository.CategoryPropertyKeyRepository;
 import com.realestate.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +39,10 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final CategoryPropertyKeyService categoryPropertyKeyService;
-    private final AdvertService advertService;
     private final PageableHelper pageableHelper;
+    private final CategoryPropertyKeyRepository categoryPropertyKeyRepository;
+
+    private final CategoryPropertyKeyMapper categoryPropertyKeyMapper;
 
     public ResponseMessage<CategoryResponse> deleteCategory(Long categoryId) {
 
@@ -66,18 +72,27 @@ public class CategoryService {
 
     public Category createCategory(CategoryRequest categoryRequest) {
 
-        List<CategoryPropertyKey> categoryPropertyKeys = categoryPropertyKeyService.getCategoryPropertyKeyByCategoryPropertyKeyIdList(categoryRequest.getCategoryPropertiesKeyId());
-
         String slugFromTitle = categoryRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");
         String slug = categoryRequest.getSlug();
 
         if (slugFromTitle.equals(slug)) {
-            Category category = categoryMapper.mapCategoryRequestToCategory(categoryRequest, categoryPropertyKeys);
+            Category category = categoryMapper.mapCategoryRequestToCategory(categoryRequest);
+            List<CategoryPropertyKeyRequest> categoryPropertyKeyList = categoryRequest.getCategoryPropertyKeyList();
 
             category.setBuiltIn(false);
 
             categoryRepository.save(category);
+            Long categoryId = category.getId();
+            Category savedCategory = categoryPropertyKeyService.isCategoryExist(categoryId);
 
+            if(categoryRequest.getCategoryPropertyKeyList() != null){
+                List<CategoryPropertyKey> categoryPropertyKeyList1 = categoryPropertyKeyMapper.mapCategoryPropertyKeyRequestToListCategoryPropertyKey(categoryPropertyKeyList,savedCategory);
+
+                for(CategoryPropertyKey categoryPropertyKey  : categoryPropertyKeyList1){
+                    categoryPropertyKey.setBuiltIn(false);
+                    categoryPropertyKeyRepository.save(categoryPropertyKey);
+                }
+            }
             return category;
 
         } else {

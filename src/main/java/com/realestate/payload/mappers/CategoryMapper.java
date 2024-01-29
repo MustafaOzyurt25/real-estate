@@ -15,7 +15,7 @@ public class CategoryMapper {
 
     //DTO --> POJO
 
-    public Category mapCategoryRequestToCategory(CategoryRequest categoryRequest, List<CategoryPropertyKey> categoryPropertyKeySet){
+    public Category mapCategoryRequestToCategory(CategoryRequest categoryRequest){
 
         return Category.builder()
                 .title(categoryRequest.getTitle())
@@ -23,7 +23,7 @@ public class CategoryMapper {
                 .seq(categoryRequest.getSeq())
                 .slug(categoryRequest.getSlug())
                 .isActive(categoryRequest.getIsActive())
-                .categoryPropertyKeys(categoryPropertyKeySet)
+                //.categoryPropertyKeys(categoryPropertyKeySet)
                 .createAt(categoryRequest.getCreateAt())
                 .build();
     }
@@ -46,7 +46,7 @@ public class CategoryMapper {
     }
 
     public Category mapCategoryRequestToUpdatedCategory(Long id, CategoryRequest categoryRequest,List<CategoryPropertyKey> categoryPropertyKeys) {
-        Category category = mapCategoryRequestToCategory(categoryRequest,categoryPropertyKeys);
+        Category category = mapCategoryRequestToCategory(categoryRequest);
         category.setId(id);
         category.setUpdateAt(LocalDateTime.now());
         category.setBuiltIn(false);
