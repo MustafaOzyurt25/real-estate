@@ -84,9 +84,9 @@ public class UserController {
     //F11 user update
     @PutMapping("{id}/admin")
     @PreAuthorize("hasAnyAuthority('ADMIN' , 'MANAGER')")
-    public ResponseMessage<UserResponse> updateUserById(@PathVariable("id") Long id, @RequestBody @Valid UserRequest request)
+    public ResponseMessage<UserResponse> updateUserById(@PathVariable("id") Long id, @RequestBody @Valid UserRequest userRequest, HttpServletRequest request)
     {
-        return userService.updateUserById(id, request);
+        return userService.updateUserById(id, userRequest,request);
     }
 
 }

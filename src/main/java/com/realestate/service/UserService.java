@@ -334,7 +334,7 @@ public class UserService {
 
 
 
-    public ResponseMessage<UserResponse> updateUserById(Long id, UserRequest userRequest) {
+    public ResponseMessage<UserResponse> updateUserById(Long id, UserRequest userRequest, HttpServletRequest request) {
         User user = isUserExists(id);
 
         if(user.getBuiltIn()){
@@ -346,14 +346,20 @@ public class UserService {
             throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
         }
 
-        /*
-        Set<String> roles = userRepository.getRolesById(user.getId());
-        if(roles.contains("MANAGER")){
-            if(!(roles.contains("CUSTOMER") && !roles.contains("MANAGER") && !roles.contains("ADMIN"))){
-                throw new BadRequestException(ErrorMessages.MANAGER_CAN_UPDATE_ONLY_A_CUSTOMER);
+        String userInSessionEmail = (String) request.getAttribute("email");
+        User userInSession = userRepository.findByEmailEquals(userInSessionEmail);
+        Set<String> roles = userRepository.getRolesById(userInSession.getId());
+
+        if(!roles.contains("ADMIN")){
+            if(roles.contains("MANAGER")){
+                Set<String> rolesOfUserWhoWantedToUpdate = userRepository.getRolesById(id);
+                if(!(rolesOfUserWhoWantedToUpdate.contains("CUSTOMER") && !rolesOfUserWhoWantedToUpdate.contains("MANAGER") && !rolesOfUserWhoWantedToUpdate.contains("ADMIN"))){
+                    throw new BadRequestException(ErrorMessages.MANAGER_CAN_UPDATE_ONLY_CUSTOMER);
+                }
             }
         }
-        */
+
+
         uniquePropertyValidator.checkUniqueProperties(user, userRequest);
 
         User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
