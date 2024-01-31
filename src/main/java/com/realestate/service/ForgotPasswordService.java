@@ -29,25 +29,21 @@ public class ForgotPasswordService {
 
     public void forgotPasswordUser(ForgotPasswordRequest forgotPasswordRequest) {
 
-        try{
-
             User user = userRepository.findByEmailEquals(forgotPasswordRequest.getEmail());
 
-            String resetToken = generateResetToken();
+            if(user != null){
+                String resetToken = generateResetToken();
 
-            user.setResetPasswordCode(resetToken);
-            userRepository.save(user);
+                user.setResetPasswordCode(resetToken);
+                userRepository.save(user);
 
-            sendEmail(forgotPasswordRequest.getEmail(), resetToken);
+                sendEmail(forgotPasswordRequest.getEmail(), resetToken);
+            }
 
-        }catch (RuntimeException e){
-            throw new ResourceNotFoundException(ErrorMessages.NOT_VALID_EMAIL);
-        }
+
     }
 
     private String generateResetToken() {
-        // Burada benzersiz bir reset token oluşturabilirsiniz
-        // Örneğin, UUID.randomUUID() kullanabilirsiniz.
         return UUID.randomUUID().toString();
     }
 

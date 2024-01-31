@@ -2,6 +2,7 @@ package com.realestate.service;
 
 import com.realestate.entity.Category;
 import com.realestate.entity.CategoryPropertyKey;
+import com.realestate.entity.User;
 import com.realestate.exception.BadRequestException;
 import com.realestate.exception.ConflictException;
 import com.realestate.exception.ResourceNotFoundException;
@@ -25,10 +26,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -133,8 +136,17 @@ public class CategoryService {
     }
 
 
-    public List<Category> getAllCategories(String q, int page, int size, String sort, String type) {
-        return categoryRepository.findAll();
+    public Page<CategoryResponse> getAllCategoriesByPageWithAdmin(String q, int page, int size, String sort, String type) {
+
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort,type);
+
+        if (q != null) {
+            q = q.trim().toLowerCase().replaceAll("-", " ");
+        }
+
+        return categoryRepository.getCategoriesByAdmin(q,pageable).map(categoryMapper::mapCategoryToCategoryResponse);
+
+
     }
 
     public ResponseMessage<CategoryResponse> updateCategoryWithId(Long id, CategoryRequest categoryRequest) {

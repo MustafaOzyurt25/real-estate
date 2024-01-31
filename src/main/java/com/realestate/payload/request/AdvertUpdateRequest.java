@@ -23,6 +23,9 @@ public class AdvertUpdateRequest {
     @NotNull
     @Size(min=5,max=150,message = "The number of characters in the title must be between 5 and 150")
     private String title;
+
+    @NotNull
+    private String slug;
     @Size(max=300,message = "The number of characters in the description max 300")
     private String description;
     @NotNull

@@ -432,6 +432,12 @@ public class AdvertService {
                 .map(advertMapper::mapAdvertToAdvertResponse);
     }
 
+    public void isSlugExists(String slug){
+        advertRepository.findBySlug(slug).orElseThrow(() ->
+                new ConflictException(String.format(ErrorMessages.NOT_UNIQUE_SLUG)));
+
+    }
+
 
 
     public ResponseMessage<AdvertResponse> updateAdminAdvertById(Long advertId, AdvertUpdateRequest updateRequest,HttpServletRequest httpServletRequest) {
@@ -445,6 +451,14 @@ public class AdvertService {
                 categoryPropertyKeyService.getCategoryPropertyKeys(updateRequest.getCategoryId());
         Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(updateRequest);
 
+        Long userId = existAdvert.getUser().getId();
+        String slug = updateRequest.getSlug()+ "-" + userId;
+
+        try{
+            isSlugExists(slug);
+        }catch (RuntimeException e) {
+            throw new ConflictException(String.format(ErrorMessages.NOT_UNIQUE_SLUG));
+        }
 
         advert.setBuiltIn(false);
         advert.setAdvertType(advertType);
@@ -455,12 +469,11 @@ public class AdvertService {
         advert.setCountry(country);
         advert.setUpdateAt(LocalDateTime.now());
 
-
         advert.setCategoryPropertyValue(existAdvert.getCategoryPropertyValue());
         advert.setFavorites(existAdvert.getFavorites());
         advert.setCreateAt(existAdvert.getCreateAt());
         advert.setImages(existAdvert.getImages());
-        advert.setSlug(existAdvert.getSlug());
+        advert.setSlug(slug);
         advert.setLogAdverts(existAdvert.getLogAdverts());
         advert.setId(existAdvert.getId());
         advert.setTourRequests(existAdvert.getTourRequests());

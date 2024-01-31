@@ -48,7 +48,6 @@ public class ErrorMessages {
     public static final String CAN_NOT_BE_DELETABLE_USER = "User, has tour request or advert, can not be deletable";
     public static final String CUSTOMER_CAN_NOT_DELETE_ANY_USER = "User, has just Customer Role, can not delete any user";
     public static final String MANAGER_CAN_DELETE_ONLY_A_CUSTOMER = "A Manager can not delete the user who has Admin role or Manager role.";
-    public static final String NOT_VALID_EMAIL = "You have logged in incorrectly. Please check your information and try again.";
     public static final String NOT_PERMITTED_METHOD_MESSAGE = "Error: You don't have any permission to do this operation";
     public static final String FAVORITE_NOT_FOUND = "Favorite is not found with id %s";
     public static final String COULD_NOT_FIND_FAVORITES_BY_USER_ID = "Not found favorites belong %s";
@@ -59,6 +58,7 @@ public class ErrorMessages {
     public static final String USER_UNAUTHORIZED= "You do not have the authority to perform this action.";
     public static final String MANAGER_CAN_UPDATE_ONLY_CUSTOMER= "A Manager can update only Customers.";
     public static final String SLUG_IS_NOT_IN_THE_DESIRED_FORMAT= "Slug is not in the desired format.";
+    public static final String NOT_UNIQUE_SLUG = "The slug has been used before, please enter a different slug.";
 
 
 
