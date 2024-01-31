@@ -212,6 +212,10 @@ public class UserService {
 
                 Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
 
+                if (q != null) {
+                    q = q.trim().toLowerCase().replaceAll("-", " ");
+                }
+
                 return userRepository.getUsersByAdmin(q,pageable).map(userMapper::mapUserToUserResponse);
 
             }

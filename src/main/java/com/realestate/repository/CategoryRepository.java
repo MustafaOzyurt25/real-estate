@@ -3,6 +3,7 @@ package com.realestate.repository;
 import com.realestate.entity.Advert;
 import com.realestate.entity.Category;
 import com.realestate.entity.enums.AdvertStatus;
+import com.realestate.payload.response.CategoryResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.StatisticsResponse;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Modifying;
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.DoubleStream;
 
 public interface CategoryRepository extends JpaRepository<Category,Long> {
     boolean existsByIdAndAdvertsIsNotEmpty(Long id);
@@ -35,4 +38,6 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
     @Query("SELECT COUNT(DISTINCT c) FROM Category c WHERE c.isActive = true")
     long countPublishedCategories();
 
+    @Query("SELECT c FROM Category c WHERE (:q IS NULL OR LOWER(c.title) LIKE %:q%) ")
+    Page<Category> getCategoriesByAdmin(String q, Pageable pageable);
 }
