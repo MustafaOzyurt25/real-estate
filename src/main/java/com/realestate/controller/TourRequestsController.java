@@ -89,13 +89,13 @@ public class TourRequestsController {
 
 
     @GetMapping("/admin")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public Page<TourRequestResponse> getTourRequestByAdmin (HttpServletRequest httpServletRequest,
                                                                       @RequestParam(value = "q", required = false) String q,
                                                                       @RequestParam(value = "page", defaultValue = "0") int page,
                                                                       @RequestParam(value = "size", defaultValue = "20") int size,
-                                                                      @RequestParam(value = "sort", defaultValue = "id") String sort,
-                                                                      @RequestParam(value = "type", defaultValue = "desc") String type) {
+                                                                      @RequestParam(value = "sort", defaultValue = "categoryId") String sort,
+                                                                      @RequestParam(value = "type", defaultValue = "asc") String type) {
         return tourRequestsService.getTourRequestByAdmin(httpServletRequest , q, page, size, sort, type);
     }
 

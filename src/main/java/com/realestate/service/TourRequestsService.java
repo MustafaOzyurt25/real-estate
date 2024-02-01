@@ -288,8 +288,8 @@ public class TourRequestsService {
             User user = userRepository.findByEmailEquals(userEmail);
             Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
 
-            Long guestUserId = user.getId();
-            List<TourRequest> userTourRequests = tourRequestsRepository.findByGuestUserId(guestUserId);
+            //Long guestUserId = user.getId();
+            List<TourRequest> userTourRequests = tourRequestsRepository.findAll();
 
             // Filtreleme işlemi "q" parametresiyle
             List<TourRequest> filteredTourRequests = userTourRequests.stream()
