@@ -453,7 +453,7 @@ public class AdvertService {
 
         Long userId = existAdvert.getUser().getId();
         String slug = updateRequest.getSlug()+ "-" + userId;
-
+        //title ile slug ayni olacak
         try{
             isSlugExists(slug);
         }catch (RuntimeException e) {

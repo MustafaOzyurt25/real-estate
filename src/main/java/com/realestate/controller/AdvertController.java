@@ -119,7 +119,7 @@ public class AdvertController {
                                                                         @RequestParam(value = "city_id",required = false) Long cityId,
                                                                         @RequestParam(value = "district_id",required = false) Long districtId,
                                                                         @RequestParam(value = "page",defaultValue = "0") int page,
-                                                                        @RequestParam(value = "size",defaultValue = "20") int size,
+                                                                        @RequestParam(value = "size",defaultValue = "2") int size,
                                                                         @RequestParam(value = "sort",defaultValue = "category") String sort,
                                                                         @RequestParam(value = "type",defaultValue = "asc") String type){
         return advertService.getSortedAdvertsByValues(q,categoryId,advertTypeId,priceStart,priceEnd,status,countryId,cityId,districtId,page,size,sort,type);
