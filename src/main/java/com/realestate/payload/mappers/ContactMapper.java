@@ -25,6 +25,7 @@ public class ContactMapper {
     //POJO > DTO
     public ContactResponse createResponse(Contact contact) {
         return ContactResponse.builder()
+                .id(contact.getId())//frontend j02 icin eklendi
                 .firstName(contact.getFirstName())
                 .lastName(contact.getLastName())
                 .message(contact.getMessage())

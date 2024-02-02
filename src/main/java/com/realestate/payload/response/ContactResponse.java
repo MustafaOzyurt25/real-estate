@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class ContactResponse implements Serializable {
 
+    private Long id;//frontend j02 icin eklendi
     private String firstName;
     private String lastName;
     private String email;

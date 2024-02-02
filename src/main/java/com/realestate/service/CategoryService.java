@@ -73,6 +73,7 @@ public class CategoryService {
 
     }
 
+    //C04
     public Category createCategory(CategoryRequest categoryRequest) {
 
         String slugFromTitle = categoryRequest.getTitle().toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "");

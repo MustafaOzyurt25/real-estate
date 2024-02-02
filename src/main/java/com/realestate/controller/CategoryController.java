@@ -26,7 +26,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
 
-    //C04
+    //C04---------------------------------------------------------------------------------------------------------------
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     public Category createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
