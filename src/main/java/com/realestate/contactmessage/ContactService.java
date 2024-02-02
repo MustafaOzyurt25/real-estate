@@ -29,7 +29,7 @@ public class ContactService {
     private final ContactRepository contactRepository;
     private final ContactMapper contactMapper;
 
-    //J02
+    //J01 contactMessageCreated ------------------------------------------------------------------------------
     public ResponseMessage<ContactResponse> contactMessageCreated(ContactRequest contactRequest) {
         boolean isSameMessageWithSameEmailForToday =
                 contactRepository.existsByEmailEqualsAndCreateAtEquals(contactRequest.getEmail(), LocalDate.now());
@@ -51,7 +51,7 @@ public class ContactService {
     }
 
 
-    //J01 getAllContactMessageAsPage -----------------------------------------------------------------------------------
+    //J02 getAllContactMessageAsPage -----------------------------------------------------------------------------------
     @Transactional
     public Page<ContactResponse> getAllContactMessageAsPage(int page, int size, String sort, String type, String query) {
 

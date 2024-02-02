@@ -17,14 +17,14 @@ public class ContactController {
 
     private final ContactService contactService;
 
-    //J02 save----------------------------------------------------------------------------------------------------------
+    //J01 save----------------------------------------------------------------------------------------------------------
     @PostMapping("/save")
     public ResponseMessage<ContactResponse> contactMessageCreated(@RequestBody
                                                  @Valid ContactRequest contactRequest) {
         return contactService.contactMessageCreated(contactRequest);
     }
 
-    //J01 getAllContactMessageAsPage -----------------------------------------------------------------------------------
+    //J02 getAllContactMessageAsPage -----------------------------------------------------------------------------------
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping()
     public Page<ContactResponse> getAllContactMessageAsPage(
