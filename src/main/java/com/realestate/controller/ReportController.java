@@ -75,8 +75,8 @@ public class ReportController {
 
     /** G04 It will get users ---------------------------------------------------------------------------------------*/
     /*Bakımda*/
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping("/users")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseMessage<List<UserResponse>> getUsersByRole(@RequestParam(name = "role") String role) {
         return reportService.getUsersByRole(role);
     }

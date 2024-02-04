@@ -78,7 +78,7 @@ public class ReportService {
         List<Advert> adverts = advertRepository.findAdvertsByParameters(localDateTime1,localDateTime2,categoryId,advertTypeId,advertStatus);
 
         if(adverts.isEmpty()){
-            throw new RuntimeException(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION);
+            throw new RuntimeException(ErrorMessages.ADVERTS_NOT_FOUND);
         }
 
         return ResponseMessage.<List<AdvertResponse>>builder()
