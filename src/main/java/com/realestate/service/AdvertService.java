@@ -29,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -55,6 +56,7 @@ public class AdvertService {
     private final LogsService logsService;
     private final LogUserRepository logUserRepository;
     private final LogUserMapper logUserMapper;
+    private final EmailService emailService;
 
 
     public Advert save(AdvertRequest advertRequest, HttpServletRequest httpServletRequest) {
@@ -86,25 +88,31 @@ public class AdvertService {
             for (int i = 0; i < advertRequest.getPropertyValues().size(); i++) {
                 CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
                         .save(categoryPropertyValueMapper
-                        .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertRequest.getPropertyValues().get(i)));
+                                .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertRequest.getPropertyValues().get(i)));
                 categoryPropertyValues.add(categoryPropertyValue);
             }
             advert.setCategoryPropertyValue(categoryPropertyValues);
-            LogAdvert logAdvert = logMapper.mapLog(user,advert, LogType.CREATED_ADVERT);
+            LogAdvert logAdvert = logMapper.mapLog(user, advert, LogType.CREATED_ADVERT);
             List<LogAdvert> logAdvertList = new ArrayList<>();
             logAdvertList.add(logAdvert);
             logsService.save(logAdvert);
             advert.setLogAdverts(logAdvertList);
-            LogUser logUser = logUserMapper.mapLog(user,LogType.CREATED_ADVERT);
+            LogUser logUser = logUserMapper.mapLog(user, LogType.CREATED_ADVERT);
             user.getLogUser().add(logUser);
             logUserRepository.save(logUser);
             userRepository.save(user);
             advertRepository.save(advert);
+
+            emailService.sendAdvertCreationEmail(userEmail, advert);
+
             return advert;
+
         } else {
             throw new ConflictException("You must log in to create an advert.");
         }
     }
+
+
 
     public void addImageToAdvert(Long advertId, List<Image> images) {
         Advert advert = advertRepository.findById(advertId).orElseThrow(() ->
@@ -139,6 +147,7 @@ public class AdvertService {
 
         return advert;
     }
+
     public List<AdvertCityResponse> getAdvertAmountByCity() {
 
         return advertRepository.getAdvertAmountByCity().stream().collect(Collectors.toList());
@@ -224,27 +233,27 @@ public class AdvertService {
         return advertRepository.existsByUserId(userId);
     }
 
-    public List<Advert> getAdvertsByUserId(Long userId){
+    public List<Advert> getAdvertsByUserId(Long userId) {
         return advertRepository.findByUser_Id(userId);
     }
 
     //===========================ID kontrol============================================
 
-    public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, List<Long> categoryId, List<Long> advertTypeId, Double priceStart, Double priceEnd, Integer status,Long countryId,Long cityId,Long districtId, int page, int size, String sort, String type) {
+    public ResponseEntity<Map<String, Object>> getSortedAdvertsByValues(String q, List<Long> categoryId, List<Long> advertTypeId, Double priceStart, Double priceEnd, Integer status, Long countryId, Long cityId, Long districtId, int page, int size, String sort, String type) {
         Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort.toLowerCase(), type.toLowerCase());
         AdvertStatus aStatus = null;
-        if (categoryId!=null&&categoryId.isEmpty()){
+        if (categoryId != null && categoryId.isEmpty()) {
             categoryId = null;
         }
-        if (advertTypeId!=null&&advertTypeId.isEmpty()){
+        if (advertTypeId != null && advertTypeId.isEmpty()) {
             advertTypeId = null;
         }
-        if (districtId != null){
-            cityId=null;
-            countryId=null;
+        if (districtId != null) {
+            cityId = null;
+            countryId = null;
         }
-        if (cityId != null){
-            countryId=null;
+        if (cityId != null) {
+            countryId = null;
         }
         if (status != null) {
             aStatus = AdvertStatus.getAdvertStatusByNumber(status);
@@ -252,7 +261,7 @@ public class AdvertService {
         if (q != null) {
             q = q.trim().toLowerCase().replaceAll("-", " ");
         }
-        Page<AdvertResponse> adverts = advertRepository.getSortedAdvertsByValues(q, categoryId, advertTypeId, priceStart, priceEnd, aStatus, countryId,cityId,districtId, pageable)
+        Page<AdvertResponse> adverts = advertRepository.getSortedAdvertsByValues(q, categoryId, advertTypeId, priceStart, priceEnd, aStatus, countryId, cityId, districtId, pageable)
                 .map(advertMapper::mapAdvertToAdvertResponse);
         Map<String, Object> responseBody = new HashMap<>();
         if (adverts.isEmpty()) {
@@ -335,7 +344,7 @@ public class AdvertService {
 
         // Durumu "PENDING" olarak ayarla
         advert.setStatus(AdvertStatus.PENDING);
-        LogAdvert logAdvert = logMapper.mapLog(currentUser,advert,LogType.UPDATED_ADVERT);
+        LogAdvert logAdvert = logMapper.mapLog(currentUser, advert, LogType.UPDATED_ADVERT);
         logsService.save(logAdvert);
         advert.getLogAdverts().add(logAdvert);
         for (CategoryPropertyValue categoryPropertyValue : advert.getCategoryPropertyValue()) {
@@ -347,7 +356,7 @@ public class AdvertService {
         for (int i = 0; i < advertUpdateRequest.getPropertyValues().size(); i++) {
             CategoryPropertyValue categoryPropertyValue = categoryPropertyValueRepository
                     .save(categoryPropertyValueMapper
-                    .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertUpdateRequest.getPropertyValues().get(i)));
+                            .mapValuesToCategoryPropertyValue(advert, category.getCategoryPropertyKeys().get(i), advertUpdateRequest.getPropertyValues().get(i)));
 
             //Bu value'lar listeye de ekleniyor...
             categoryPropertyValues.add(categoryPropertyValue);
@@ -355,7 +364,7 @@ public class AdvertService {
 
         // advert'in ilgili fieldi advertUpdateRequest'den gelen value ile setleniyor...
         advert.setCategoryPropertyValue(categoryPropertyValues);
-        LogUser logUser = logUserMapper.mapLog(currentUser,LogType.UPDATED_ADVERT);
+        LogUser logUser = logUserMapper.mapLog(currentUser, LogType.UPDATED_ADVERT);
         currentUser.getLogUser().add(logUser);
         logUserRepository.save(logUser);
         userRepository.save(currentUser);
@@ -368,36 +377,36 @@ public class AdvertService {
     }
 
 
-    public ResponseMessage deleteAdvertById(Long id,HttpServletRequest httpServletRequest) {
+    public ResponseMessage deleteAdvertById(Long id, HttpServletRequest httpServletRequest) {
 
         Optional<Advert> advert = advertRepository.findById(id);
 
-         if(advert.isEmpty()){
-             throw new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION, id));
-         } else if (advert.get().getBuiltIn()) {
-             throw new ConflictException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
-         }
+        if (advert.isEmpty()) {
+            throw new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION, id));
+        } else if (advert.get().getBuiltIn()) {
+            throw new ConflictException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+        }
         String userEmail = (String) httpServletRequest.getAttribute("email");
         User loginUser = userRepository.findByEmailEquals(userEmail);
         LogUser logLoginUser;
         LogUser logOwnerUser;
-        if (Objects.equals(advert.get().getUser().getId(), loginUser.getId())){
-            logLoginUser = logUserMapper.mapLog(loginUser,LogType.DELETED_ADVERT);
+        if (Objects.equals(advert.get().getUser().getId(), loginUser.getId())) {
+            logLoginUser = logUserMapper.mapLog(loginUser, LogType.DELETED_ADVERT);
             loginUser.getLogUser().add(logLoginUser);
-        }else{
+        } else {
             int deger = 0;
             for (Role role : loginUser.getRole()) {
-                if (role.getRoleName().equals(RoleType.ADMIN)){
+                if (role.getRoleName().equals(RoleType.ADMIN)) {
                     deger++;
                 }
             }
-            User user = advertRepository.findByUserWithAdvertId(id).orElseThrow(()->new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND));
-            logLoginUser = logUserMapper.mapLog(loginUser,LogType.DELETED_USERS_ADVERT);
+            User user = advertRepository.findByUserWithAdvertId(id).orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND));
+            logLoginUser = logUserMapper.mapLog(loginUser, LogType.DELETED_USERS_ADVERT);
             loginUser.getLogUser().add(logLoginUser);
-            if (deger>0){
-                logOwnerUser = logUserMapper.mapLog(user,LogType.DELETED_ADVERT_BY_ADMIN);
-            }else {
-                logOwnerUser = logUserMapper.mapLog(user,LogType.DELETED_ADVERT_BY_MANAGER);
+            if (deger > 0) {
+                logOwnerUser = logUserMapper.mapLog(user, LogType.DELETED_ADVERT_BY_ADMIN);
+            } else {
+                logOwnerUser = logUserMapper.mapLog(user, LogType.DELETED_ADVERT_BY_MANAGER);
             }
             user.getLogUser().add(logOwnerUser);
             logUserRepository.save(logOwnerUser);
@@ -432,15 +441,14 @@ public class AdvertService {
                 .map(advertMapper::mapAdvertToAdvertResponse);
     }
 
-    public void isSlugExists(String slug){
+    public void isSlugExists(String slug) {
         advertRepository.findBySlug(slug).orElseThrow(() ->
                 new ConflictException(String.format(ErrorMessages.NOT_UNIQUE_SLUG)));
 
     }
 
 
-
-    public ResponseMessage<AdvertResponse> updateAdminAdvertById(Long advertId, AdvertUpdateRequest updateRequest,HttpServletRequest httpServletRequest) {
+    public ResponseMessage<AdvertResponse> updateAdminAdvertById(Long advertId, AdvertUpdateRequest updateRequest, HttpServletRequest httpServletRequest) {
         Advert existAdvert = getAdvertById(advertId);
         City city = cityService.getCityById(updateRequest.getCityId());
         Country country = countryService.getCountryById(updateRequest.getCountryId());
@@ -452,13 +460,18 @@ public class AdvertService {
         Advert advert = advertMapper.mapAdvertRequestToUpdatedAdvert(updateRequest);
 
         Long userId = existAdvert.getUser().getId();
-        String slug = updateRequest.getSlug()+ "-" + userId;
-        //title ile slug ayni olacak
-        try{
-            isSlugExists(slug);
-        }catch (RuntimeException e) {
-            throw new ConflictException(String.format(ErrorMessages.NOT_UNIQUE_SLUG));
+        String title = updateRequest.getTitle();
+        String slug = title.toLowerCase().replaceAll("\\s", "-").replaceAll("[^a-z0-9-]", "") + "-" + userId;
+
+        String updatedSlug = updateRequest.getSlug() + "-" + userId;
+
+        if (!slug.equals(updatedSlug)) {
+            throw new ConflictException(ErrorMessages.TITLE_SLUG_IS_NOT_IN_THE_DESIRED_FORMAT);
         }
+
+
+        //isSlugExists(slug);
+
 
         advert.setBuiltIn(false);
         advert.setAdvertType(advertType);
@@ -499,58 +512,57 @@ public class AdvertService {
         advert.setCategoryPropertyValue(categoryPropertyValues);
 
 
-
         String userEmail = (String) httpServletRequest.getAttribute("email");
         User loginUser = userRepository.findByEmailEquals(userEmail);
         LogUser logLoginUser;
         LogUser logOwnerUser;
         int deger = 0;
-        User user = advertRepository.findByUserWithAdvertId(advertId).orElseThrow(()->new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND));
-        if(advert.getStatus().equals(AdvertStatus.REJECTED)){
+        User user = advertRepository.findByUserWithAdvertId(advertId).orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND));
+        if (advert.getStatus().equals(AdvertStatus.REJECTED)) {
             LogAdvert logAdvert1;
             LogUser logUser;
-            if (Objects.equals(advert.getUser().getId(), loginUser.getId())){
-                logAdvert1 = logMapper.mapLog(user,advert,LogType.DECLINED_ADVERT);
-                logUser = logUserMapper.mapLog(user,LogType.DECLINED_ADVERT);
+            if (Objects.equals(advert.getUser().getId(), loginUser.getId())) {
+                logAdvert1 = logMapper.mapLog(user, advert, LogType.DECLINED_ADVERT);
+                logUser = logUserMapper.mapLog(user, LogType.DECLINED_ADVERT);
                 logsService.save(logAdvert1);
                 logUserRepository.save(logUser);
-            }else{
+            } else {
                 LogUser logUserOwner;
                 for (Role role : loginUser.getRole()) {
-                    if (role.getRoleName().equals(RoleType.ADMIN)){
+                    if (role.getRoleName().equals(RoleType.ADMIN)) {
                         deger++;
                     }
                 }
-                if (deger>0){
-                    logUserOwner = logUserMapper.mapLog(user,LogType.DECLINED_ADVERT_BY_ADMIN);
-                }else{
-                    logUserOwner = logUserMapper.mapLog(user,LogType.DECLINED_ADVERT_BY_MANAGER);
+                if (deger > 0) {
+                    logUserOwner = logUserMapper.mapLog(user, LogType.DECLINED_ADVERT_BY_ADMIN);
+                } else {
+                    logUserOwner = logUserMapper.mapLog(user, LogType.DECLINED_ADVERT_BY_MANAGER);
                 }
-                logAdvert1 = logMapper.mapLog(user,advert,LogType.DECLINED_ADVERT);
-                logUser = logUserMapper.mapLog(loginUser,LogType.DECLINED_USERS_ADVERT);
+                logAdvert1 = logMapper.mapLog(user, advert, LogType.DECLINED_ADVERT);
+                logUser = logUserMapper.mapLog(loginUser, LogType.DECLINED_USERS_ADVERT);
 
                 logsService.save(logAdvert1);
                 logUserRepository.save(logUser);
                 logUserRepository.save(logUserOwner);
             }
-        }else {
-            if (Objects.equals(advert.getUser().getId(), loginUser.getId())){
-                logLoginUser = logUserMapper.mapLog(loginUser,LogType.UPDATED_ADVERT);
+        } else {
+            if (Objects.equals(advert.getUser().getId(), loginUser.getId())) {
+                logLoginUser = logUserMapper.mapLog(loginUser, LogType.UPDATED_ADVERT);
                 loginUser.getLogUser().add(logLoginUser);
-            }else{
+            } else {
 
                 for (Role role : loginUser.getRole()) {
-                    if (role.getRoleName().equals(RoleType.ADMIN)){
+                    if (role.getRoleName().equals(RoleType.ADMIN)) {
                         deger++;
                     }
                 }
 
-                logLoginUser = logUserMapper.mapLog(loginUser,LogType.UPDATED_USERS_ADVERT);
+                logLoginUser = logUserMapper.mapLog(loginUser, LogType.UPDATED_USERS_ADVERT);
                 loginUser.getLogUser().add(logLoginUser);
-                if (deger>0){
-                    logOwnerUser = logUserMapper.mapLog(user,LogType.UPDATED_ADVERT_BY_ADMIN);
-                }else {
-                    logOwnerUser = logUserMapper.mapLog(user,LogType.UPDATED_ADVERT_BY_MANAGER);
+                if (deger > 0) {
+                    logOwnerUser = logUserMapper.mapLog(user, LogType.UPDATED_ADVERT_BY_ADMIN);
+                } else {
+                    logOwnerUser = logUserMapper.mapLog(user, LogType.UPDATED_ADVERT_BY_MANAGER);
                 }
                 user.getLogUser().add(logOwnerUser);
                 logUserRepository.save(logOwnerUser);
@@ -558,7 +570,7 @@ public class AdvertService {
             }
             userRepository.save(loginUser);
             logUserRepository.save(logLoginUser);
-            LogAdvert logAdvert = logMapper.mapLog(user,advert,LogType.UPDATED_ADVERT);
+            LogAdvert logAdvert = logMapper.mapLog(user, advert, LogType.UPDATED_ADVERT);
             logsService.save(logAdvert);
             advert.getLogAdverts().add(logAdvert);
 
@@ -572,10 +584,7 @@ public class AdvertService {
                 .httpStatus(HttpStatus.OK).build();
 
 
-}
-
-
-
+    }
 
 
 }

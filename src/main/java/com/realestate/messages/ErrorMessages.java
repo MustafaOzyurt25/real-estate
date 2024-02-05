@@ -59,6 +59,7 @@ public class ErrorMessages {
     public static final String MANAGER_CAN_UPDATE_ONLY_CUSTOMER= "A Manager can update only Customers.";
     public static final String SLUG_IS_NOT_IN_THE_DESIRED_FORMAT= "Slug is not in the desired format.";
     public static final String NOT_UNIQUE_SLUG = "The slug has been used before, please enter a different slug.";
+    public static final String TITLE_SLUG_IS_NOT_IN_THE_DESIRED_FORMAT = "title or slug is not in the desired form";
 
 
 
