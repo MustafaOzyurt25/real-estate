@@ -60,6 +60,7 @@ public class ErrorMessages {
     public static final String SLUG_IS_NOT_IN_THE_DESIRED_FORMAT= "Slug is not in the desired format.";
     public static final String NOT_UNIQUE_SLUG = "The slug has been used before, please enter a different slug.";
     public static final String TITLE_SLUG_IS_NOT_IN_THE_DESIRED_FORMAT = "title or slug is not in the desired form";
+    public static final String ADVERTS_NOT_FOUND = "Could not find adverts according to your filter!";
 
 
 
@@ -68,7 +69,6 @@ public class ErrorMessages {
     public static final String ALREADY_REGISTER_MESSAGE_EMAIL = "Error: User with email %s is already registered";
     // -------------------------------------------------------------------------------------------------------------
 
-    public static final String NOT_FOUND_TOUR_REQUEST = "Error: Tour Request not found with id %s";
     public static final String TOUR_REQUEST_CANNOT_BE_UPDATED = "Error: Tour Request can not be updated!";
     public static final String INVALID_TOUR_TIME = "Error: Please select different tour time!";
 
