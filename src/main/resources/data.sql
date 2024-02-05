@@ -68,7 +68,8 @@ INSERT INTO cities (id, name, country_id) VALUES
 (16, 'BURSA', 39),
 (20,'DENIZLI', 39),
 (34, 'ISTANBUL',39),
-(35, 'IZMIR',39)
+(35, 'IZMIR',39),
+(41 , 'KOCAELİ' , 39)
 
 ON CONFLICT (id) DO NOTHING;
 
@@ -247,5 +248,18 @@ INSERT INTO districts (id, name, city_id) VALUES
   (158, 'PAMUKKALE', 20),
   (159, 'SARAYKÖY', 20),
   (160, 'SERİNHİSAR', 20),
-  (161, 'TAVAS', 20)
+  (161, 'TAVAS', 20),
+
+  (162 , 'BAŞİSKELE' , 41),
+  (163 , 'İZMİT' , 41),
+  (164 , 'KARTEPE' , 41),
+  (165 , 'DERİNCE' , 41),
+  (166 , 'GÖLCÜK' , 41),
+  (167 , 'KÖRFEZ' , 41),
+  (168 , 'ÇAYIROVA' , 41),
+  (169 , 'DARICA' , 41),
+  (170 , 'DİLOVAI' , 41),
+  (171 , 'GEBZE' , 41),
+  (172 , 'KANDIRA' , 41),
+  (173 , 'KARAMÜRSEL' , 41)
   ON CONFLICT (id) DO NOTHING;

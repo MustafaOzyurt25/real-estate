@@ -31,6 +31,4 @@ public class Favorite {
     @JsonIgnore
     @ManyToOne
     private User user;
-
-
 }
