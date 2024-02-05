@@ -52,6 +52,8 @@ public class TourRequestsService {
     private final AdvertRepository advertRepository;
     private final AdvertTypeRepository advertTypeRepository;
 
+    private final EmailService emailService;
+
     //S05
     public ResponseMessage<TourRequestResponse> save(TourRequestRequest tourRequestRequest, String userEmail) {
 
@@ -105,6 +107,8 @@ public class TourRequestsService {
         logUserRepository.save(logUser);
 
         TourRequest savedTourRequest = tourRequestsRepository.save(tourRequest);
+
+        emailService.sendTourRequestCreationEmail(userEmail, savedTourRequest);
 
         return ResponseMessage.<TourRequestResponse>builder()
                 .message(SuccessMessages.TOUR_REQUEST_CREATE)
