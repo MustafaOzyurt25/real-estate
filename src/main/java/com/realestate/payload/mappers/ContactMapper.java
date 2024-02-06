@@ -5,6 +5,7 @@ import com.realestate.payload.request.ContactRequest;
 import com.realestate.payload.response.ContactResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
@@ -16,8 +17,8 @@ public class ContactMapper {
         return Contact.builder()
                 .firstName(contactRequest.getFirstName())
                 .lastName(contactRequest.getLastName())
-                .message(contactRequest.getMessage())
                 .email(contactRequest.getEmail())
+                .message(contactRequest.getMessage())
                 .createAt(LocalDateTime.now())
                 .build();
     }
@@ -25,13 +26,14 @@ public class ContactMapper {
     //POJO > DTO
     public ContactResponse createResponse(Contact contact) {
         return ContactResponse.builder()
-                .id(contact.getId())//frontend j02 icin eklendi
+                .id(contact.getId())
                 .firstName(contact.getFirstName())
                 .lastName(contact.getLastName())
-                .message(contact.getMessage())
                 .email(contact.getEmail())
+                .message(contact.getMessage())
                 .createAt(contact.getCreateAt())
-                .contactStatus(contact.getStatus())
+                .status(contact.getStatus())
                 .build();
     }
+
 }

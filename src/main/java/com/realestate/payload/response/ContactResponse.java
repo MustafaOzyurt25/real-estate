@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
@@ -14,13 +15,13 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 public class ContactResponse implements Serializable {
 
-    private Long id;//frontend j02 icin eklendi
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String message;
     private LocalDateTime createAt;
-    private ContactStatus contactStatus;
+    private ContactStatus status;
 
 
 
