@@ -1,4 +1,5 @@
 package com.realestate.service;
+
 import com.realestate.entity.Contact;
 import com.realestate.entity.enums.ContactStatus;
 import com.realestate.exception.ConflictException;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +30,9 @@ public class ContactService {
     private final ContactRepository contactRepository;
     private final ContactMapper contactMapper;
 
-    /**J01 contactMessageCreated start *************************************************************************/
+    /**
+     * J01 contactMessageCreated start
+     *************************************************************************/
     public void checkIfMessageSentToday(String email) {
         // Güncel tarih ve saat bilgisini al
         LocalDateTime now = LocalDateTime.now();
@@ -44,6 +48,7 @@ public class ContactService {
             throw new ConflictException(ErrorMessages.ALREADY_SEND_A_MESSAGE_TODAY);
         }
     }
+
     public ResponseMessage<ContactResponse> contactMessageCreated(ContactRequest contactRequest) {
 
         checkIfMessageSentToday(contactRequest.getEmail());//e-mail-today kontrolu: basarili
@@ -61,9 +66,8 @@ public class ContactService {
     }
 
 
-
     /**J02 getAllContactMessageAsPage start ***********************************************************************/
-    public Page<ContactResponse> getAllContactMessageAsPage(String query, int page, int size, String sort, String type, boolean status) {
+    public Page<ContactResponse> getAllContactMessageAsPage(String query, int page, int size, String sort, String type, String status) {
 
         /** 1. ascending - descending kontrolu yapiliyor: basarili*/
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
@@ -73,57 +77,51 @@ public class ContactService {
 
         /** 2.query nin null kontrolu yapiliyor: */
 
-        if (query == null || query.isEmpty()) {
-            return contactRepository.findAll(pageable).map(contactMapper::createResponse);
+        if (query != null) {
+            List<ContactResponse> contactResponsesList = contactRepository.findAll(pageable)
+                    .stream()
+                    .filter(Contact -> Contact.getMessage().toLowerCase().contains(query.toLowerCase()))
+                    .map(contactMapper::createResponse)
+                    .toList();
+            return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
         }
 
-        List<ContactResponse> contactResponsesList = contactRepository.findAll(pageable)
-                .stream()
-                .filter(Contact -> Contact.getMessage().toLowerCase().contains(query.toLowerCase()))
-                .map(contactMapper::createResponse)
-                .toList();
+        List<ContactResponse> contactResponsesList;
 
-        return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
-
-        /** 3. status kontrolu yapiliyor: */
-
-
-        /*
-        List<ContactResponse> contactResponsesList = contactRepository.findAll(pageable)
-                .stream()
-                .filter(contact -> contact.getMessage().toLowerCase().contains(query.toLowerCase())
-                        && (status ? contact.getStatus() == ContactStatus.OPENED : contact.getStatus() == ContactStatus.NOTOPENED))
-                .map(contactMapper::createResponse)
-                .toList();
-
-        return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
-        */
-
-
-
-
+        switch (status) {
+            case "read" -> {
+                contactResponsesList = contactRepository.findAll(pageable)
+                        .stream()
+                        .filter(Contact -> Contact.getStatus().getName().equalsIgnoreCase("read"))
+                        .map(contactMapper::createResponse)
+                        .toList();
+                return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
+            }
+            case "unread" -> {
+                contactResponsesList = contactRepository.findAll(pageable)
+                        .stream()
+                        .filter(Contact -> Contact.getStatus().getName().equalsIgnoreCase("unread"))
+                        .map(contactMapper::createResponse)
+                        .toList();
+                return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
+            }
+            default -> {
+                contactResponsesList = contactRepository.findAll(pageable)
+                        .stream()
+                        .map(contactMapper::createResponse)
+                        .toList();
+                return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
+            }
         }
 
-    public void markContactAsOpened(Long contactId) {
-        Optional<Contact> optionalContact = contactRepository.findById(contactId);
-
-        if (optionalContact.isPresent()) {
-            Contact contact = optionalContact.get();
-            contact.setStatus(ContactStatus.OPENED);
-            contactRepository.save(contact);
-        } else {
-            // Belirtilen ID'ye sahip bir Contact bulunamazsa, bir hata fırlatabilirsiniz.
-            //throw new ContactNotFoundException("Contact not found with id: " + contactId);--- yoruma aldim exception olusturacagim
-        }
     }
-    /**J02 getAllContactMessageAsPage end ***********************************************************************/
-
 
 
     //J03
     public ResponseMessage<ContactResponse> getContactMessageById(Long id) {//bu method ile ilgilen --------------------------------------
-        Contact contact=getContactById(id);
+        Contact contact = getContactById(id);
         contact.setStatus(ContactStatus.OPENED);
+        contactRepository.save(contact);//
         return ResponseMessage.<ContactResponse>builder()
                 .httpStatus(HttpStatus.OK)
                 .object(contactMapper.createResponse(contact))
@@ -145,8 +143,8 @@ public class ContactService {
     }
 
     private Contact isContactMessageExists(Long id) {
-        return contactRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.CONTACT_MESSAGE_NOT_FOUND_EXCEPTION,id)));
+        return contactRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.CONTACT_MESSAGE_NOT_FOUND_EXCEPTION, id)));
     }
 
 

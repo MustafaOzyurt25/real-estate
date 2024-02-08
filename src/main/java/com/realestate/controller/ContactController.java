@@ -28,13 +28,13 @@ public class ContactController {
     //J02 getAllContactMessageAsPage -----------------------------------------------------------------------------------
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping()
-    public Page<ContactResponse>  getAllContactMessageAsPage(/*ResponseEntity<Page<ContactResponse>>*/
+    public Page<ContactResponse>  getAllContactMessageAsPage(
             @RequestParam(value = "query", required = false) String query,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "size", defaultValue = "20", required = false) int size,
             @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,//defaultValue yu "createAt" ten "id" ye cevirdim. ???
             @RequestParam(value = "type", defaultValue = "asc", required = false) String type,
-            @RequestParam(value = "status", required = false) boolean status
+            @RequestParam(value = "status", required = false, defaultValue = "unread") String status
 
     ) {
         return contactService.getAllContactMessageAsPage(query, page, size, sort, type, status);
