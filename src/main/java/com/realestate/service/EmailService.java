@@ -102,7 +102,7 @@ public class EmailService {
                         "<div style='background-color: #6cb533; padding: 10px;'>" +
 
                         "<p>Tour Date : %s</p>" +
-                        "<p>Tour Date : %s</p>" +
+                        "<p>Tour Time : %s</p>" +
                         "</div>" +
                         "<p>Thank you for choosing our platform to list your property. Your advert is now visible to potential buyers and renters.</p>" +
                         "<p>If you have any questions or need further assistance, feel free to reach out to our customer support team.</p>" +
