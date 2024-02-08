@@ -110,6 +110,7 @@ public class WebSecurityConfig
             "/register",
             "/tour-requests/**",
             "/settings/db-reset",
-            "/auth/**"
+            "/auth/**",
+            "/actuator/**"
     };
 }
