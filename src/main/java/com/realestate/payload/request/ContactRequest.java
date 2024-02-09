@@ -34,8 +34,7 @@ public class ContactRequest implements Serializable  {
     @Size(min=5, max=60, message = "Your email should be at least 5 characters.")
     @NotNull(message = "Please enter your email.")
     @Pattern(regexp = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
-    //@Email(message = "{validation.email.pattern}") sadece bu yeterli
-    private String email;
+    private String email; //@Email(message = "{validation.email.pattern}") sadece bu yeterli
 
     @Size(min=4, max=300, message = "Your message should be at least 4 characters.")
     @NotNull(message = "Please enter message.")

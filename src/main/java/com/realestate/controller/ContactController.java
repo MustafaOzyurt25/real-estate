@@ -32,7 +32,7 @@ public class ContactController {
             @RequestParam(value = "query", required = false) String query,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "size", defaultValue = "20", required = false) int size,
-            @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,//defaultValue yu "createAt" ten "id" ye cevirdim. ???
+            @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,
             @RequestParam(value = "type", defaultValue = "asc", required = false) String type,
             @RequestParam(value = "status", required = false, defaultValue = "unread") String status
 

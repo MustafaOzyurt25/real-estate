@@ -15,13 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -67,61 +64,36 @@ public class ContactService {
 
 
     /**J02 getAllContactMessageAsPage start ***********************************************************************/
-    public Page<ContactResponse> getAllContactMessageAsPage(String query, int page, int size, String sort, String type, String status) {
 
-        /** 1. ascending - descending kontrolu yapiliyor: basarili*/
+    public Page<ContactResponse> getAllContactMessageAsPage(String query, int page, int size, String sort, String type, String status) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         if (Objects.equals(type, "desc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
 
-        /** 2.query nin null kontrolu yapiliyor: */
+        List<ContactResponse> contactResponsesList = contactRepository.findAll(pageable)
+                .stream()
+                .filter(contact -> statusFilter(contact, status))
+                .filter(contact -> query == null || contact.getMessage().toLowerCase().contains(query.toLowerCase()))
+                .map(contactMapper::createResponse)
+                .toList();
 
-        if (query != null) {
-            List<ContactResponse> contactResponsesList = contactRepository.findAll(pageable)
-                    .stream()
-                    .filter(Contact -> Contact.getMessage().toLowerCase().contains(query.toLowerCase()))
-                    .map(contactMapper::createResponse)
-                    .toList();
-            return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
-        }
-
-        List<ContactResponse> contactResponsesList;
-
-        switch (status) {
-            case "read" -> {
-                contactResponsesList = contactRepository.findAll(pageable)
-                        .stream()
-                        .filter(Contact -> Contact.getStatus().getName().equalsIgnoreCase("read"))
-                        .map(contactMapper::createResponse)
-                        .toList();
-                return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
-            }
-            case "unread" -> {
-                contactResponsesList = contactRepository.findAll(pageable)
-                        .stream()
-                        .filter(Contact -> Contact.getStatus().getName().equalsIgnoreCase("unread"))
-                        .map(contactMapper::createResponse)
-                        .toList();
-                return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
-            }
-            default -> {
-                contactResponsesList = contactRepository.findAll(pageable)
-                        .stream()
-                        .map(contactMapper::createResponse)
-                        .toList();
-                return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
-            }
-        }
-
+        return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
     }
+
+    private boolean statusFilter(Contact contact, String status) {
+        return (status == null || status.equalsIgnoreCase("all")) ||
+                (status.equalsIgnoreCase("read") && contact.getStatus().equals(ContactStatus.OPENED)) ||
+                (status.equalsIgnoreCase("unread") && contact.getStatus().equals(ContactStatus.NOTOPENED));
+    }
+
 
 
     //J03
     public ResponseMessage<ContactResponse> getContactMessageById(Long id) {//bu method ile ilgilen --------------------------------------
         Contact contact = getContactById(id);
         contact.setStatus(ContactStatus.OPENED);
-        contactRepository.save(contact);//
+        contactRepository.save(contact);//degisen status durumu save edildi
         return ResponseMessage.<ContactResponse>builder()
                 .httpStatus(HttpStatus.OK)
                 .object(contactMapper.createResponse(contact))

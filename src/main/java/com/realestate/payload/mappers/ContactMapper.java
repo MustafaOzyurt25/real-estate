@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Component
 public class ContactMapper {
 
-    //HELPER METHODS
     //DTO > POJO
     public Contact createContact(ContactRequest contactRequest) {
         return Contact.builder()
