@@ -6,6 +6,7 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,17 +29,36 @@ public class ContactController {
     //J02 getAllContactMessageAsPage -----------------------------------------------------------------------------------
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @GetMapping()
-    public Page<ContactResponse>  getAllContactMessageAsPage(/*ResponseEntity<Page<ContactResponse>>*/
+    public Page<ContactResponse>  getAllContactMessageAsPage(
             @RequestParam(value = "query", required = false) String query,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "size", defaultValue = "20", required = false) int size,
-            @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,//defaultValue yu "createAt" ten "id" ye cevirdim. ???
+            @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,
             @RequestParam(value = "type", defaultValue = "asc", required = false) String type,
-            @RequestParam(value = "status", required = false) boolean status
+            @RequestParam(value = "status", required = false, defaultValue = "unread") String status
 
     ) {
         return contactService.getAllContactMessageAsPage(query, page, size, sort, type, status);
     }
+
+    /**deleteAllContactMessages----------------------documentation ve screen de yok, hocaya sordum task de yok, olmalı J02 ye ekleyebilirsiniz dedi hoca -------*/
+
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    @DeleteMapping()
+    public ResponseEntity<?> deleteAllMessages() {
+        return contactService.deleteAllContactMessages();
+    }
+
+
+    /**updateStatusContactMessages----------------------documentation ve screen de yok, hocaya sordum task de yok, J03 3 buton olarak ekleyebilirsiniz dedi hoca-------*/
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @PatchMapping("/{id}")
+    public ResponseMessage<ContactResponse> updateContactMessages(@PathVariable Long id){
+        return contactService.updateContactMessages(id);
+    }
+
+
 
     //J03
 
