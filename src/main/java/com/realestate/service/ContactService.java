@@ -1,5 +1,6 @@
 package com.realestate.service;
 
+import com.realestate.controller.ContactController;
 import com.realestate.entity.Contact;
 import com.realestate.entity.enums.ContactStatus;
 import com.realestate.exception.ConflictException;
@@ -14,6 +15,7 @@ import com.realestate.repository.ContactRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -119,5 +121,43 @@ public class ContactService {
                 new ResourceNotFoundException(String.format(ErrorMessages.CONTACT_MESSAGE_NOT_FOUND_EXCEPTION, id)));
     }
 
+    //deleteAllContactMessages
+
+    public ResponseEntity<?> deleteAllContactMessages() {
+        if (contactRepository.count() == 0) {
+            throw new ResourceNotFoundException(ErrorMessages.CONTACT_MESSAGES_NOT_FOUND_EXCEPTION);
+        }
+        contactRepository.deleteAll();
+
+        return ResponseEntity.ok("All contact messages deleted successfully.");
+
+    }
+
+
+    //updateStatus -----------------------------------------------------------------------------------------------------
+    public ResponseMessage<ContactResponse> updateContactMessages(Long id) {
+        // Belirtilen ID'ye sahip Contact'ı veritabanından bulmaya çalışır
+        Contact contact = contactRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Contact not found with id: " + id));
+        // Contact'ın mevcut durumunu kontrol eder ve tersine çevirir
+
+        contact.setStatus(
+                contact.getStatus() == ContactStatus.OPENED
+                        ? ContactStatus.NOTOPENED
+                        : ContactStatus.OPENED
+        );
+        // Güncellenmiş Contact'ı veritabanına kaydeder
+        contactRepository.save(contact);
+
+        // Güncellenmiş Contact'ı kullanarak bir ContactResponse nesnesi oluşturur
+        ContactResponse contactResponse = contactMapper.createResponse(contact);
+
+        // Başarı durumunda bir ResponseMessage nesnesi oluşturur ve geri döner
+        return ResponseMessage.<ContactResponse>builder()
+                .object(contactResponse) // Oluşturulan ContactResponse nesnesini ekler
+                .message("Contact message updated successfully.") // Başarı mesajını ekler
+                .httpStatus(HttpStatus.OK) // HTTP status kodunu ekler
+                .build();
+    }
 
 }

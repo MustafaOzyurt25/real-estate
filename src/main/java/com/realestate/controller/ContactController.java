@@ -6,6 +6,7 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,25 @@ public class ContactController {
     ) {
         return contactService.getAllContactMessageAsPage(query, page, size, sort, type, status);
     }
+
+    /**deleteAllContactMessages----------------------documentation ve screen de yok, hocaya sordum task de yok, olmalı J02 ye ekleyebilirsiniz dedi hoca -------*/
+
+    @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
+    @DeleteMapping()
+    public ResponseEntity<?> deleteAllMessages() {
+        return contactService.deleteAllContactMessages();
+    }
+
+
+    /**updateStatusContactMessages----------------------documentation ve screen de yok, hocaya sordum task de yok, J03 3 buton olarak ekleyebilirsiniz dedi hoca-------*/
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    @PatchMapping("/{id}")
+    public ResponseMessage<ContactResponse> updateContactMessages(@PathVariable Long id){
+        return contactService.updateContactMessages(id);
+    }
+
+
 
     //J03
 
