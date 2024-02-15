@@ -85,7 +85,6 @@ public class WebSecurityConfig
             }
         };
     }
-
     private static final String[] AUTH_WHITE_LIST = {
             "/",
             "swagger-ui.html",
@@ -111,6 +110,7 @@ public class WebSecurityConfig
             "/tour-requests/**",
             "/settings/db-reset",
             "/auth/**",
-            "/actuator/**"
+            "/actuator/**",
+            "/auth/google/register"
     };
 }

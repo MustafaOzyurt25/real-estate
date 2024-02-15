@@ -1,6 +1,5 @@
 package com.realestate.controller;
 
-import com.realestate.entity.User;
 import com.realestate.payload.request.PasswordUpdatedRequest;
 import com.realestate.payload.request.UserRequest;
 import com.realestate.payload.response.ResponseMessage;
@@ -8,13 +7,11 @@ import com.realestate.payload.response.UserResponse;
 import com.realestate.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -88,5 +85,7 @@ public class UserController {
     {
         return userService.updateUserById(id, userRequest,request);
     }
+
+
 
 }
