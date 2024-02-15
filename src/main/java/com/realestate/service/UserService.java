@@ -12,6 +12,7 @@ import com.realestate.payload.mappers.AdvertMapper;
 import com.realestate.payload.mappers.FavoriteMapper;
 import com.realestate.payload.mappers.TourRequestMapper;
 import com.realestate.payload.mappers.UserMapper;
+import com.realestate.payload.request.LoginRequestWithGoogle;
 import com.realestate.payload.request.PasswordUpdatedRequest;
 import com.realestate.payload.request.RegisterRequest;
 import com.realestate.payload.request.UserRequest;
@@ -22,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +30,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,7 +117,7 @@ public class UserService {
 
         if (user.getBuiltIn().equals(false)) {
 
-            try{
+            try {
                 uniquePropertyValidator.checkUniqueProperties(user, userRequest);
 
                 User updatedUser = userMapper.mapUserRequestUpdatedUser(user, userRequest);
@@ -129,7 +131,7 @@ public class UserService {
                         .message(SuccessMessages.USER_UPDATE)
                         .httpStatus(HttpStatus.OK)
                         .build();
-            }catch (RuntimeException e) {
+            } catch (RuntimeException e) {
                 throw new ConflictException(ErrorMessages.USER_CANNOT_BE_UPDATED);
             }
 
@@ -165,16 +167,14 @@ public class UserService {
                         .message(SuccessMessages.USER_PASSWORD_UPDATE)
                         .httpStatus(HttpStatus.OK)
                         .build();
-            }
-            else{
+            } else {
                 throw new ConflictException("User's password cannot be updated");
             }
-        }catch(RuntimeException e){
-                throw new ConflictException(ErrorMessages.USER_PASSWORD_CANNOT_BE_UPDATED);
+        } catch (RuntimeException e) {
+            throw new ConflictException(ErrorMessages.USER_PASSWORD_CANNOT_BE_UPDATED);
         }
 
     }
-
 
 
     public ResponseMessage authenticatedUserDeleted(HttpServletRequest request) {
@@ -202,13 +202,13 @@ public class UserService {
 
     public Page<UserResponse> getAllUsersByPage(HttpServletRequest httpServletRequest, String q, int page, int size, String sort, String type) {
 
-        try{
+        try {
             String userEmail = (String) httpServletRequest.getAttribute("email");
             User user = userRepository.findByEmailEquals(userEmail);
 
             Set<String> roles = userRepository.getRolesById(user.getId());
 
-            if(roles.contains("ADMIN") || roles.contains("MANAGER") ){
+            if (roles.contains("ADMIN") || roles.contains("MANAGER")) {
 
                 Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
 
@@ -216,12 +216,11 @@ public class UserService {
                     q = q.trim().toLowerCase().replaceAll("-", " ");
                 }
 
-                return userRepository.getUsersByAdmin(q,pageable).map(userMapper::mapUserToUserResponse);
+                return userRepository.getUsersByAdmin(q, pageable).map(userMapper::mapUserToUserResponse);
 
-            }
-            else throw new ConflictException("You do not have the authority to perform this action.");
+            } else throw new ConflictException("You do not have the authority to perform this action.");
 
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             throw new ConflictException(ErrorMessages.USER_UNAUTHORIZED);
         }
 
@@ -253,14 +252,12 @@ public class UserService {
 
 
         return ResponseMessage.<UserResponse>builder()
-                .object(userMapper.mapUserToUserResponseWithAdvert(user,advertResponses,tourRequestResponses,favoriteResponses))
+                .object(userMapper.mapUserToUserResponseWithAdvert(user, advertResponses, tourRequestResponses, favoriteResponses))
                 .message(SuccessMessages.USER_FOUNDED)
                 .httpStatus(HttpStatus.OK)
                 .build();
 
     }
-
-
 
 
     private User isUserExists(Long userId) {
@@ -306,7 +303,7 @@ public class UserService {
         }
 
         logsService.deleteByUserId(userId); // ÇALIŞIYOR
-        favoritesService.deleteByUserId(userId , user); // ÇALIŞIYOR
+        favoritesService.deleteByUserId(userId, user); // ÇALIŞIYOR
 
 
         userRepository.deleteById(userId);
@@ -337,16 +334,15 @@ public class UserService {
     }
 
 
-
     public ResponseMessage<UserResponse> updateUserById(Long id, UserRequest userRequest, HttpServletRequest request) {
         User user = isUserExists(id);
 
-        if(user.getBuiltIn()){
+        if (user.getBuiltIn()) {
             throw new ConflictException(ErrorMessages.THE_PROPERTY_KEY_CAN_NOT_BE_UPDATED);
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN") || r.getAuthority().equals("MANAGER")))) {
+        if (!(authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN") || r.getAuthority().equals("MANAGER")))) {
             throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
         }
 
@@ -354,10 +350,10 @@ public class UserService {
         User userInSession = userRepository.findByEmailEquals(userInSessionEmail);
         Set<String> roles = userRepository.getRolesById(userInSession.getId());
 
-        if(!roles.contains("ADMIN")){
-            if(roles.contains("MANAGER")){
+        if (!roles.contains("ADMIN")) {
+            if (roles.contains("MANAGER")) {
                 Set<String> rolesOfUserWhoWantedToUpdate = userRepository.getRolesById(id);
-                if(!(rolesOfUserWhoWantedToUpdate.contains("CUSTOMER") && !rolesOfUserWhoWantedToUpdate.contains("MANAGER") && !rolesOfUserWhoWantedToUpdate.contains("ADMIN"))){
+                if (!(rolesOfUserWhoWantedToUpdate.contains("CUSTOMER") && !rolesOfUserWhoWantedToUpdate.contains("MANAGER") && !rolesOfUserWhoWantedToUpdate.contains("ADMIN"))) {
                     throw new BadRequestException(ErrorMessages.MANAGER_CAN_UPDATE_ONLY_CUSTOMER);
                 }
             }
@@ -375,6 +371,44 @@ public class UserService {
                 .httpStatus(HttpStatus.OK)
                 .object(userMapper.mapUserToUserResponse(savedUser))
                 .build();
+
+
+    }
+
+    public ResponseMessage<UserResponse> loginUserWithGoogle(LoginRequestWithGoogle loginRequestWithGoogle) {
+
+        String userEmail = loginRequestWithGoogle.getEmail();
+
+        User user = userRepository.findByEmailEquals(userEmail);
+
+        if (user != null) {
+            return ResponseMessage.<UserResponse>builder()
+                    .object(userMapper.mapUserToUserResponse(user))
+                    .message(SuccessMessages.USER_FOUNDED)
+                    .httpStatus(HttpStatus.CREATED)
+                    .build();
+        } else {
+
+            User newUser = new User();
+
+            Set<Role> role = new HashSet<>();
+            role.add(roleService.getRole(RoleType.CUSTOMER));
+
+            String passwordHash = "$2a$10$lV.U8zwWe8Sh5B3zOZk0gen0Bb5LNsFDaqf1Hxc6HC9qJ7sj2UpU6";
+
+            newUser.setBuiltIn(false);
+            newUser.setRole(role);
+            newUser.setFirstName(loginRequestWithGoogle.getFirstName());
+            newUser.setLastName(loginRequestWithGoogle.getLastName());
+            newUser.setEmail(loginRequestWithGoogle.getEmail());
+            newUser.setPasswordHash(passwordHash);
+
+            return ResponseMessage.<UserResponse>builder()
+                    .object(userMapper.mapUserToUserResponse(userRepository.save(newUser)))
+                    .message(SuccessMessages.USER_CREATE)
+                    .httpStatus(HttpStatus.CREATED)
+                    .build();
+        }
 
 
     }

@@ -1,9 +1,6 @@
 package com.realestate.controller;
 
-import com.realestate.payload.request.ForgotPasswordRequest;
-import com.realestate.payload.request.LoginRequest;
-import com.realestate.payload.request.RegisterRequest;
-import com.realestate.payload.request.ResetPasswordRequest;
+import com.realestate.payload.request.*;
 import com.realestate.payload.response.AuthResponse;
 import com.realestate.payload.response.ResponseMessage;
 import com.realestate.payload.response.UserResponse;
@@ -55,6 +52,26 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @PostMapping("/google/register")
+    public ResponseMessage<UserResponse> loginUserWithGoogle(@RequestBody @Valid LoginRequestWithGoogle loginRequestWithGoogle){
+
+        return userService.loginUserWithGoogle(loginRequestWithGoogle);
+
+    }
+
+    @PostMapping("/google/login")
+    public ResponseEntity<AuthResponse> authenticateUserWithGoogle(@RequestBody @Valid LoginRequestWithGoogle loginRequestWithGoogle){
+
+        return authenticationService.authenticateUserWithGoogle(loginRequestWithGoogle);
+
+    }
+
+
+
+
+
+
 
 
 

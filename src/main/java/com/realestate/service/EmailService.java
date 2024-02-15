@@ -97,14 +97,13 @@ public class EmailService {
                 "<html><body>" +
                         "<div style='background-color: #ffffff; color: #000000; padding: 10px;'>" +
                         "<p style='text-align: center; font-size: 18px; font-weight: bold;'>Dear %s,</p>" +
-                        "<p>Your advert has started to be published on our ritzy homes platform.</p>" +
                         "<p>Here are the details of your tour request:</p>" +
                         "<div style='background-color: #6cb533; padding: 10px;'>" +
 
                         "<p>Tour Date : %s</p>" +
                         "<p>Tour Time : %s</p>" +
                         "</div>" +
-                        "<p>Thank you for choosing our platform to list your property. Your advert is now visible to potential buyers and renters.</p>" +
+                        "<p>Thank you for choosing our platform to list your property.</p>" +
                         "<p>If you have any questions or need further assistance, feel free to reach out to our customer support team.</p>" +
                         "<p style='font-style: italic;'>Best regards,<br>Ritzy Homes</p>" +
                         "</div>" +
