@@ -33,7 +33,7 @@ public class ContactController {
             @RequestParam(value = "query", required = false) String query,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "size", defaultValue = "20", required = false) int size,
-            @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,
+            @RequestParam(value = "sort", defaultValue = "createAt", required = false) String sort,//tarihe gore sirala
             @RequestParam(value = "type", defaultValue = "asc", required = false) String type,
             @RequestParam(value = "status", required = false, defaultValue = "unread") String status
 
@@ -41,7 +41,7 @@ public class ContactController {
         return contactService.getAllContactMessageAsPage(query, page, size, sort, type, status);
     }
 
-    /**deleteAllContactMessages----------------------documentation ve screen de yok, hocaya sordum task de yok, olmalı J02 ye ekleyebilirsiniz dedi hoca -------*/
+    /**deleteAllContactMessages-------------------*/
 
     @PreAuthorize("hasAnyAuthority('MANAGER','ADMIN')")
     @DeleteMapping()
@@ -50,7 +50,7 @@ public class ContactController {
     }
 
 
-    /**updateStatusContactMessages----------------------documentation ve screen de yok, hocaya sordum task de yok, J03 3 buton olarak ekleyebilirsiniz dedi hoca-------*/
+    /**updateStatusContactMessages--------------------*/
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     @PatchMapping("/{id}")
