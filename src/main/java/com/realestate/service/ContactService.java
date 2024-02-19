@@ -1,6 +1,4 @@
 package com.realestate.service;
-
-import com.realestate.controller.ContactController;
 import com.realestate.entity.Contact;
 import com.realestate.entity.enums.ContactStatus;
 import com.realestate.exception.ConflictException;
@@ -14,13 +12,23 @@ import com.realestate.payload.response.ResponseMessage;
 import com.realestate.repository.ContactRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +72,6 @@ public class ContactService {
                 .build();
     }
 
-
     /**J02 getAllContactMessageAsPage start ***********************************************************************/
 
     public Page<ContactResponse> getAllContactMessageAsPage(String query, int page, int size, String sort, String type, String status) {
@@ -73,15 +80,17 @@ public class ContactService {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
 
-        List<ContactResponse> contactResponsesList = contactRepository.findAll(pageable)
-                .stream()
+        Page<Contact> contactPage = contactRepository.findAll(pageable);
+
+        List<ContactResponse> contactResponsesList = contactPage.getContent().stream()
                 .filter(contact -> statusFilter(contact, status))
                 .filter(contact -> query == null || contact.getMessage().toLowerCase().contains(query.toLowerCase()))
                 .map(contactMapper::createResponse)
                 .toList();
 
-        return new PageImpl<>(contactResponsesList, pageable, contactResponsesList.size());
+        return new PageImpl<>(contactResponsesList, pageable, contactPage.getTotalElements());
     }
+
 
     private boolean statusFilter(Contact contact, String status) {
         return (status == null || status.equalsIgnoreCase("all")) ||
@@ -92,7 +101,7 @@ public class ContactService {
 
 
     //J03
-    public ResponseMessage<ContactResponse> getContactMessageById(Long id) {//bu method ile ilgilen --------------------------------------
+    public ResponseMessage<ContactResponse> getContactMessageById(Long id) {
         Contact contact = getContactById(id);
         contact.setStatus(ContactStatus.OPENED);
         contactRepository.save(contact);//degisen status durumu save edildi
@@ -129,7 +138,7 @@ public class ContactService {
         }
         contactRepository.deleteAll();
 
-        return ResponseEntity.ok("All contact messages deleted successfully.");
+        return ResponseEntity.ok(SuccessMessages.CONTACT_MESSAGES_DELETED);
 
     }
 

@@ -3,9 +3,13 @@ package com.realestate.messages;
 public class SuccessMessages {
 
 
+
+
     private SuccessMessages(){
 
     }
+
+    public static final Object CONTACT_MESSAGES_DELETED = "All contact messages deleted successfully.";
     public static final String ADVERT_TYPES_FOUND = "Advert Types found Successfully";
     public static final String CONTACT_MESSAGE_CREATED = "Contact Message is created successfully";
     public static final String CONTACT_MESSAGE_FOUNDED = "Contact Message is founded successfully";
