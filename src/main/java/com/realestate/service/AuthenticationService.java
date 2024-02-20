@@ -1,6 +1,8 @@
 package com.realestate.service;
 
 import com.realestate.entity.User;
+import com.realestate.exception.ResourceNotFoundException;
+import com.realestate.messages.ErrorMessages;
 import com.realestate.payload.request.LoginRequest;
 import com.realestate.payload.request.LoginRequestWithGoogle;
 import com.realestate.payload.response.AuthResponse;
@@ -35,33 +37,39 @@ public class AuthenticationService {
 
     public ResponseEntity<AuthResponse> authenticateUser(LoginRequest loginRequest) {
 
-
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
-
-
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = "Bearer " + jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        try{
+            String email = loginRequest.getEmail();
+            String password = loginRequest.getPassword();
 
 
-        Set<String> role = userDetails.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
-        System.out.println("role : " + role);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        AuthResponse.AuthResponseBuilder authResponse = AuthResponse.builder();
+            String token = "Bearer " + jwtUtils.generateJwtToken(authentication);
 
-        authResponse.token(token.substring(7));
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        authResponse.role(String.join(" ", role));
 
-        return ResponseEntity.ok(authResponse.build());
+            Set<String> role = userDetails.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+
+            System.out.println("role : " + role);
+
+            AuthResponse.AuthResponseBuilder authResponse = AuthResponse.builder();
+
+            authResponse.token(token.substring(7));
+
+            authResponse.role(String.join(" ", role));
+
+            return ResponseEntity.ok(authResponse.build());
+        }catch (RuntimeException e){
+            throw new ResourceNotFoundException(ErrorMessages.EMAIL_OR_PASSWORD_INCORRECT);
+        }
+
+
+
 
     }
 
