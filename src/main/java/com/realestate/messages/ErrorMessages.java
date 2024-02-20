@@ -4,6 +4,8 @@ package com.realestate.messages;
 public class ErrorMessages {
 
 
+
+
     private ErrorMessages() {
     }
 
@@ -63,6 +65,7 @@ public class ErrorMessages {
     public static final String NOT_UNIQUE_SLUG = "The slug has been used before, please enter a different slug.";
     public static final String TITLE_SLUG_IS_NOT_IN_THE_DESIRED_FORMAT = "title or slug is not in the desired form";
     public static final String ADVERTS_NOT_FOUND = "Could not find adverts according to your filter!";
+    public static final String EMAIL_OR_PASSWORD_INCORRECT = "You entered your email or password incorrectly, please try again.";
 
 
 
