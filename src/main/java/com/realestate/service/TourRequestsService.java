@@ -108,7 +108,11 @@ public class TourRequestsService {
 
         TourRequest savedTourRequest = tourRequestsRepository.save(tourRequest);
 
-        emailService.sendTourRequestCreationEmail(userEmail, savedTourRequest);
+        String ownerUserEmail =  savedTourRequest.getOwnerUser().getEmail();
+        String guestUserEmail =  savedTourRequest.getGuestUser().getEmail();
+
+        emailService.sendTourRequestOwnerCreationEmail(ownerUserEmail,savedTourRequest);
+        emailService.sendTourRequestGuestCreationEmail(guestUserEmail, savedTourRequest);
 
         return ResponseMessage.<TourRequestResponse>builder()
                 .message(SuccessMessages.TOUR_REQUEST_CREATE)

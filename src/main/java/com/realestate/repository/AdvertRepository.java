@@ -27,7 +27,7 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
 
     Optional<Advert> findBySlug(String slug);
 
-    @Query("SELECT new com.realestate.payload.response.AdvertCityResponse(a.city.name, COUNT(a)) FROM Advert a GROUP BY a.city.name")
+    @Query("SELECT new com.realestate.payload.response.AdvertCityResponse(a.city.name, a.city.id, COUNT(a)) FROM Advert a GROUP BY a.city.name, a.city.id")
     List<AdvertCityResponse> getAdvertAmountByCity();
 
 
@@ -35,7 +35,7 @@ public interface AdvertRepository extends JpaRepository<Advert, Long> {
     boolean isEmpty();
 
 
-    @Query("SELECT new com.realestate.payload.response.AdvertCategoriesResponse(a.category.title, a.category.icon, COUNT(a)) FROM Advert a GROUP BY a.category.title, a.category.icon")
+    @Query("SELECT new com.realestate.payload.response.AdvertCategoriesResponse(a.category.title, a.category.icon, a.category.id, COUNT(a)) FROM Advert a GROUP BY a.category.title, a.category.icon, a.category.id")
     List<AdvertCategoriesResponse> getAdvertAmountByCategories();
 
     @Query("SELECT a FROM Advert a WHERE (:q IS NULL OR Lower(a.title) LIKE %:q% OR Lower(a.description) LIKE %:q%) " +
