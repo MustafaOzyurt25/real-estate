@@ -14,5 +14,6 @@ public class AdvertCityResponse {
 
     private String city;
     private Long amount;
+    private Long id;
 
 }

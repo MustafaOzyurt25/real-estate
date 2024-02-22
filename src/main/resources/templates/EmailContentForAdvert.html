@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Advert Published</title>
+</head>
+<body>
+<div style="background-color: #ffffff; color: #000000; padding: 10px;">
+    <p style="text-align: center; font-size: 18px; font-weight: bold;">Dear [[${userFullName}]],</p>
+    <p>Your advert has started to be published on our Ritzy Homes platform.</p>
+    <p>Here are the details of your advert:</p>
+    <div style="background-color: #6cb533; padding: 10px;">
+        <p style="font-weight: bold;">[[${advertTitle}]]</p>
+        <p>Location: [[${advertDistrict}]], [[${advertCity}]]</p>
+        <p>Price: [[${advertPrice}]] $</p>
+    </div>
+    <p>Thank you for choosing our platform to list your property. Your advert is now visible to potential buyers and renters.</p>
+    <p>If you have any questions or need further assistance, please contact our customer support team.</p>
+    <p style="font-style: italic;">Best regards,<br>Ritzy Homes</p>
+</div>
+</body>
+</html>
