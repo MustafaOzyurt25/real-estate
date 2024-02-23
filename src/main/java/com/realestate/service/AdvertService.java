@@ -151,7 +151,8 @@ public class AdvertService {
         User user = userRepository.findByEmailEquals(userEmail);
 
         Advert advert = getAdvertBySlug(slug);
-        advert = advertView(advert.getId(),user);
+
+        advert = advertView(advert,user);
 
         return ResponseMessage.<Advert>builder()
                 .object(advert)
@@ -159,18 +160,18 @@ public class AdvertService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
-    public Advert advertView(Long advertId,User user) {
+    public Advert advertView(Advert advert,User user) {
         //id kontrol
-        Advert advert = getAdvertById(advertId);
 
-
-        if(advert.getUser().getEmail().equals(user.getEmail())){
-            return advert;
+        if(user==null){
+            advert.setViewCount(advert.getViewCount() + 1);
+            return advertRepository.save(advert);
         }
-        advert.setViewCount(advert.getViewCount() + 1);
-        return advertRepository.save(advert);
-
-
+        if(!(advert.getUser().getId().equals(user.getId()))){
+            advert.setViewCount(advert.getViewCount() + 1);
+            return advertRepository.save(advert);
+        }
+        return advert;
     }
 
 
