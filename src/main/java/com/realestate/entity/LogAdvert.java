@@ -31,6 +31,7 @@ public class LogAdvert {
     @JsonIgnore
     private User user;
 
+
     @ManyToOne
     @JsonIgnore
     private Advert advert;

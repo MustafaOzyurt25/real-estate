@@ -37,8 +37,8 @@ public class AdvertController {
 
     //A07
     @GetMapping("/{slug}")
-    public ResponseMessage<Advert> getAdvertWithSlug(@PathVariable String slug) {
-        return advertService.getAdvertWithSlug(slug);
+    public ResponseMessage<Advert> getAdvertWithSlug(@PathVariable String slug,HttpServletRequest httpServletRequest) {
+        return advertService.getAdvertWithSlug(slug,httpServletRequest);
     }
 
 

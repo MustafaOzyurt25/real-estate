@@ -125,26 +125,61 @@ public class AdvertService {
         advertRepository.save(updatedAdvert);
     }
 
-    public ResponseMessage<Advert> getAdvertWithSlug(String slug) {
-
+ /*   public ResponseMessage<Advert> getAdvertWithSlug(String slug) {
         Advert advert = getAdvertBySlug(slug);
+        advert = advertView(advert.getId());
 
         return ResponseMessage.<Advert>builder()
                 .object(advert)
                 .message(SuccessMessages.ADVERT_FOUNDED)
                 .httpStatus(HttpStatus.OK)
                 .build();
-
     }
+    //view_count sayısını güncellemek için
+    public Advert advertView(Long advertId) {
+        //id kontrol
+        Advert advert = getAdvertById(advertId);
+
+        advert.setViewCount(advert.getViewCount() + 1);
+        return advertRepository.save(advert);
+
+    }*/
+
+    public ResponseMessage<Advert> getAdvertWithSlug(String slug,HttpServletRequest httpServletRequest) {
+
+        String userEmail = (String) httpServletRequest.getAttribute("email");
+        User user = userRepository.findByEmailEquals(userEmail);
+
+        Advert advert = getAdvertBySlug(slug);
+
+        advert = advertView(advert,user);
+
+        return ResponseMessage.<Advert>builder()
+                .object(advert)
+                .message(SuccessMessages.ADVERT_FOUNDED)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+    public Advert advertView(Advert advert,User user) {
+        //id kontrol
+
+        if(user==null){
+            advert.setViewCount(advert.getViewCount() + 1);
+            return advertRepository.save(advert);
+        }
+        if(!(advert.getUser().getId().equals(user.getId()))){
+            advert.setViewCount(advert.getViewCount() + 1);
+            return advertRepository.save(advert);
+        }
+        return advert;
+    }
+
+
 
     public Advert getAdvertBySlug(String slug) {
 
         Advert advert = advertRepository.findBySlug(slug).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessages.ADVERT_NOT_FOUND_EXCEPTION_BY_SLUG, slug)));
-
-        Long advertId = advert.getId();// view_count güncellemek için eklendi
-        advert = advertView(advertId);
-
         return advert;
     }
 
@@ -159,15 +194,7 @@ public class AdvertService {
 
     //====================================popular================================================
 
-    //view_count sayısını güncellemek için
-    public Advert advertView(Long advertId) {
-        //id kontrol
-        Advert advert = getAdvertById(advertId);
 
-        advert.setViewCount(advert.getViewCount() + 1);
-        advertRepository.save(advert);
-        return advert;
-    }
 
     //tour_request sayısını almak için
     public int tourRequestAmount(Long advertId) {
