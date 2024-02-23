@@ -15,4 +15,5 @@ public class AdvertCategoriesResponse {
     private String icon;
     private Long amount;
     private Long id;
+
 }
