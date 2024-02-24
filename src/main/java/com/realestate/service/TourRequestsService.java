@@ -185,7 +185,7 @@ public class TourRequestsService {
 
         TourRequest tourRequestExist = isTourRequestExist(tourId);//var ise
 
-        if (!isValidTourTime(updateTourRequestRequest.getTourTime())) {// Tur zamani gecerli degil/ yarim ve tam zamanli tur time belirleyebilir
+        if (!isValidTourTime(updateTourRequestRequest.getTourTime())) {// Tur zamani gecerli degil / yarim ve tam zamanli tur time belirleyebilir
             return ResponseMessage.<UpdateTourRequestResponse>builder()
                     .message(ErrorMessages.INVALID_TOUR_TIME)
                     .httpStatus(HttpStatus.BAD_REQUEST)
@@ -205,10 +205,14 @@ public class TourRequestsService {
         }
 
         /*Only the tour requests whose status PENDING or DECLINED can be updated.*/
+        /* tour request pending dışında ise tarih değişmesin - BAU*/
         if (tourRequestExist.getStatus() == TourRequestStatus.PENDING || tourRequestExist.getStatus() == TourRequestStatus.DECLINED) {
             tourRequestExist.setTourDate(updateTourRequestRequest.getTourDate());
             tourRequestExist.setTourTime(updateTourRequestRequest.getTourTime());
             tourRequestExist.setUpdateAt(LocalDateTime.now());
+
+            if(tourRequestExist.getStatus() == TourRequestStatus.DECLINED)
+                tourRequestExist.setStatus(TourRequestStatus.PENDING);
 
         } else {
             return ResponseMessage.<UpdateTourRequestResponse>builder()
