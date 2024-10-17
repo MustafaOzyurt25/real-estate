@@ -441,7 +441,7 @@ public class AdvertService {
         }
         userRepository.save(loginUser);
         logUserRepository.save(logLoginUser);
-
+        
         advertRepository.deleteById(id);
         return ResponseMessage.builder()
                 .message(SuccessMessages.ADVERT_DELETE)
